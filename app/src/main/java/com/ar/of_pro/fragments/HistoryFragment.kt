@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.ar.of_pro.R
 
-class RequestFragment : Fragment() {
+class HistoryFragment : Fragment() {
 
     lateinit var v : View
     override fun onCreateView(
@@ -15,7 +15,7 @@ class RequestFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_request, container, false)
+        v = inflater.inflate(R.layout.fragment_history, container, false)
         return v
     }
 

@@ -2,16 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layoutRequest"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.RequestFragment" >
+    tools:context=".fragments.HistoryFragment">
 
     <TextView
-        android:id="@+id/txtRequest"
+        android:id="@+id/txtHistory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="REQUEST FRAGMENT"
+        android:text="HISTORY FRAGMENT"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
