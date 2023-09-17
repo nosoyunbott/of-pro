@@ -28,7 +28,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtRequests">
 
         <Spinner
-            android:id="@+id/spnRubro"
+            android:id="@+id/spnOcupations"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:autofillHints="Rubro" />
@@ -43,7 +43,7 @@
             android:hint="Titulo de la solicitud"/>
 
         <Spinner
-            android:id="@+id/spnTipo"
+            android:id="@+id/spnServiceTypes"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:autofillHints="Tipo de servicio"/>
