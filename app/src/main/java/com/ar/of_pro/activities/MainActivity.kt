@@ -1,11 +1,12 @@
-package com.ar.of_pro
+package com.ar.of_pro.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.ar.of_pro.R
 
-class AuthActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_auth)
+        setContentView(R.layout.activity_main)
     }
 }
