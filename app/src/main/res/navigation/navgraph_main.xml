@@ -11,11 +11,6 @@
         android:label="fragment_app"
         tools:layout="@layout/fragment_app" />
     <fragment
-        android:id="@+id/requestsFragment"
-        android:name="com.ar.of_pro.fragments.RequestsFragment"
-        android:label="fragment_requests"
-        tools:layout="@layout/fragment_requests" />
-    <fragment
         android:id="@+id/historyFragment"
         android:name="com.ar.of_pro.fragments.HistoryFragment"
         android:label="fragment_history"
@@ -25,4 +20,9 @@
         android:name="com.ar.of_pro.fragments.RequestFragment"
         android:label="fragment_request"
         tools:layout="@layout/fragment_request" />
+    <fragment
+        android:id="@+id/requestsListFragment"
+        android:name="com.ar.of_pro.fragments.RequestsListFragment"
+        android:label="fragment_requests_list"
+        tools:layout="@layout/fragment_requests_list" />
 </navigation>

@@ -2,14 +2,12 @@ package com.ar.of_pro.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.ar.of_pro.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.ar.of_pro.fragments.HistoryFragment
 import com.ar.of_pro.fragments.RequestFragment
-import com.ar.of_pro.fragments.RequestsFragment
+import com.ar.of_pro.fragments.RequestsListFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,8 +21,8 @@ class MainActivity : AppCompatActivity() {
 
         bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.requestsFragment -> {
-                    loadFragment(RequestsFragment())
+                R.id.requestsListFragment -> {
+                    loadFragment(RequestsListFragment())
                     true
                 }
                 R.id.historyFragment -> {

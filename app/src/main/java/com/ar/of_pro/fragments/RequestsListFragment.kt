@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.ar.of_pro.R
 
-class RequestsFragment : Fragment() {
+class RequestsListFragment : Fragment() {
 
     lateinit var v : View
 
@@ -16,7 +16,7 @@ class RequestsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_requests, container, false)
+        v = inflater.inflate(R.layout.fragment_requests_list, container, false)
         return v
     }
 
