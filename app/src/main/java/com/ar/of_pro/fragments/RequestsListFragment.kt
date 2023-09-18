@@ -5,13 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.of_pro.R
 import com.ar.of_pro.adapters.RequestCardAdapter
 import com.ar.of_pro.entities.Request
+import com.ar.of_pro.listeners.OnViewItemClickedListener
+import com.google.android.material.snackbar.Snackbar
 
-class RequestsListFragment : Fragment() {
+
+class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
     lateinit var v: View
     lateinit var recRequestList: RecyclerView
@@ -39,11 +44,17 @@ class RequestsListFragment : Fragment() {
         recRequestList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recRequestList.layoutManager = linearLayoutManager
-        requestListAdapter = RequestCardAdapter(requestList)
+        requestListAdapter = RequestCardAdapter(requestList, this)
         recRequestList.adapter = requestListAdapter
 
     }
 
+    override fun onViewItemDetail(request: Request) {
+    val action = RequestsListFragmentDirections.actionRequestsListFragmentToProposalFragment(request)
+        v.findNavController().navigate(action)
+
+        Snackbar.make(v,request.requestTitle,Snackbar.LENGTH_SHORT).show()
+    }
 
 
 }
