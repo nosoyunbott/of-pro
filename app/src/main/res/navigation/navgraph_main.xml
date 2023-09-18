@@ -24,10 +24,18 @@
         android:id="@+id/requestsListFragment"
         android:name="com.ar.of_pro.fragments.RequestsListFragment"
         android:label="fragment_requests_list"
-        tools:layout="@layout/fragment_requests_list" />
+        tools:layout="@layout/fragment_requests_list" >
+        <action
+            android:id="@+id/action_requestsListFragment_to_proposalFragment"
+            app:destination="@id/proposalFragment" />
+    </fragment>
     <fragment
         android:id="@+id/proposalFragment"
         android:name="com.ar.of_pro.fragments.ProposalFragment"
         android:label="fragment_proposal"
-        tools:layout="@layout/fragment_proposal" />
+        tools:layout="@layout/fragment_proposal" >
+        <argument
+            android:name="request"
+            app:argType="com.ar.of_pro.entities.Request" />
+    </fragment>
 </navigation>
