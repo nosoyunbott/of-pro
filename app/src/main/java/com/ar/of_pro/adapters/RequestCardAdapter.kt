@@ -8,8 +8,8 @@ import com.ar.of_pro.R
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.holders.RequestCardHolder
 import com.ar.of_pro.listeners.OnViewItemClickedListener
-
 class RequestCardAdapter(private val requestList: MutableList<Request>,  private val onItemClick: OnViewItemClickedListener) :
+
     RecyclerView.Adapter<RequestCardHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestCardHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.request_card_element, parent, false)
@@ -24,14 +24,10 @@ class RequestCardAdapter(private val requestList: MutableList<Request>,  private
         val request = requestList[position]
         holder.setTitle(request.requestTitle)
         holder.setBidsAmount(request.requestBidsAmount)
-
-
         holder.getCardLayout().setOnClickListener{
             onItemClick.onViewItemDetail(request)
         }
 
     }
-
-
 
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ar.of_pro.R
 import com.ar.of_pro.adapters.RequestCardAdapter
 import com.ar.of_pro.entities.Request
+
 import com.ar.of_pro.listeners.OnViewItemClickedListener
 import com.google.android.material.snackbar.Snackbar
 
@@ -48,13 +49,10 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         recRequestList.adapter = requestListAdapter
 
     }
-
+    
     override fun onViewItemDetail(request: Request) {
     val action = RequestsListFragmentDirections.actionRequestsListFragmentToProposalFragment(request)
         v.findNavController().navigate(action)
-
         Snackbar.make(v,request.requestTitle,Snackbar.LENGTH_SHORT).show()
     }
-
-
 }
