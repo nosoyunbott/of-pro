@@ -14,7 +14,6 @@ class RequestCardHolder(v: View) : RecyclerView.ViewHolder(v) {
         this.view = v
     }
 
-
     fun setTitle(title: String ) {
         val txt : TextView = view.findViewById(R.id.requestCardTitle)
         txt.text = title

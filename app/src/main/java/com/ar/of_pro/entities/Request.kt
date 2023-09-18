@@ -6,8 +6,8 @@ import android.os.Parcelable
 class Request(requestTitle: String?, requestBidsAmount: Int?) : Parcelable {
 
 
-    private var requestTitle: String = ""
-    private var requestBidsAmount: Int = 0
+     var requestTitle: String = ""
+     var requestBidsAmount: Int = 0
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
