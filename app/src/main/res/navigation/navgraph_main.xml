@@ -3,11 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navgraph_main"
-    app:startDestination="@id/appFragment">
+    app:startDestination="@id/proposalFragment">
 
     <fragment
         android:id="@+id/appFragment"
         android:name="com.ar.of_pro.fragments.AppFragment"
         android:label="fragment_app"
         tools:layout="@layout/fragment_app" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.ar.of_pro.fragments.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
+    <fragment
+        android:id="@+id/requestFragment"
+        android:name="com.ar.of_pro.fragments.RequestFragment"
+        android:label="fragment_request"
+        tools:layout="@layout/fragment_request" />
+    <fragment
+        android:id="@+id/requestsListFragment"
+        android:name="com.ar.of_pro.fragments.RequestsListFragment"
+        android:label="fragment_requests_list"
+        tools:layout="@layout/fragment_requests_list" />
+    <fragment
+        android:id="@+id/proposalFragment"
+        android:name="com.ar.of_pro.fragments.ProposalFragment"
+        android:label="fragment_proposal"
+        tools:layout="@layout/fragment_proposal" />
 </navigation>
