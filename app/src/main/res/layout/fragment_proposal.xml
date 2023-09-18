@@ -5,8 +5,148 @@
     android:id="@+id/layoutProposal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="12dp"
     tools:context=".fragments.ProposalFragment">
 
+    <include
+        android:id="@+id/profile_header"
+        layout="@layout/profile_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="579dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_header">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Titulo de la oferta/solicitud" />
+
+            <TextView
+                android:id="@+id/txtOcupation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Rubro"
+                android:textAlignment="textEnd"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtServiceType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tipo de servicio" />
+
+            <TextView
+                android:id="@+id/txtTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Preferencia horario"
+                android:textAlignment="textEnd"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtPricing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="$20.000 - $30.000" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@tools:sample/avatars" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@tools:sample/avatars" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@tools:sample/avatars" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/edtBudget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                android:text="Ingresar el presupuesto por el trabajo" />
+
+            <EditText
+                android:id="@+id/edtComment"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Comentario"/>
+
+            <Button
+                android:id="@+id/btnProposal"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:text="Proponer" />
+
+        </LinearLayout>
+
+        <!--  end of vertical  -->
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
