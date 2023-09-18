@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navgraph_main"
-    app:startDestination="@id/requestsListFragment">
+    app:startDestination="@id/proposalFragment">
 
     <fragment
         android:id="@+id/appFragment"
@@ -25,4 +25,9 @@
         android:name="com.ar.of_pro.fragments.RequestsListFragment"
         android:label="fragment_requests_list"
         tools:layout="@layout/fragment_requests_list" />
+    <fragment
+        android:id="@+id/proposalFragment"
+        android:name="com.ar.of_pro.fragments.ProposalFragment"
+        android:label="fragment_proposal"
+        tools:layout="@layout/fragment_proposal" />
 </navigation>

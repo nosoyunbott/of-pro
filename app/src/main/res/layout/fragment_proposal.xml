@@ -104,28 +104,28 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@tools:sample/avatars" />
+                    android:src="@drawable/ic_launcher_foreground" />
 
                 <ImageView
                     android:id="@+id/imageView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@tools:sample/avatars" />
+                    android:src="@drawable/ic_launcher_foreground" />
 
                 <ImageView
                     android:id="@+id/imageView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@tools:sample/avatars" />
+                    android:src="@drawable/ic_launcher_foreground" />
 
             </LinearLayout>
 
             <EditText
                 android:id="@+id/edtBudget"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:ems="10"
                 android:inputType="number"
                 android:text="Ingresar el presupuesto por el trabajo" />
