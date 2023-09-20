@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.of_pro.R
+import com.ar.of_pro.adapters.ServiceProviderAdapter
 import com.ar.of_pro.entities.ServiceProvider
 
 
@@ -17,7 +18,7 @@ class ProviderRequestsFragment : Fragment() {
     lateinit var recProviderList: RecyclerView
     var providerList: MutableList<ServiceProvider> = ArrayList()
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private lateinit var serviceProvider: ServiceProvider
+    private lateinit var serviceProviderAdapter: ServiceProviderAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,6 +36,13 @@ class ProviderRequestsFragment : Fragment() {
             providerList.add(ServiceProvider("Mirta", 15f, 3.3))
             providerList.add(ServiceProvider("Gladys", 30f, 5.0))
         }
+
+        recProviderList.setHasFixedSize(true)
+        linearLayoutManager = LinearLayoutManager(context)
+        recProviderList.layoutManager = linearLayoutManager
+        serviceProviderAdapter = ServiceProviderAdapter(providerList)
+        recProviderList.adapter = serviceProviderAdapter
+
     }
 
 

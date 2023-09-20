@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/provider_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8sp"
-    >
+    android:layout_margin="8sp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,25 +15,24 @@
             android:layout_width="50sp"
             android:layout_height="50sp"
             android:layout_weight="1"
-            android:src="@tools:sample/avatars" />
+            android:src="@drawable/ic_launcher_foreground" />
 
         <LinearLayout
             android:layout_width="300sp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical"
             android:gravity="center"
-            >
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/txtName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="3sp"
                 android:text="Gladys" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/txtBidAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="3sp"
@@ -55,7 +54,7 @@
                 android:text="⭐" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/txtCalification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="15sp"
