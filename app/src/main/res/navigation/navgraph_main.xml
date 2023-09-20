@@ -38,4 +38,9 @@
             android:name="request"
             app:argType="com.ar.of_pro.entities.Request" />
     </fragment>
+    <fragment
+        android:id="@+id/requestDetailFragment"
+        android:name="com.ar.of_pro.fragments.RequestDetailFragment"
+        android:label="fragment_request_detail"
+        tools:layout="@layout/fragment_request_detail" />
 </navigation>
