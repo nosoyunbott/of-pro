@@ -45,7 +45,11 @@
         android:id="@+id/requestDetailFragment"
         android:name="com.ar.of_pro.fragments.RequestDetailFragment"
         android:label="fragment_request_detail"
-        tools:layout="@layout/fragment_request_detail" />
+        tools:layout="@layout/fragment_request_detail" >
+        <argument
+            android:name="serviceProvider"
+            app:argType="com.ar.of_pro.entities.ServiceProvider" />
+    </fragment>
     <fragment
         android:id="@+id/providerRequestsFragment"
         android:name="com.ar.of_pro.fragments.ProviderRequestsFragment"

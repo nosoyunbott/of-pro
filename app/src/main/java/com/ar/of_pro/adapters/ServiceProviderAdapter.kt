@@ -7,8 +7,10 @@ import com.ar.of_pro.R
 import com.ar.of_pro.entities.ServiceProvider
 import com.ar.of_pro.holders.RequestCardHolder
 import com.ar.of_pro.holders.ServiceProviderHolder
+import com.ar.of_pro.listeners.OnServiceProviderClickedListener
+import com.ar.of_pro.listeners.OnViewItemClickedListener
 
-class ServiceProviderAdapter(private val providerList: MutableList<ServiceProvider>) : RecyclerView.Adapter<ServiceProviderHolder>() {
+class ServiceProviderAdapter(private val providerList: MutableList<ServiceProvider>, private val onItemClick: OnServiceProviderClickedListener) : RecyclerView.Adapter<ServiceProviderHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceProviderHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.provider_card_element, parent, false)
         return (ServiceProviderHolder(view))
@@ -23,6 +25,10 @@ class ServiceProviderAdapter(private val providerList: MutableList<ServiceProvid
         holder.setBidAmount(serviceProvider.bidAmount)
         holder.setCalification(serviceProvider.calification)
         holder.setName(serviceProvider.name)
+        holder.getCardLayout().setOnClickListener{
+            onItemClick.onViewItemDetail(serviceProvider)
+        }
+
     }
 
 }

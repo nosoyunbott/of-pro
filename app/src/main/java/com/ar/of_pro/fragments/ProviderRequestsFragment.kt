@@ -5,14 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.of_pro.R
 import com.ar.of_pro.adapters.ServiceProviderAdapter
+import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.ServiceProvider
+import com.ar.of_pro.listeners.OnServiceProviderClickedListener
+import com.ar.of_pro.listeners.OnViewItemClickedListener
+import com.google.android.material.snackbar.Snackbar
 
 
-class ProviderRequestsFragment : Fragment() {
+class ProviderRequestsFragment : Fragment(), OnServiceProviderClickedListener {
 
     lateinit var v: View
     lateinit var recProviderList: RecyclerView
@@ -31,7 +36,7 @@ class ProviderRequestsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        for(i in 1..3){
+        for(i in 1..10){
             providerList.add(ServiceProvider("Gladys", 30f, 4.5))
             providerList.add(ServiceProvider("Mirta", 15f, 3.3))
             providerList.add(ServiceProvider("Gladys", 30f, 5.0))
@@ -40,9 +45,15 @@ class ProviderRequestsFragment : Fragment() {
         recProviderList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recProviderList.layoutManager = linearLayoutManager
-        serviceProviderAdapter = ServiceProviderAdapter(providerList)
+        serviceProviderAdapter = ServiceProviderAdapter(providerList, this)
         recProviderList.adapter = serviceProviderAdapter
 
+    }
+
+    override fun onViewItemDetail(serviceProvider: ServiceProvider) {
+        val action = ProviderRequestsFragmentDirections.actionProviderRequestsFragmentToRequestDetailFragment(serviceProvider)
+        v.findNavController().navigate(action)
+        Snackbar.make(v, serviceProvider.name, Snackbar.LENGTH_SHORT).show()
     }
 
 
