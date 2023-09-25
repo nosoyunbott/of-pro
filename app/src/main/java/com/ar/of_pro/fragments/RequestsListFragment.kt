@@ -3,6 +3,7 @@ package com.ar.of_pro.fragments
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -51,9 +52,9 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     override fun onStart() {
         super.onStart()
        for (i in 1..10) {
-           requestList.add(Request("Pintar paredes en una cocina", 9, ocupationList[Random.nextInt(5)]))
-           requestList.add(Request("Arreglar canilla que pierde", 0, ocupationList[Random.nextInt(5)]))
-           requestList.add(Request("Instalar aire acondicionado", 23, ocupationList[Random.nextInt(5)]))
+           requestList.add(Request("Pintar paredes en una cocina", 9, ocupationList[1]))
+           requestList.add(Request("Arreglar canilla que pierde", 0, ocupationList[0]))
+           requestList.add(Request("Instalar aire acondicionado", 23, ocupationList[4]))
        }
 
         recRequestList.setHasFixedSize(true)
@@ -63,6 +64,33 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         recRequestList.adapter = requestListAdapter
 
         setupSpinner(spnOcupation, ocupationAdapter)
+        refreshRecycleView()
+    }
+
+    fun refreshRecycleView(){
+        spnOcupation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when (spnOcupation) {
+                    spnOcupation -> selectedOcupation = ocupationList[position]
+                }
+                val filteredList = requestList.filter { it.category == selectedOcupation } as MutableList
+                requestListAdapter = RequestCardAdapter(filteredList, this@RequestsListFragment)
+                recRequestList.adapter = requestListAdapter
+                filteredList.forEach {
+                    Log.d("a", it.requestTitle)
+                }
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                showDialog()
+            }
+        }
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
