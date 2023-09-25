@@ -3,20 +3,23 @@ package com.ar.of_pro.entities
 import android.os.Parcel
 import android.os.Parcelable
 
-class Request(requestTitle: String?, requestBidsAmount: Int?) : Parcelable {
+class Request(requestTitle: String?, requestBidsAmount: Int?, category: String?) : Parcelable {
 
 
      var requestTitle: String = ""
      var requestBidsAmount: Int = 0
+    var category: String =""
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readInt(),
+        parcel.readString()
     )
 
     init {
         this.requestTitle = requestTitle!!
         this.requestBidsAmount = requestBidsAmount!!
+        this.category=category!!
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
