@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -27,6 +29,8 @@ import kotlin.random.Random
 
 class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
+
+    lateinit var filterContainer: LinearLayout
     //Spinner setup
     lateinit var spnOcupation : Spinner
     var ocupationList : List<String> = Ocupation().getList()
@@ -45,7 +49,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_requests_list, container, false)
         recRequestList = v.findViewById(R.id.rec_requestsList)
-        spnOcupation = v.findViewById(R.id.spnOcupations2)
+        filterContainer = v.findViewById(R.id.filterContainer)
         return v
     }
 
@@ -63,33 +67,31 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         requestListAdapter = RequestCardAdapter(requestList, this)
         recRequestList.adapter = requestListAdapter
 
-        setupSpinner(spnOcupation, ocupationAdapter)
+
         refreshRecycleView()
     }
 
     fun refreshRecycleView(){
-        spnOcupation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                when (spnOcupation) {
-                    spnOcupation -> selectedOcupation = ocupationList[position]
-                }
-                val filteredList = requestList.filter { it.category == selectedOcupation } as MutableList
+        ocupationList
+        for(filterName in ocupationList){
+            val btnFilter = Button(context)
+            btnFilter.text=filterName
+            val layoutParams = ViewGroup.MarginLayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, // Width
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            layoutParams.setMargins(10,0, 10,0)
+            btnFilter.layoutParams = layoutParams
+            btnFilter.textSize = 16F
+            btnFilter.background = resources.getDrawable(R.drawable.rounded_button)
+            btnFilter.setOnClickListener{
+                val filter = btnFilter.text.toString()
+                val filteredList = requestList.filter { it.category == filter } as MutableList
                 requestListAdapter = RequestCardAdapter(filteredList, this@RequestsListFragment)
                 recRequestList.adapter = requestListAdapter
-                filteredList.forEach {
-                    Log.d("a", it.requestTitle)
-                }
-
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                showDialog()
-            }
+            filterContainer.addView(btnFilter)
         }
     }
     override fun onAttach(context: Context) {
@@ -106,26 +108,6 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         Snackbar.make(v,request.requestTitle,Snackbar.LENGTH_SHORT).show()
     }
 
-    private fun setupSpinner(spinner: Spinner, adapter: ArrayAdapter<String>) {
-        spinner.adapter = adapter
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                when (spinner) {
-                    spnOcupation -> selectedOcupation = ocupationList[position]
-                }
-
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                showDialog()
-            }
-        }
-    }
     private fun showDialog(){
         val dialog = AlertDialog.Builder(context)
             .setTitle("Error")
