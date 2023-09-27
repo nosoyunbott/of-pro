@@ -1,24 +1,31 @@
 package com.ar.of_pro.fragments
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
+import androidx.fragment.app.Fragment
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.ServiceType
+
+
 
 class RequestFragment : Fragment() {
 
     lateinit var v : View
     lateinit var spnOcupation : Spinner
     lateinit var spnServiceTypes : Spinner
+    lateinit var btnAttach : Button
+    private val PICK_MEDIA_REQUEST = 1
 
     var ocupationList : List<String> = Ocupation().getList()
     lateinit var ocupationAdapter: ArrayAdapter<String>
@@ -36,6 +43,7 @@ class RequestFragment : Fragment() {
         v = inflater.inflate(R.layout.fragment_request, container, false)
         spnOcupation = v.findViewById(R.id.spnOcupations)
         spnServiceTypes = v.findViewById(R.id.spnServiceTypes)
+        btnAttach = v.findViewById(R.id.btnAttach)
         return v
     }
 
@@ -44,6 +52,7 @@ class RequestFragment : Fragment() {
 
         setupSpinner(spnOcupation, ocupationAdapter)
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
+        setOnClickListener(btnAttach)
     }
 
     override fun onAttach(context: Context) {
@@ -81,5 +90,13 @@ class RequestFragment : Fragment() {
             .setCancelable(true)
             .create()
         dialog.show()
+    }
+
+    private fun setOnClickListener(btn : Button){
+        btn.setOnClickListener(){
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*, video/*"
+            startActivityForResult(intent, PICK_MEDIA_REQUEST)
+        }
     }
 }
