@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navgraph_main"
-    app:startDestination="@id/providerRequestsFragment">
+    app:startDestination="@id/requestsListFragment">
 
     <fragment
         android:id="@+id/appFragment"
@@ -49,6 +49,10 @@
         <argument
             android:name="serviceProvider"
             app:argType="com.ar.of_pro.entities.ServiceProvider" />
+        <action
+            android:id="@+id/action_requestDetailFragment_to_requestsListFragment"
+            app:destination="@id/requestsListFragment"
+            app:popUpTo="@id/requestsListFragment" />
     </fragment>
     <fragment
         android:id="@+id/providerRequestsFragment"
