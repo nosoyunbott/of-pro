@@ -69,4 +69,8 @@
             android:id="@+id/action_providerRequestsFragment_to_requestDetailFragment"
             app:destination="@id/requestDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/providerProfileFragment"
+        android:name="com.ar.of_pro.fragments.ProviderProfileFragment"
+        android:label="ProviderProfileFragment" />
 </navigation>
