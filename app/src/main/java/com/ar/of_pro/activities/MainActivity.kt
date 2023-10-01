@@ -5,21 +5,27 @@ import android.os.Bundle
 import com.ar.of_pro.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import com.ar.of_pro.fragments.HistoryFragment
 import com.ar.of_pro.fragments.RequestFragment
 import com.ar.of_pro.fragments.RequestsListFragment
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var bottomNav : BottomNavigationView
-
+    lateinit var bottomNavigation : BottomNavigationView
+    lateinit var navHostFragment: NavHostFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        bottomNav = findViewById(R.id.bottomNavView) as BottomNavigationView
+        bottomNavigation = findViewById(R.id.bottomNavView) as BottomNavigationView
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostView) as NavHostFragment
 
-        bottomNav.setOnItemSelectedListener {
+        bottomNavigation = findViewById(R.id.bottomNavView)
+
+        NavigationUI.setupWithNavController(bottomNavigation, navHostFragment.navController)
+        /*bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.requestsListFragment -> {
                     loadFragment(RequestsListFragment())
@@ -38,9 +44,9 @@ class MainActivity : AppCompatActivity() {
                     false
                 }
             }
-        }
+        }*/
     }
-    private fun loadFragment(fragment: Fragment) {
+   /* private fun loadFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragments = fragmentManager.fragments
 
@@ -55,5 +61,5 @@ class MainActivity : AppCompatActivity() {
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.mainLayout, fragment)
         transaction.commit()
-    }
+    }*/
 }

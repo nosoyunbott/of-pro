@@ -82,9 +82,18 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     }
 
     override fun onViewItemDetail(request: Request) {
-        val action =
+        //for service provider
+        /*val action =
             RequestsListFragmentDirections.actionRequestsListFragmentToProposalFragment(request)
         v.findNavController().navigate(action)
+        Snackbar.make(v, request.requestTitle, Snackbar.LENGTH_SHORT).show()*/
+
+        //for client
+        val action2 =
+            RequestsListFragmentDirections.actionRequestsListFragmentToProviderRequestsFragment()
+        val navController = v.findNavController()
+        navController.navigate(action2)
         Snackbar.make(v, request.requestTitle, Snackbar.LENGTH_SHORT).show()
+
     }
 }
