@@ -80,5 +80,11 @@
     <fragment
         android:id="@+id/providerProfileEditFragment"
         android:name="com.ar.of_pro.fragments.ProviderProfileEditFragment"
-        android:label="ProviderProfileEditFragment" />
+        android:label="ProviderProfileEditFragment" >
+        <action
+            android:id="@+id/action_providerProfileEditFragment_to_providerProfileFragment"
+            app:destination="@id/providerProfileFragment"
+            app:popUpTo="@id/providerProfileFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
