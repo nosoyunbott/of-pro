@@ -16,12 +16,12 @@
             android:orientation="horizontal">
 
             <TableRow
-                android:layout_width="207dp"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btnAccept"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -30,7 +30,7 @@
                 android:textColorLink="#673AB7" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/btnCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -94,7 +94,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Rubro1,Rubro2,Rubro3" />
+                android:hint="Rubro1,Rubro2,Rubro3"
+                android:textSize="22sp" />
 
             <TableRow
                 android:layout_width="match_parent"
@@ -119,8 +120,9 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="251dp"
-                        android:layout_height="wrap_content"
-                        android:hint="lorem@ipsum.com" />
+                        android:layout_height="60dp"
+                        android:hint="lorem@ipsum.com"
+                        android:textSize="22sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
