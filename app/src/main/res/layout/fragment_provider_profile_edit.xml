@@ -21,11 +21,20 @@
                 android:layout_weight="1" />
 
             <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Aceptar"
+                android:textColorHighlight="#4CAF50"
+                android:textColorLink="#673AB7" />
+
+            <Button
                 android:id="@+id/btnEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Editar" />
+                android:text="Cancelar" />
 
         </LinearLayout>
 
@@ -56,38 +65,41 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/textView7"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Nombre" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
 
-                    <TextView
-                        android:id="@+id/textView3"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="251dp"
+                            android:layout_height="wrap_content"
+                            android:hint="Nombre" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Localidad" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="251dp"
+                            android:layout_height="wrap_content"
+                            android:hint="Localidad" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Rubro1,Rubro2,Rubro3"
+                android:textSize="22sp" />
+
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="32dp" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Rubro1,Rubro2,Rubro3"
-                android:textSize="20sp" />
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="31dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -102,12 +114,16 @@
                     android:text="Mail: "
                     android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="lorem@ipsum.com" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="251dp"
+                        android:layout_height="60dp"
+                        android:hint="lorem@ipsum.com"
+                        android:textSize="22sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -128,12 +144,15 @@
                     android:text="Telefono:"
                     android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="1121654455" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="251dp"
+                        android:layout_height="wrap_content"
+                        android:hint="01123456789" />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -151,42 +170,15 @@
             android:text="Descripcion"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/textView10"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from &quot;de Finibus Bonorum et Malorum&quot; by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham." />
+            android:layout_height="match_parent">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="59dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:backgroundTint="#EFE6E6"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txtRate2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="4.7 "
-                android:textAlignment="textEnd"
-                android:textSize="34sp" />
-
-            <TextView
-                android:id="@+id/txtRateQuantity2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:baselineAligned="false"
-                android:text="🌟"
-                android:textSize="34sp" />
-
-        </LinearLayout>
-
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="111dp"
+                android:hint="Descripcion" />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
