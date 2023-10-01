@@ -1,33 +1,35 @@
 package com.ar.of_pro.activities
 
+import android.content.ClipData.Item
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import com.ar.of_pro.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import com.ar.of_pro.fragments.RequestsListFragment
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var bottomNavigationClient : BottomNavigationView
+    lateinit var bottomNavigation : BottomNavigationView
     lateinit var bottomNavigationProvider : BottomNavigationView
     lateinit var navHostFragment: NavHostFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostView) as NavHostFragment
 
-        bottomNavigationClient = findViewById(R.id.bottomNavViewClient) as BottomNavigationView
-        bottomNavigationClient = findViewById(R.id.bottomNavViewClient)
+        bottomNavigation = findViewById(R.id.bottomNavView)
+        if(false){
+            bottomNavigation.menu.findItem(R.id.providerProfileFragment).isVisible = false
+        }else{
+            bottomNavigation.menu.findItem(R.id.requestFragment).isVisible = false
+        }
 
-        bottomNavigationProvider = findViewById(R.id.bottomNavViewProvider) as BottomNavigationView
-        bottomNavigationProvider = findViewById(R.id.bottomNavViewProvider)
 
+        NavigationUI.setupWithNavController(bottomNavigation, navHostFragment.navController)
 
-
-        //NavigationUI.setupWithNavController(bottomNavigationClient, navHostFragment.navController)
-        NavigationUI.setupWithNavController(bottomNavigationProvider, navHostFragment.navController)
     }
 
 

@@ -85,6 +85,6 @@
             android:id="@+id/action_providerProfileEditFragment_to_providerProfileFragment"
             app:destination="@id/providerProfileFragment"
             app:popUpTo="@id/providerProfileFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>

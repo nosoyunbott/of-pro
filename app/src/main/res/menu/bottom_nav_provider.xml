@@ -8,4 +8,6 @@
         android:id="@+id/historyFragment"/>
     <item android:title="Perfil"
         android:id="@+id/providerProfileFragment"/>
+    <item android:title="Solicitar"
+        android:id="@+id/requestFragment"/>
 </menu>
