@@ -29,6 +29,8 @@ class RequestDetailFragment : Fragment() {
         val action = RequestDetailFragmentDirections.actionRequestDetailFragmentToRequestsListFragment()
 
         btnAccept.setOnClickListener{
+
+            //v.findNavController().popBackStack(v.findNavController().graph.startDestinationId, false)
             v.findNavController().navigate(action)
         }
     }
