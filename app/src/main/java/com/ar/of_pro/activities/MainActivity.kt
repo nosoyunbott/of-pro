@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigation : BottomNavigationView
     lateinit var bottomNavigationProvider : BottomNavigationView
     lateinit var navHostFragment: NavHostFragment
+    lateinit var user : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         val userType: String? = intent?.let {
             MainActivityArgs.fromBundle(it.extras!!).userType
         }
+        user = userType!!
 
         navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostView) as NavHostFragment
 
@@ -35,6 +37,9 @@ class MainActivity : AppCompatActivity() {
 
         NavigationUI.setupWithNavController(bottomNavigation, navHostFragment.navController)
 
+    }
+    fun getUserType(): String{
+        return this.user
     }
 
 
