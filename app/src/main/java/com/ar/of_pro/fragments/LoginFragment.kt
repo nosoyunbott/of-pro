@@ -12,6 +12,7 @@ class LoginFragment : Fragment() {
 
     lateinit var v : View
     lateinit var txtToMain : TextView
+    val client : String = "CLIENT"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,7 +31,7 @@ class LoginFragment : Fragment() {
 
     private fun goToApp() {
         txtToMain.setOnClickListener {
-            val action = LoginFragmentDirections.actionLoginFragmentToMainActivity()
+            val action = LoginFragmentDirections.actionLoginFragmentToMainActivity(client)
             v.findNavController().navigate(action)
         }
     }

@@ -18,10 +18,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val userType: String? = intent?.let {
+            MainActivityArgs.fromBundle(it.extras!!).userType
+        }
+
         navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostView) as NavHostFragment
 
         bottomNavigation = findViewById(R.id.bottomNavView)
-        if(false){
+        if(userType == "CLIENT"){
             bottomNavigation.menu.findItem(R.id.providerProfileFragment).isVisible = false
         }else{
             bottomNavigation.menu.findItem(R.id.requestFragment).isVisible = false

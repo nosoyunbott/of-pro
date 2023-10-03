@@ -30,5 +30,9 @@
         android:id="@+id/mainActivity"
         android:name="com.ar.of_pro.activities.MainActivity"
         android:label="activity_main"
-        tools:layout="@layout/activity_main" />
+        tools:layout="@layout/activity_main" >
+        <argument
+            android:name="userType"
+            app:argType="string" />
+    </activity>
 </navigation>
