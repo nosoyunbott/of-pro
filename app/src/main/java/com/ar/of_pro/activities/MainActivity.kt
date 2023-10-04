@@ -3,6 +3,7 @@ package com.ar.of_pro.activities
 import android.content.ClipData.Item
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import com.ar.of_pro.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -30,8 +31,10 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation = findViewById(R.id.bottomNavView)
         if(userType == "CLIENT"){
             bottomNavigation.menu.findItem(R.id.providerProfileFragment).isVisible = false
+            bottomNavigation.menu.findItem(R.id.requestListProviderFragment).isVisible = false
         }else{
             bottomNavigation.menu.findItem(R.id.requestFragment).isVisible = false
+            bottomNavigation.menu.findItem(R.id.requestsListFragment).isVisible = false
         }
 
 
