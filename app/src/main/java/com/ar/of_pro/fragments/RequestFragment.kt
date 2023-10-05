@@ -11,7 +11,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.Ocupation
@@ -25,7 +27,14 @@ class RequestFragment : Fragment() {
     lateinit var spnOcupation : Spinner
     lateinit var spnServiceTypes : Spinner
     lateinit var btnAttach : Button
+    lateinit var btnRequest : Button
     private val PICK_MEDIA_REQUEST = 1
+
+    lateinit var edtTitle : EditText
+    lateinit var edtPriceMin:EditText
+    lateinit var edtPriceMax:EditText
+    lateinit var edtDescripcion : EditText
+    lateinit var edtTime : EditText
 
     var ocupationList : List<String> = Ocupation().getList()
     lateinit var ocupationAdapter: ArrayAdapter<String>
@@ -44,6 +53,12 @@ class RequestFragment : Fragment() {
         spnOcupation = v.findViewById(R.id.spnOcupations)
         spnServiceTypes = v.findViewById(R.id.spnServiceTypes)
         btnAttach = v.findViewById(R.id.btnAttach)
+        btnRequest = v.findViewById(R.id.btnRequest)
+        edtTitle = v.findViewById(R.id.edtTitle)
+        edtPriceMin = v.findViewById(R.id.edtPriceMin)
+        edtPriceMax = v.findViewById(R.id.edtPriceMax)
+        edtDescripcion = v.findViewById(R.id.edtDescripcion)
+        edtTime = v.findViewById(R.id.edtTime)
         return v
     }
 
@@ -53,6 +68,10 @@ class RequestFragment : Fragment() {
         setupSpinner(spnOcupation, ocupationAdapter)
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
         setOnClickListener(btnAttach)
+        btnRequest.setOnClickListener{
+            Toast.makeText(context, "Selected Occupation: $selectedOcupation, Titulo: ${edtTitle.text.toString()}", Toast.LENGTH_SHORT).show()
+
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -94,9 +113,12 @@ class RequestFragment : Fragment() {
 
     private fun setOnClickListener(btn : Button){
         btn.setOnClickListener(){
+
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*, video/*"
             startActivityForResult(intent, PICK_MEDIA_REQUEST)
+
+
         }
     }
 }
