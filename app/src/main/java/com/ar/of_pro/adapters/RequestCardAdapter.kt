@@ -2,7 +2,6 @@ package com.ar.of_pro.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.Request
@@ -23,7 +22,7 @@ class RequestCardAdapter(private val requestList: MutableList<Request>,  private
     override fun onBindViewHolder(holder: RequestCardHolder, position: Int) {
         val request = requestList[position]
         holder.setTitle(request.requestTitle)
-        holder.setBidsAmount(request.requestBidsAmount)
+        holder.setBidsAmount(request.requestBidAmount)
         holder.getCardLayout().setOnClickListener{
             onItemClick.onViewItemDetail(request)
         }
