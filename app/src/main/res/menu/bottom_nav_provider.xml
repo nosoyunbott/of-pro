@@ -4,6 +4,8 @@
 
     <item android:title="Solicitudes"
         android:id="@+id/requestsListFragment"/>
+    <item android:title="Solicitudes"
+        android:id="@+id/requestListProviderFragment"/>
     <item android:title="Historial"
         android:id="@+id/historyFragment"/>
     <item android:title="Perfil"

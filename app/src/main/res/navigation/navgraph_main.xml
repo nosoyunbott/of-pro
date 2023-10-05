@@ -3,13 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navgraph_main"
-    app:startDestination="@id/requestsListFragment">
+    app:startDestination="@id/appFragment">
 
     <fragment
         android:id="@+id/appFragment"
         android:name="com.ar.of_pro.fragments.AppFragment"
         android:label="fragment_app"
-        tools:layout="@layout/fragment_app" />
+        tools:layout="@layout/fragment_app" >
+        <action
+            android:id="@+id/action_appFragment_to_requestListProviderFragment"
+            app:destination="@id/requestListProviderFragment" />
+        <action
+            android:id="@+id/action_appFragment_to_requestsListFragment"
+            app:destination="@id/requestsListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.ar.of_pro.fragments.HistoryFragment"
@@ -26,9 +33,6 @@
         android:label="fragment_requests_list"
         tools:layout="@layout/fragment_requests_list" >
         <action
-            android:id="@+id/action_requestsListFragment_to_proposalFragment"
-            app:destination="@id/proposalFragment" />
-        <action
             android:id="@+id/action_requestsListFragment_to_providerRequestsFragment"
             app:destination="@id/providerRequestsFragment" />
     </fragment>
@@ -41,10 +45,8 @@
             android:name="request"
             app:argType="com.ar.of_pro.entities.Request" />
         <action
-            android:id="@+id/action_proposalFragment_to_requestsListFragment"
-            app:destination="@id/requestsListFragment"
-            app:popUpTo="@id/requestsListFragment"
-            app:popUpToInclusive="false" />
+            android:id="@+id/action_proposalFragment_to_requestListProviderFragment"
+            app:destination="@id/requestListProviderFragment" />
     </fragment>
     <fragment
         android:id="@+id/requestDetailFragment"
@@ -86,5 +88,14 @@
             app:destination="@id/providerProfileFragment"
             app:popUpTo="@id/providerProfileFragment"
             app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestListProviderFragment"
+        android:name="com.ar.of_pro.fragments.RequestListProviderFragment"
+        android:label="fragment_request_list_provider"
+        tools:layout="@layout/fragment_request_list_provider" >
+        <action
+            android:id="@+id/action_requestListProviderFragment_to_proposalFragment"
+            app:destination="@id/proposalFragment" />
     </fragment>
 </navigation>

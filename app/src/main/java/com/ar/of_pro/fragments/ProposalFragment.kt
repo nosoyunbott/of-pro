@@ -27,7 +27,7 @@ class ProposalFragment : Fragment() {
         super.onStart()
         btnProposal.setOnClickListener{
             val action =
-                ProposalFragmentDirections.actionProposalFragmentToRequestsListFragment()
+                ProposalFragmentDirections.actionProposalFragmentToRequestListProviderFragment()
             v.findNavController().navigate(action)
         }
     }

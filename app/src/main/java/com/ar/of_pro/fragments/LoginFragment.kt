@@ -11,14 +11,18 @@ import com.ar.of_pro.R
 class LoginFragment : Fragment() {
 
     lateinit var v : View
-    lateinit var txtToMain : TextView
+    lateinit var txtClient : TextView
+    lateinit var txtProvider : TextView
+    val client : String = "CLIENT"
+    val provider : String = "PROVIDER"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_login, container, false)
-        txtToMain = v.findViewById(R.id.txtToMain)
+        txtClient = v.findViewById(R.id.txtClient)
+        txtProvider= v.findViewById(R.id.txtProvider)
         return v
     }
 
@@ -29,8 +33,12 @@ class LoginFragment : Fragment() {
     }
 
     private fun goToApp() {
-        txtToMain.setOnClickListener {
-            val action = LoginFragmentDirections.actionLoginFragmentToMainActivity()
+        txtClient.setOnClickListener {
+            val action = LoginFragmentDirections.actionLoginFragmentToMainActivity(client)
+            v.findNavController().navigate(action)
+        }
+        txtProvider.setOnClickListener {
+            val action = LoginFragmentDirections.actionLoginFragmentToMainActivity(provider)
             v.findNavController().navigate(action)
         }
     }
