@@ -65,6 +65,9 @@ class Request(requestTitle: String?, requestBidAmount: Int?, categoryOcupation: 
         override fun newArray(size: Int): Array<Request?> {
             return arrayOfNulls(size)
         }
+        const val IN_COURSE = "EN CURSO"
+        const val PENDING = "PENDIENTE"
+        const val FINISHED = "FINALIZADA"
     }
 
 }

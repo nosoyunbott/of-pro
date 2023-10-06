@@ -71,8 +71,9 @@ class RequestFragment : Fragment() {
         setOnClickListener(btnAttach)
         btnRequest.setOnClickListener{
             val title = edtTitle.text.toString()
-            val r = Request(title,0, selectedOcupation, selectedServiceType, edtDescripcion.text.toString(), "EN PROGRESO", edtTime.text.toString(), edtPriceMin.text.toString().toIntOrNull(), edtPriceMax.text.toString().toIntOrNull(), "1"    )
-            Toast.makeText(context, "Selected Occupation: ${r.categoryOcupation}, Titulo: ${r.requestTitle}", Toast.LENGTH_SHORT).show()
+
+            val r = Request(title,0, selectedOcupation, selectedServiceType, edtDescripcion.text.toString(), Request.PENDING, edtTime.text.toString(), edtPriceMin.text.toString().toIntOrNull(), edtPriceMax.text.toString().toIntOrNull(), "1"    )
+            Toast.makeText(context, "state: ${Request.FINISHED}, Precios: ${r.minCost} to ${r.maxCost}", Toast.LENGTH_SHORT).show()
 
         }
     }
