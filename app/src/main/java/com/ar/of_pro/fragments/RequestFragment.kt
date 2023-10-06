@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.Ocupation
+import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.ServiceType
 
 
@@ -69,7 +70,9 @@ class RequestFragment : Fragment() {
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
         setOnClickListener(btnAttach)
         btnRequest.setOnClickListener{
-            Toast.makeText(context, "Selected Occupation: $selectedOcupation, Titulo: ${edtTitle.text.toString()}", Toast.LENGTH_SHORT).show()
+            val title = edtTitle.text.toString()
+            val r = Request(title,0, selectedOcupation, selectedServiceType, edtDescripcion.text.toString(), "EN PROGRESO", edtTime.text.toString(), edtPriceMin.text.toString().toIntOrNull(), edtPriceMax.text.toString().toIntOrNull(), "1"    )
+            Toast.makeText(context, "Selected Occupation: ${r.categoryOcupation}, Titulo: ${r.requestTitle}", Toast.LENGTH_SHORT).show()
 
         }
     }

@@ -9,7 +9,7 @@ class Request(requestTitle: String?, requestBidAmount: Int?, categoryOcupation: 
 
 
      var requestTitle: String = ""
-     var requestBidAmount: Int = 0
+     var requestBidAmount: Int = 0 //no se pasa inicialmente
      var categoryOcupation: String =""
      var categoryService: String = ""
     var description: String = ""
@@ -18,7 +18,7 @@ class Request(requestTitle: String?, requestBidAmount: Int?, categoryOcupation: 
     var minCost: Int = 0
     var maxCost: Int = 0
     var idClient: String = ""
-    var idProvider: String = ""
+    var idProvider: String = "" //no se pasa inicialmente
 
 
 
