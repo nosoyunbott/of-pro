@@ -11,7 +11,6 @@ class Proposal(
     idRequest: String?,
     bid: Float?,
     commentary: String?,
-    disabled: Boolean?,
 ) : Parcelable {
 
 
@@ -27,7 +26,7 @@ class Proposal(
         parcel.readString(),
         parcel.readFloat(),
         parcel.readString(),
-        parcel.readBoolean()
+
 
     )
 
@@ -37,7 +36,7 @@ class Proposal(
         this.idRequest = idRequest!!
         this.bid = bid!!
         this.commentary = commentary!!
-        this.disabled = disabled!!
+        this.disabled = false
 
     }
 
@@ -62,5 +61,10 @@ class Proposal(
             return arrayOfNulls(size)
         }
     }
+
+    fun setDisabled(){
+        //TODO Para desactivar proposals que son rechazadas
+    };
+
 
 }

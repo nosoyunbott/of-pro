@@ -8,8 +8,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
+import com.ar.of_pro.entities.Proposal
+import com.ar.of_pro.entities.Request
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ProposalFragment : Fragment() {
 
@@ -23,6 +28,7 @@ class ProposalFragment : Fragment() {
     lateinit var txtDescription : TextView
     lateinit var edtBudget : EditText
     lateinit var edtComment : EditText
+    private val db = FirebaseFirestore.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,7 +60,25 @@ class ProposalFragment : Fragment() {
         txtPricing.text = request.maxCost.toString()
         txtDescription.text = request.description
 
+
+
         btnProposal.setOnClickListener{
+
+            val bid = edtBudget.text.toString().toFloat()
+            val commentary = edtComment.text.toString()
+            val idProvider = "19238913" //TODO Mandar idProvider desde la sesión
+            val idRequest = "940909012"//TODO Mandar idRequest desde la sesión
+            val p = Proposal(
+                idProvider,
+                idRequest,
+                bid,
+                commentary
+            )
+
+            val newDocProposal = db.collection("Proposals").document()
+            db.collection("Proposals").document(newDocProposal.id).set(p)
+
+
             val action =
                 //agregar que edit text carguen el objeto a la db y crear entity Proposal
                 ProposalFragmentDirections.actionProposalFragmentToRequestListProviderFragment()
