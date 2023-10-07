@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
@@ -20,6 +21,8 @@ class ProposalFragment : Fragment() {
     lateinit var txtTime : TextView
     lateinit var txtPricing : TextView
     lateinit var txtDescription : TextView
+    lateinit var edtBudget : EditText
+    lateinit var edtComment : EditText
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,6 +36,10 @@ class ProposalFragment : Fragment() {
         txtTime = v.findViewById(R.id.txtTime)
         txtPricing = v.findViewById(R.id.txtPricing)
         txtDescription = v.findViewById(R.id.txtDescription)
+        edtBudget = v.findViewById(R.id.edtBudget)
+        edtComment = v.findViewById(R.id.edtComment)
+
+        //id request, coment, presupuesto, idproveedor
         return v
     }
 
@@ -49,6 +56,7 @@ class ProposalFragment : Fragment() {
 
         btnProposal.setOnClickListener{
             val action =
+                //agregar que edit text carguen el objeto a la db y crear entity Proposal
                 ProposalFragmentDirections.actionProposalFragmentToRequestListProviderFragment()
             v.findNavController().navigate(action)
         }

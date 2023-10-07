@@ -86,7 +86,7 @@ class RequestFragment : Fragment() {
                 Request.PENDING,
                 edtTime.text.toString(),
                 edtPriceMax.text.toString().toIntOrNull(),
-                clientId
+                clientId,
             )
 
             val newDocRequest = db.collection("Requests").document()

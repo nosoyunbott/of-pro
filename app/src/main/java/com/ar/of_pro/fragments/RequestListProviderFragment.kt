@@ -67,7 +67,7 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
                     state,
                     date,
                     maxCost,
-                    idClient
+                    idClient,
                 )
 
                 requestList.add(r)
