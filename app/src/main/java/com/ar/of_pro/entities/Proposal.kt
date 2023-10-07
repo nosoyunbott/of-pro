@@ -22,7 +22,6 @@ class Proposal(
     var disabled: Boolean = false
 
 
-    @SuppressLint("NewApi")
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
