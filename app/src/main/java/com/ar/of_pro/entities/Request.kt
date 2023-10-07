@@ -12,7 +12,7 @@ class Request(
     state: String?,
     date: String?,
     maxCost: Int?,
-    idClient: String?,
+    clientId: String?,
 ) : Parcelable {
 
 
@@ -24,8 +24,8 @@ class Request(
     var state: String = ""
     var date: String = ""
     var maxCost: Int = 0
-    var idClient: String = ""
-    var idProvider: String = "" //no se pasa inicialmente
+    var clientId: String = ""
+    var providerId: String = "" //no se pasa inicialmente
 
 
     constructor(parcel: Parcel) : this(
@@ -49,7 +49,7 @@ class Request(
         this.state = state!!
         this.date = date!!
         this.maxCost = maxCost!!
-        this.idClient = idClient!!
+        this.clientId = clientId!!
 
     }
 

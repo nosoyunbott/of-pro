@@ -16,6 +16,7 @@ import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.listeners.OnViewItemClickedListener
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class RequestsListFragment : Fragment(), OnViewItemClickedListener {
@@ -29,6 +30,47 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     var requestList: MutableList<Request> = ArrayList()
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var requestListAdapter: RequestCardAdapter
+
+    val db = FirebaseFirestore.getInstance()
+    val requestsCollection = db.collection("Requests")
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //TODO filtrar solicitudes por id de cliente
+        requestsCollection.get().addOnSuccessListener { documents ->
+            for (document in documents) {
+                val title = document.getString("requestTitle") ?: ""
+                val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
+                val selectedOcupation = document.getString("categoryOcupation") ?: ""
+                val selectedServiceType = document.getString("categoryService") ?: ""
+                val description = document.getString("description") ?: ""
+                val state = document.getString("state") ?: ""
+                val date = document.getString("date") ?: ""
+                val maxCost = document.getLong("maxCost")?.toInt() ?: 0
+                val clientId = document.getString("clientId") ?: ""
+
+                val r = Request(
+                    title,
+                    requestBidAmount,
+                    selectedOcupation,
+                    selectedServiceType,
+                    description,
+                    state,
+                    date,
+                    maxCost,
+                    clientId,
+                )
+
+                requestList.add(r)
+
+            }
+
+            requestListAdapter.notifyDataSetChanged()
+        }
+            .addOnFailureListener { Exception ->
+                println("Error getting documents: $Exception")
+            }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -41,47 +83,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
     override fun onStart() {
         super.onStart()
-        for (i in 1..10) {
-            requestList.add(
-                Request(
-                    "Pintar paredes en una cocina",
-                    9,
-                    ocupationList[1],
-                    "",
-                    "",
-                    "",
-                    "",
-                    15,
-                    ""
-                )
-            )
-            requestList.add(
-                Request(
-                    "Arreglar canilla que pierde",
-                    0,
-                    ocupationList[0],
-                    "",
-                    "",
-                    "",
-                    "",
-                    15,
-                    ""
-                )
-            )
-            requestList.add(
-                Request(
-                    "Instalar aire acondicionado",
-                    23,
-                    ocupationList[4],
-                    "",
-                    "",
-                    "",
-                    "",
-                    15,
-                    ""
-                )
-            )
-        }
+
 
         recRequestList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
