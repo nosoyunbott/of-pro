@@ -19,6 +19,9 @@ import com.ar.of_pro.R
 import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.ServiceType
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 
 class RequestFragment : Fragment() {
@@ -43,6 +46,9 @@ class RequestFragment : Fragment() {
     lateinit var serviceTypesAdapter: ArrayAdapter<String>
     lateinit var selectedServiceType: String
 
+    private val db = FirebaseFirestore.getInstance()
+    private var userId = FirebaseAuth.getInstance().currentUser?.uid
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,6 +72,7 @@ class RequestFragment : Fragment() {
         setupSpinner(spnOcupation, ocupationAdapter)
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
         setOnClickListener(btnAttach)
+
         btnRequest.setOnClickListener {
             val title = edtTitle.text.toString()
 
@@ -80,6 +87,11 @@ class RequestFragment : Fragment() {
                 edtPriceMax.text.toString().toIntOrNull(),
                 "1"
             )
+
+            val newDocRequest = db.collection("Requests").document()
+            db.collection("Requests").document(newDocRequest.id).set(r)
+            db.collection("Requests").document(newDocRequest.id).set(hashMapOf("idClient" to userId), SetOptions.merge())
+
             Toast.makeText(
                 context,
                 "state: ${Request.FINISHED}, Precio máximo: ${r.maxCost}",
