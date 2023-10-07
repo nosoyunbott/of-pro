@@ -41,9 +41,45 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
     override fun onStart() {
         super.onStart()
         for (i in 1..10) {
-            requestList.add(Request("Pintar paredes en una cocina", 9, ocupationList[1], "", "", "", "", 12, 15, ""))
-            requestList.add(Request("Arreglar canilla que pierde", 0, ocupationList[0], "", "", "", "", 12, 15, ""))
-            requestList.add(Request("Instalar aire acondicionado", 23, ocupationList[4], "", "", "", "", 12, 15, ""))
+            requestList.add(
+                Request(
+                    "Pintar paredes en una cocina",
+                    9,
+                    ocupationList[1],
+                    "",
+                    "",
+                    "",
+                    "",
+                    15,
+                    ""
+                )
+            )
+            requestList.add(
+                Request(
+                    "Arreglar canilla que pierde",
+                    0,
+                    ocupationList[0],
+                    "",
+                    "",
+                    "",
+                    "",
+                    15,
+                    ""
+                )
+            )
+            requestList.add(
+                Request(
+                    "Instalar aire acondicionado",
+                    23,
+                    ocupationList[4],
+                    "",
+                    "",
+                    "",
+                    "",
+                    15,
+                    ""
+                )
+            )
         }
 
         recRequestList.setHasFixedSize(true)
@@ -71,8 +107,10 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
 
             btnFilter.setOnClickListener {
                 val filter = btnFilter.text.toString()
-                val filteredList = requestList.filter { it.categoryOcupation == filter } as MutableList
-                requestListAdapter = RequestCardAdapter(filteredList, this@RequestListProviderFragment)
+                val filteredList =
+                    requestList.filter { it.categoryOcupation == filter } as MutableList
+                requestListAdapter =
+                    RequestCardAdapter(filteredList, this@RequestListProviderFragment)
                 recRequestList.adapter = requestListAdapter
             }
 
@@ -83,10 +121,11 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
     override fun onViewItemDetail(request: Request) {
         //for service provider
         val action =
-            RequestListProviderFragmentDirections.actionRequestListProviderFragmentToProposalFragment(request)
+            RequestListProviderFragmentDirections.actionRequestListProviderFragmentToProposalFragment(
+                request
+            )
         v.findNavController().navigate(action)
         Snackbar.make(v, request.requestTitle, Snackbar.LENGTH_SHORT).show()
-
 
 
     }

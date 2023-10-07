@@ -42,9 +42,45 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     override fun onStart() {
         super.onStart()
         for (i in 1..10) {
-            requestList.add(Request("Pintar paredes en una cocina", 9, ocupationList[1], "", "", "", "", 12, 15, ""))
-            requestList.add(Request("Arreglar canilla que pierde", 0, ocupationList[0], "", "", "", "", 12, 15, ""))
-            requestList.add(Request("Instalar aire acondicionado", 23, ocupationList[4], "", "", "", "", 12, 15, ""))
+            requestList.add(
+                Request(
+                    "Pintar paredes en una cocina",
+                    9,
+                    ocupationList[1],
+                    "",
+                    "",
+                    "",
+                    "",
+                    15,
+                    ""
+                )
+            )
+            requestList.add(
+                Request(
+                    "Arreglar canilla que pierde",
+                    0,
+                    ocupationList[0],
+                    "",
+                    "",
+                    "",
+                    "",
+                    15,
+                    ""
+                )
+            )
+            requestList.add(
+                Request(
+                    "Instalar aire acondicionado",
+                    23,
+                    ocupationList[4],
+                    "",
+                    "",
+                    "",
+                    "",
+                    15,
+                    ""
+                )
+            )
         }
 
         recRequestList.setHasFixedSize(true)
@@ -72,7 +108,8 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
             btnFilter.setOnClickListener {
                 val filter = btnFilter.text.toString()
-                val filteredList = requestList.filter { it.categoryOcupation == filter } as MutableList
+                val filteredList =
+                    requestList.filter { it.categoryOcupation == filter } as MutableList
                 requestListAdapter = RequestCardAdapter(filteredList, this@RequestsListFragment)
                 recRequestList.adapter = requestListAdapter
             }

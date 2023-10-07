@@ -21,29 +21,27 @@ import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.ServiceType
 
 
-
 class RequestFragment : Fragment() {
 
-    lateinit var v : View
-    lateinit var spnOcupation : Spinner
-    lateinit var spnServiceTypes : Spinner
-    lateinit var btnAttach : Button
-    lateinit var btnRequest : Button
+    lateinit var v: View
+    lateinit var spnOcupation: Spinner
+    lateinit var spnServiceTypes: Spinner
+    lateinit var btnAttach: Button
+    lateinit var btnRequest: Button
     private val PICK_MEDIA_REQUEST = 1
 
-    lateinit var edtTitle : EditText
-    lateinit var edtPriceMin:EditText
-    lateinit var edtPriceMax:EditText
-    lateinit var edtDescripcion : EditText
-    lateinit var edtTime : EditText
+    lateinit var edtTitle: EditText
+    lateinit var edtPriceMax: EditText
+    lateinit var edtDescripcion: EditText
+    lateinit var edtTime: EditText
 
-    var ocupationList : List<String> = Ocupation().getList()
+    var ocupationList: List<String> = Ocupation().getList()
     lateinit var ocupationAdapter: ArrayAdapter<String>
-    lateinit var selectedOcupation : String
+    lateinit var selectedOcupation: String
 
-    var serviceTypesList : List<String> = ServiceType().getList()
+    var serviceTypesList: List<String> = ServiceType().getList()
     lateinit var serviceTypesAdapter: ArrayAdapter<String>
-    lateinit var selectedServiceType : String
+    lateinit var selectedServiceType: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,7 +54,6 @@ class RequestFragment : Fragment() {
         btnAttach = v.findViewById(R.id.btnAttach)
         btnRequest = v.findViewById(R.id.btnRequest)
         edtTitle = v.findViewById(R.id.edtTitle)
-        edtPriceMin = v.findViewById(R.id.edtPriceMin)
         edtPriceMax = v.findViewById(R.id.edtPriceMax)
         edtDescripcion = v.findViewById(R.id.edtDescripcion)
         edtTime = v.findViewById(R.id.edtTime)
@@ -69,11 +66,25 @@ class RequestFragment : Fragment() {
         setupSpinner(spnOcupation, ocupationAdapter)
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
         setOnClickListener(btnAttach)
-        btnRequest.setOnClickListener{
+        btnRequest.setOnClickListener {
             val title = edtTitle.text.toString()
 
-            val r = Request(title,0, selectedOcupation, selectedServiceType, edtDescripcion.text.toString(), Request.PENDING, edtTime.text.toString(), edtPriceMin.text.toString().toIntOrNull(), edtPriceMax.text.toString().toIntOrNull(), "1"    )
-            Toast.makeText(context, "state: ${Request.FINISHED}, Precios: ${r.minCost} to ${r.maxCost}", Toast.LENGTH_SHORT).show()
+            val r = Request(
+                title,
+                0,
+                selectedOcupation,
+                selectedServiceType,
+                edtDescripcion.text.toString(),
+                Request.PENDING,
+                edtTime.text.toString(),
+                edtPriceMax.text.toString().toIntOrNull(),
+                "1"
+            )
+            Toast.makeText(
+                context,
+                "state: ${Request.FINISHED}, Precio máximo: ${r.maxCost}",
+                Toast.LENGTH_SHORT
+            ).show()
 
         }
     }
@@ -81,8 +92,10 @@ class RequestFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        ocupationAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, ocupationList)
-        serviceTypesAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, serviceTypesList)
+        ocupationAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, ocupationList)
+        serviceTypesAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, serviceTypesList)
     }
 
     private fun setupSpinner(spinner: Spinner, adapter: ArrayAdapter<String>) {
@@ -106,7 +119,7 @@ class RequestFragment : Fragment() {
         }
     }
 
-    private fun showDialog(){
+    private fun showDialog() {
         val dialog = AlertDialog.Builder(context)
             .setTitle("Error")
             .setMessage("ROMPISTE TODO")
@@ -115,8 +128,8 @@ class RequestFragment : Fragment() {
         dialog.show()
     }
 
-    private fun setOnClickListener(btn : Button){
-        btn.setOnClickListener(){
+    private fun setOnClickListener(btn: Button) {
+        btn.setOnClickListener() {
 
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*, video/*"
