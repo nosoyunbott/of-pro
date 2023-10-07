@@ -5,6 +5,7 @@
     android:id="@+id/navgraph_main"
     app:startDestination="@id/requestsListFragment">
 
+
     <fragment
         android:id="@+id/appFragment"
         android:name="com.ar.of_pro.fragments.AppFragment"
@@ -15,6 +16,13 @@
         android:name="com.ar.of_pro.fragments.HistoryFragment"
         android:label="fragment_history"
         tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/requestsHistoryFragment"
+        android:name="com.ar.of_pro.fragments.RequestsHistoryListFragment"
+        android:label="fragment_request_history_list"
+        tools:layout="@layout/fragment_request_history_list" />
+
     <fragment
         android:id="@+id/requestFragment"
         android:name="com.ar.of_pro.fragments.RequestFragment"

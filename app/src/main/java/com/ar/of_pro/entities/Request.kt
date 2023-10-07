@@ -7,8 +7,10 @@ class Request(requestTitle: String?, requestBidsAmount: Int?, category: String?)
 
 
      var requestTitle: String = ""
+     var requestDate:String="02-10-2023"
+     var  workerName:String="Hector Medina"
      var requestBidsAmount: Int = 0
-    var category: String =""
+     var category: String =""
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
