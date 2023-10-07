@@ -1,6 +1,7 @@
 package com.ar.of_pro.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.listeners.OnViewItemClickedListener
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
 
@@ -28,6 +30,9 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
     var requestList: MutableList<Request> = ArrayList()
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var requestListAdapter: RequestCardAdapter
+
+    val db = FirebaseFirestore.getInstance()
+    val requestsCollection = db.collection("Requests")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -40,47 +45,59 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
 
     override fun onStart() {
         super.onStart()
-        for (i in 1..10) {
-            requestList.add(
-                Request(
-                    "Pintar paredes en una cocina",
-                    9,
-                    ocupationList[1],
-                    "",
-                    "",
-                    "",
-                    "",
-                    15,
-                    ""
-                )
-            )
-            requestList.add(
-                Request(
-                    "Arreglar canilla que pierde",
-                    0,
-                    ocupationList[0],
-                    "",
-                    "",
-                    "",
-                    "",
-                    15,
-                    ""
-                )
-            )
-            requestList.add(
-                Request(
-                    "Instalar aire acondicionado",
-                    23,
-                    ocupationList[4],
-                    "",
-                    "",
-                    "",
-                    "",
-                    15,
-                    ""
-                )
-            )
-        }
+//        for (i in 1..10) {
+//            requestList.add(
+//                Request(
+//                    "Pintar paredes en una cocina",
+//                    9,
+//                    ocupationList[1],
+//                    "",
+//                    "",
+//                    "",
+//                    "",
+//                    15,
+//                    ""
+//                )
+//            )
+//            requestList.add(
+//                Request(
+//                    "Arreglar canilla que pierde",
+//                    0,
+//                    ocupationList[0],
+//                    "",
+//                    "",
+//                    "",
+//                    "",
+//                    15,
+//                    ""
+//                )
+//            )
+//            requestList.add(
+//                Request(
+//                    "Instalar aire acondicionado",
+//                    23,
+//                    ocupationList[4],
+//                    "",
+//                    "",
+//                    "",
+//                    "",
+//                    15,
+//                    ""
+//                )
+//            )
+//        }
+//
+//        val r = Request(
+//            title,
+//            0,
+//            selectedOcupation,
+//            selectedServiceType,
+//            edtDescripcion.text.toString(),
+//            Request.PENDING,
+//            edtTime.text.toString(),
+//            edtPriceMax.text.toString().toIntOrNull(),
+//            "1"
+//        )
 
         recRequestList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
@@ -88,6 +105,41 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
         requestListAdapter = RequestCardAdapter(requestList, this)
         recRequestList.adapter = requestListAdapter
 
+        requestsCollection.get().addOnSuccessListener { documents ->
+            for (document in documents) {
+                val title = document.getString("requestTitle") ?: ""
+                val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
+                val selectedOcupation = document.getString("categoryOcupation") ?: ""
+                val selectedServiceType = document.getString("categoryService") ?: ""
+                val description = document.getString("description") ?: ""
+                val state = document.getString("state") ?: ""
+                val date = document.getString("date") ?: ""
+                val maxCost = document.getLong("maxCost")?.toInt() ?: 0
+                val idClient = document.getString("idClient") ?: ""
+
+                val r = Request(
+                    title,
+                    requestBidAmount,
+                    selectedOcupation,
+                    selectedServiceType,
+                    description,
+                    state,
+                    date,
+                    maxCost,
+                    idClient
+                )
+
+                println(r)
+                requestList.add(r)
+
+
+            }
+
+            requestListAdapter.notifyDataSetChanged()
+        }
+            .addOnFailureListener { Exception ->
+                println("Error getting documents: $Exception")
+            }
 
         refreshRecyclerView()
     }
