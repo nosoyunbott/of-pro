@@ -26,7 +26,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtRequests"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.0"
+        android:paddingHorizontal="15dp"
+        >
 
         <Spinner
             android:id="@+id/spnOcupations"
@@ -53,19 +55,9 @@
             app:layout_constraintTop_toBottomOf="@+id/edtTitle">
 
             <EditText
-                android:id="@+id/edtPriceMin"
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:ems="10"
-                android:hint="Precio Min"
-                android:inputType="number"
-                android:text="" />
-
-            <EditText
                 android:id="@+id/edtPriceMax"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
-                android:layout_marginLeft="30dp"
                 android:ems="10"
                 android:hint="Precio Max"
                 android:inputType="number"
@@ -91,6 +83,7 @@
             android:id="@+id/edtTime"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:hint="Fecha y hora"
             android:ems="10"
             android:inputType="time" />
 
