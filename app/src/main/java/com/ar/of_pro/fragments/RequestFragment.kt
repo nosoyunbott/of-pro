@@ -75,6 +75,7 @@ class RequestFragment : Fragment() {
 
         btnRequest.setOnClickListener {
             val title = edtTitle.text.toString()
+            val clientId = "1"
 
             val r = Request(
                 title,
@@ -85,12 +86,11 @@ class RequestFragment : Fragment() {
                 Request.PENDING,
                 edtTime.text.toString(),
                 edtPriceMax.text.toString().toIntOrNull(),
-                "1"
+                clientId
             )
 
             val newDocRequest = db.collection("Requests").document()
             db.collection("Requests").document(newDocRequest.id).set(r)
-            db.collection("Requests").document(newDocRequest.id).set(hashMapOf("idClient" to userId), SetOptions.merge())
 
             Toast.makeText(
                 context,

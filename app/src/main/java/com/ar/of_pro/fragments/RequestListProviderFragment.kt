@@ -43,67 +43,8 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
         return v
     }
 
-    override fun onStart() {
-        super.onStart()
-//        for (i in 1..10) {
-//            requestList.add(
-//                Request(
-//                    "Pintar paredes en una cocina",
-//                    9,
-//                    ocupationList[1],
-//                    "",
-//                    "",
-//                    "",
-//                    "",
-//                    15,
-//                    ""
-//                )
-//            )
-//            requestList.add(
-//                Request(
-//                    "Arreglar canilla que pierde",
-//                    0,
-//                    ocupationList[0],
-//                    "",
-//                    "",
-//                    "",
-//                    "",
-//                    15,
-//                    ""
-//                )
-//            )
-//            requestList.add(
-//                Request(
-//                    "Instalar aire acondicionado",
-//                    23,
-//                    ocupationList[4],
-//                    "",
-//                    "",
-//                    "",
-//                    "",
-//                    15,
-//                    ""
-//                )
-//            )
-//        }
-//
-//        val r = Request(
-//            title,
-//            0,
-//            selectedOcupation,
-//            selectedServiceType,
-//            edtDescripcion.text.toString(),
-//            Request.PENDING,
-//            edtTime.text.toString(),
-//            edtPriceMax.text.toString().toIntOrNull(),
-//            "1"
-//        )
-
-        recRequestList.setHasFixedSize(true)
-        linearLayoutManager = LinearLayoutManager(context)
-        recRequestList.layoutManager = linearLayoutManager
-        requestListAdapter = RequestCardAdapter(requestList, this)
-        recRequestList.adapter = requestListAdapter
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         requestsCollection.get().addOnSuccessListener { documents ->
             for (document in documents) {
@@ -129,9 +70,7 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
                     idClient
                 )
 
-                println(r)
                 requestList.add(r)
-
 
             }
 
@@ -140,6 +79,16 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
             .addOnFailureListener { Exception ->
                 println("Error getting documents: $Exception")
             }
+
+    }
+    override fun onStart() {
+        super.onStart()
+
+        recRequestList.setHasFixedSize(true)
+        linearLayoutManager = LinearLayoutManager(context)
+        recRequestList.layoutManager = linearLayoutManager
+        requestListAdapter = RequestCardAdapter(requestList, this)
+        recRequestList.adapter = requestListAdapter
 
         refreshRecyclerView()
     }
@@ -157,6 +106,7 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
             btnFilter.textSize = 16F
             btnFilter.background = resources.getDrawable(R.drawable.rounded_button)
 
+            // botones del carrousel de rubros
             btnFilter.setOnClickListener {
                 val filter = btnFilter.text.toString()
                 val filteredList =
