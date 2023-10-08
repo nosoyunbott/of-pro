@@ -19,7 +19,8 @@ import com.ar.of_pro.listeners.OnViewItemClickedListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 
-
+//TODO Actualizar cantidad de proposals para que figuren en el recycler view
+//TODO  dejar la demo linda para el miercoles
 class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
 
