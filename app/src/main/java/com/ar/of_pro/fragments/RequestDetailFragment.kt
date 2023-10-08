@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
+import com.ar.of_pro.services.RequestsService
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -57,6 +58,7 @@ class RequestDetailFragment : Fragment() {
         txtCalificationQty.text = proposalInfo.calificationQty.toString()
 
         btnAccept.setOnClickListener{
+            RequestsService.updateProviderIdFromRequest(proposalInfo.requestId, proposalInfo.providerId)
 
             //v.findNavController().popBackStack(v.findNavController().graph.startDestinationId, false)
             v.findNavController().navigate(action)
