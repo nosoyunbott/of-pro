@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class ServiceProvider(name: String?, bidAmount: Float?, calification: Float?): Parcelable {
+    //TODO cambiar nombre de la clase porque nuestros usuarios estan todos bajo la entity User
     var name: String = ""
     var bidAmount: Float = 0f
     var calification: Float = 0f
