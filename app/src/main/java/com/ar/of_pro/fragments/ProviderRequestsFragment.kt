@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +34,8 @@ class ProviderRequestsFragment : Fragment(), OnServiceProviderClickedListener {
     val db = FirebaseFirestore.getInstance()
     val proposalsCollection = db.collection("Proposals")
     val usersCollection = db.collection("Users")
+
+    lateinit var txtTitle: TextView
 
     lateinit var userObj: User
     var userName: String = ""
@@ -97,13 +101,15 @@ class ProviderRequestsFragment : Fragment(), OnServiceProviderClickedListener {
     ): View? {
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_provider_requests, container, false)
+        txtTitle = v.findViewById(R.id.txtTitle)
         recProviderList = v.findViewById(R.id.rec_providers)
         return v
     }
 
     override fun onStart() {
         super.onStart()
-
+        val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
+        txtTitle.text = request.requestTitle
 
         recProviderList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)

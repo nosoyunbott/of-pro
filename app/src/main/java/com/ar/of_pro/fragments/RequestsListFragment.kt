@@ -129,7 +129,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
         //for client
         val action2 =
-            RequestsListFragmentDirections.actionRequestsListFragmentToProviderRequestsFragment()
+            RequestsListFragmentDirections.actionRequestsListFragmentToProviderRequestsFragment(request)
         val navController = v.findNavController()
         navController.navigate(action2)
         Snackbar.make(v, request.requestTitle, Snackbar.LENGTH_SHORT).show()

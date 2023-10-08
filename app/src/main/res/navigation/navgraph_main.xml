@@ -70,6 +70,9 @@
         <action
             android:id="@+id/action_providerRequestsFragment_to_requestDetailFragment"
             app:destination="@id/requestDetailFragment" />
+        <argument
+            android:name="request"
+            app:argType="com.ar.of_pro.entities.Request" />
     </fragment>
     <fragment
         android:id="@+id/providerProfileFragment"
