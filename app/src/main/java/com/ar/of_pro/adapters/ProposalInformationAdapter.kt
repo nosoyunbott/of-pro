@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.ProposalInformation
 import com.ar.of_pro.holders.ServiceProviderHolder
-import com.ar.of_pro.listeners.OnServiceProviderClickedListener
+import com.ar.of_pro.listeners.OnProposalInformationClickedListener
 
-class ServiceProviderAdapter(private val providerList: MutableList<ProposalInformation>, private val onItemClick: OnServiceProviderClickedListener) : RecyclerView.Adapter<ServiceProviderHolder>() {
+class ProposalInformationAdapter(private val providerList: MutableList<ProposalInformation>, private val onItemClick: OnProposalInformationClickedListener) : RecyclerView.Adapter<ServiceProviderHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceProviderHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.provider_card_element, parent, false)
         return (ServiceProviderHolder(view))

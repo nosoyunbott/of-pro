@@ -11,22 +11,22 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.of_pro.R
-import com.ar.of_pro.adapters.ServiceProviderAdapter
+import com.ar.of_pro.adapters.ProposalInformationAdapter
 import com.ar.of_pro.entities.Proposal
 import com.ar.of_pro.entities.ProposalInformation
 import com.ar.of_pro.entities.User
-import com.ar.of_pro.listeners.OnServiceProviderClickedListener
+import com.ar.of_pro.listeners.OnProposalInformationClickedListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-class ProviderRequestsFragment : Fragment(), OnServiceProviderClickedListener {
+class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListener {
 
     lateinit var v: View
     lateinit var recProviderList: RecyclerView
     var providerList: MutableList<ProposalInformation> = ArrayList()
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private lateinit var serviceProviderAdapter: ServiceProviderAdapter
+    private lateinit var proposalInformationAdapter: ProposalInformationAdapter
 
     val db = FirebaseFirestore.getInstance()
     val proposalsCollection = db.collection("Proposals")
@@ -92,7 +92,7 @@ class ProviderRequestsFragment : Fragment(), OnServiceProviderClickedListener {
 
                 //TODO desranciar esto
 
-                serviceProviderAdapter.notifyDataSetChanged()
+                proposalInformationAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -116,8 +116,8 @@ class ProviderRequestsFragment : Fragment(), OnServiceProviderClickedListener {
         recProviderList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recProviderList.layoutManager = linearLayoutManager
-        serviceProviderAdapter = ServiceProviderAdapter(providerList, this)
-        recProviderList.adapter = serviceProviderAdapter
+        proposalInformationAdapter = ProposalInformationAdapter(providerList, this)
+        recProviderList.adapter = proposalInformationAdapter
 
     }
 
