@@ -43,66 +43,53 @@ class ProviderRequestsFragment : Fragment(), OnServiceProviderClickedListener {
         var providerId: String = ""
         var bid: Float = 0f
         val requestId = "QBFNQx2HbgRCXH5YV5tJ"
+        getProposalsFromRequestId(requestId)
+
+    }
+
+    /**
+     * Retrieves proposals from Firestore based on a given request ID and populates the
+     * [providerList] with data obtained from Firestore.
+     *
+     * @param requestId The unique identifier of the request to fetch proposals for.
+     */
+    private fun getProposalsFromRequestId(requestId: String) {
+
         proposalsCollection.get().addOnSuccessListener { proposals ->
+
             for (proposal in proposals) {
                 if(proposal.getString("requestId") == requestId) {
-                    bid = proposal.getLong("bid")?.toFloat()!!
-                    providerId = proposal.getString("providerId")!!
-                }
-            }
-            usersCollection.document(providerId).get().addOnSuccessListener { user ->
-                if(user != null){
+                    val bid = proposal.getLong("bid")?.toFloat()
+                    val providerId = proposal.getString("providerId")!!
+                    getProviderFromProviderId(providerId!!, bid!!)
 
-                    userObj = User(user.getString("fullName")!!, user.getLong("rating")?.toFloat()!!)
-                    Log.d("data", "${userObj.name}, userObj.rating, bid")
-                    providerList.add(ServiceProvider(userObj.name, userObj.rating, bid))
-
-                    //TODO desranciar esto
-
-                    serviceProviderAdapter.notifyDataSetChanged()
                 }
             }
         }.addOnFailureListener { Exception ->
             Log.d("Error getting documents:", Exception.toString())
         }
-
-
-
     }
+    /**
+     * Retrieves provider information based on the given provider ID and bid,
+     * and adds the provider's data to the [providerList] for later display in the UI.
+     *
+     * @param id The unique identifier of the provider in Firestore.
+     * @param bid The bid associated with the provider for a specific proposal.
+     */
+    private fun getProviderFromProviderId(id: String, bid: Float)  {
+        val userDoc = usersCollection.document(id)
+        userDoc.get().addOnSuccessListener { user ->
+            if(user != null){
 
-//    private fun getProposalsFromRequestId(requestId: String) {
-//
-//        proposalsCollection.get().addOnSuccessListener { proposals ->
-//
-//            for (proposal in proposals) {
-//                if(proposal.getString("requestId") == requestId) {
-//                    val bid = proposal.getLong("bid")?.toFloat()
-//                    //Log.d("bid", bid.toString())
-//                    val providerId = proposal.getString("providerId")!!
-//                    //Log.d("id provider", providerId)
-//                    getProviderFromProviderId(providerId!!, bid!!)
-//
-//                }
-//            }
-//        }.addOnFailureListener { Exception ->
-//            Log.d("Error getting documents:", Exception.toString())
-//        }
-//    }
-//
-//    private fun getProviderFromProviderId(id: String, bid: Float)  {
-//        val userDoc = usersCollection.document(id)
-//        userDoc.get().addOnSuccessListener { user ->
-//            if(user != null){
-//
-//                userObj = User(user.getString("fullName")!!, user.getLong("rating")?.toFloat()!!)
-//                providerList.add(ServiceProvider(userObj.name, userObj.rating, bid))
-//
-//                //TODO desranciar esto
-//
-//                serviceProviderAdapter.notifyDataSetChanged()
-//            }
-//        }
-//    }
+                userObj = User(user.getString("fullName")!!, user.getLong("rating")?.toFloat()!!)
+                providerList.add(ServiceProvider(userObj.name, userObj.rating, bid))
+
+                //TODO desranciar esto
+
+                serviceProviderAdapter.notifyDataSetChanged()
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
