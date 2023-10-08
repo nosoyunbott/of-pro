@@ -14,7 +14,7 @@ class ServiceProviderHolder(v: View) : RecyclerView.ViewHolder(v){
     }
 
     fun setName(name: String ) {
-        val txt : TextView = view.findViewById(R.id.txtName)
+        val txt : TextView = view.findViewById(R.id.txtFullName)
         txt.text = name
     }
 
