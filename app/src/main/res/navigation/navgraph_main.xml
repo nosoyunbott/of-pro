@@ -54,8 +54,8 @@
         android:label="fragment_request_detail"
         tools:layout="@layout/fragment_request_detail" >
         <argument
-            android:name="serviceProvider"
-            app:argType="com.ar.of_pro.entities.ServiceProvider" />
+            android:name="proposalInformation"
+            app:argType="com.ar.of_pro.entities.ProposalInformation" />
         <action
             android:id="@+id/action_requestDetailFragment_to_requestsListFragment"
             app:destination="@id/requestsListFragment"
@@ -70,6 +70,9 @@
         <action
             android:id="@+id/action_providerRequestsFragment_to_requestDetailFragment"
             app:destination="@id/requestDetailFragment" />
+        <argument
+            android:name="request"
+            app:argType="com.ar.of_pro.entities.Request" />
     </fragment>
     <fragment
         android:id="@+id/providerProfileFragment"

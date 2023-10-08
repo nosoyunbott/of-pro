@@ -1,7 +1,6 @@
 package com.ar.of_pro.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -56,7 +55,7 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
                 val state = document.getString("state") ?: ""
                 val date = document.getString("date") ?: ""
                 val maxCost = document.getLong("maxCost")?.toInt() ?: 0
-                val idClient = document.getString("idClient") ?: ""
+                val clientId = document.getString("clientId") ?: ""
 
                 val r = Request(
                     title,
@@ -67,7 +66,7 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
                     state,
                     date,
                     maxCost,
-                    idClient,
+                    clientId,
                 )
 
                 requestList.add(r)
