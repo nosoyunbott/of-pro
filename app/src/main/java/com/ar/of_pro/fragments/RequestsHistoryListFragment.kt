@@ -20,16 +20,13 @@ import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.RequestHistoryProvider
 import com.ar.of_pro.entities.ServiceType
 
-class RequestsHistoryListFragment:Fragment() {
-    var recyclerView: RecyclerView?=null;
-    lateinit var v : View
+class RequestsHistoryListFragment : Fragment() {
+    var recyclerView: RecyclerView? = null;
+    lateinit var v: View
 
-
-
-
-    var serviceTypesList : List<String> = ServiceType().getList()
+    var serviceTypesList: List<String> = ServiceType().getList()
     lateinit var serviceTypesAdapter: ArrayAdapter<String>
-    lateinit var selectedServiceType : String
+    lateinit var selectedServiceType: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,11 +37,10 @@ class RequestsHistoryListFragment:Fragment() {
 
         // Find the RecyclerView within the fragment's layout
         recyclerView = v.findViewById<RecyclerView>(R.id.rec_requestsHistoryList)
-        recyclerView?.layoutManager=LinearLayoutManager(requireContext())
-        recyclerView?.adapter=RequestHistoryAdapter(RequestHistoryProvider.RequestHistoryList)
+        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView?.adapter = RequestHistoryAdapter(RequestHistoryProvider.RequestHistoryList)
         return v
     }
-
 
 
     override fun onStart() {
@@ -53,10 +49,7 @@ class RequestsHistoryListFragment:Fragment() {
     }
 
 
-
-
-
-    private fun showDialog(){
+    private fun showDialog() {
         val dialog = AlertDialog.Builder(context)
             .setTitle("Error")
             .setMessage("ROMPISTE TODO")
