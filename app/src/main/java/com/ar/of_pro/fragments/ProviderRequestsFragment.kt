@@ -44,7 +44,7 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         super.onCreate(savedInstanceState)
         var providerId: String = ""
         var bid: Float = 0f
-        val requestId = "QBFNQx2HbgRCXH5YV5tJ"
+        val requestId = "hWBRuBnA27zwNCV6gYlO"
         getProposalsFromRequestId(requestId)
 
     }
