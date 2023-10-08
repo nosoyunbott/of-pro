@@ -98,4 +98,23 @@
             android:id="@+id/action_requestListProviderFragment_to_proposalFragment"
             app:destination="@id/proposalFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/customerProfileFragment"
+        android:name="com.ar.of_pro.fragments.CustomerProfileFragment"
+        android:label="fragment_customer_profile"
+        tools:layout="@layout/fragment_customer_profile" >
+        <action
+            android:id="@+id/action_customerProfileFragment_to_customerProfileEditFragment"
+            app:destination="@id/customerProfileEditFragment"
+            app:popUpTo="@id/customerProfileFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/customerProfileEditFragment"
+        android:name="com.ar.of_pro.fragments.CustomerProfileEditFragment"
+        android:label="CustomerProfileEditFragment" >
+        <action
+            android:id="@+id/action_customerProfileEditFragment_to_customerProfileFragment"
+            app:destination="@id/customerProfileFragment" />
+    </fragment>
 </navigation>
