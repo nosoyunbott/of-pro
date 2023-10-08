@@ -1,7 +1,7 @@
 package com.ar.of_pro.listeners
 
-import com.ar.of_pro.entities.ServiceProvider
+import com.ar.of_pro.entities.ProposalInformation
 
 interface OnServiceProviderClickedListener {
-    fun onViewItemDetail(serviceProvider: ServiceProvider)
+    fun onViewItemDetail(proposalInformation: ProposalInformation)
 }

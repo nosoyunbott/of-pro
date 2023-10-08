@@ -55,7 +55,7 @@
         tools:layout="@layout/fragment_request_detail" >
         <argument
             android:name="serviceProvider"
-            app:argType="com.ar.of_pro.entities.ServiceProvider" />
+            app:argType="com.ar.of_pro.entities.ProposalInformation" />
         <action
             android:id="@+id/action_requestDetailFragment_to_requestsListFragment"
             app:destination="@id/requestsListFragment"

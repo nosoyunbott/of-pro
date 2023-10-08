@@ -6,28 +6,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.of_pro.R
 import com.ar.of_pro.adapters.ServiceProviderAdapter
-import com.ar.of_pro.entities.Request
-import com.ar.of_pro.entities.ServiceProvider
+import com.ar.of_pro.entities.Proposal
+import com.ar.of_pro.entities.ProposalInformation
 import com.ar.of_pro.entities.User
 import com.ar.of_pro.listeners.OnServiceProviderClickedListener
-import com.ar.of_pro.listeners.OnViewItemClickedListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.properties.Delegates
 
 
 class ProviderRequestsFragment : Fragment(), OnServiceProviderClickedListener {
 
     lateinit var v: View
     lateinit var recProviderList: RecyclerView
-    var providerList: MutableList<ServiceProvider> = ArrayList()
+    var providerList: MutableList<ProposalInformation> = ArrayList()
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var serviceProviderAdapter: ServiceProviderAdapter
 
@@ -38,6 +35,7 @@ class ProviderRequestsFragment : Fragment(), OnServiceProviderClickedListener {
     lateinit var txtTitle: TextView
 
     lateinit var userObj: User
+    lateinit var proposalInfo: ProposalInformation
     var userName: String = ""
     var userRating: Float = 0f
 
@@ -65,7 +63,10 @@ class ProviderRequestsFragment : Fragment(), OnServiceProviderClickedListener {
                 if(proposal.getString("requestId") == requestId) {
                     val bid = proposal.getLong("bid")?.toFloat()
                     val providerId = proposal.getString("providerId")!!
-                    getProviderFromProviderId(providerId!!, bid!!)
+                    val commentary = proposal.getString("commentary")
+
+                    val p = Proposal(providerId!!,requestId, bid!!, commentary!!)
+                    getProviderFromProviderId(p)
 
                 }
             }
@@ -80,13 +81,14 @@ class ProviderRequestsFragment : Fragment(), OnServiceProviderClickedListener {
      * @param id The unique identifier of the provider in Firestore.
      * @param bid The bid associated with the provider for a specific proposal.
      */
-    private fun getProviderFromProviderId(id: String, bid: Float)  {
-        val userDoc = usersCollection.document(id)
+    private fun getProviderFromProviderId(proposal: Proposal)  {
+        val userDoc = usersCollection.document(proposal.providerId)
         userDoc.get().addOnSuccessListener { user ->
             if(user != null){
 
                 userObj = User(user.getString("fullName")!!, user.getLong("rating")?.toFloat()!!)
-                providerList.add(ServiceProvider(userObj.name, userObj.rating, bid))
+                proposalInfo = ProposalInformation(userObj.name, proposal.bid, userObj.rating, proposal.commentary, user.getLong("ratingsQuantity")?.toInt(), proposal.requestId, proposal.providerId  )
+                providerList.add(proposalInfo)
 
                 //TODO desranciar esto
 
@@ -119,10 +121,10 @@ class ProviderRequestsFragment : Fragment(), OnServiceProviderClickedListener {
 
     }
 
-    override fun onViewItemDetail(serviceProvider: ServiceProvider) {
-        val action = ProviderRequestsFragmentDirections.actionProviderRequestsFragmentToRequestDetailFragment(serviceProvider)
+    override fun onViewItemDetail(proposalInformation: ProposalInformation) {
+        val action = ProviderRequestsFragmentDirections.actionProviderRequestsFragmentToRequestDetailFragment(proposalInformation)
         v.findNavController().navigate(action)
-        Snackbar.make(v, serviceProvider.name, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(v, proposalInformation.name, Snackbar.LENGTH_SHORT).show()
     }
 
 
