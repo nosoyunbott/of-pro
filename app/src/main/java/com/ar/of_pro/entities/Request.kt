@@ -27,7 +27,6 @@ class Request(
     var clientId: String = ""
     var providerId: String = "" //no se pasa inicialmente
 
-
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readInt(),
