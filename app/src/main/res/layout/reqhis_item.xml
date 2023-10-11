@@ -6,16 +6,16 @@
     android:id="@+id/cardLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTintMode="add">
+    android:layout_margin="8dp"
+    android:backgroundTintMode="add"
+    android:elevation="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:background="@android:color/black"
         android:padding="16dp">
-
 
         <TextView
             android:id="@+id/legendTextView"

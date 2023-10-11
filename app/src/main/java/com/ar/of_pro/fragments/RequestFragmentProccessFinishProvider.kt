@@ -30,6 +30,10 @@ class RequestFragmentProccessFinishProvider : Fragment() {
 
         val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
 
+        //TODO traer todos los datos de la request linea 31 y cargarlos en el fragment desde la db
+
 
     }
+
+    //TODO elaborar finalizacion del contrato y pasar estado a PENDING
 }
