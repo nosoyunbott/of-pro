@@ -20,12 +20,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/historyFragment"
-        android:name="com.ar.of_pro.fragments.HistoryFragment"
-        android:label="fragment_history"
-        tools:layout="@layout/fragment_history" />
-
-    <fragment
         android:id="@+id/requestsHistoryFragment"
         android:name="com.ar.of_pro.fragments.RequestsHistoryListFragment"
         android:label="fragment_request_history_list"

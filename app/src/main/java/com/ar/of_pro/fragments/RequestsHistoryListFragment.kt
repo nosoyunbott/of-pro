@@ -42,6 +42,9 @@ class RequestsHistoryListFragment : Fragment() {
         return v
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onStart() {
 
