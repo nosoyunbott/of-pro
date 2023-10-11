@@ -18,6 +18,7 @@
             android:id="@+id/action_appFragment_to_requestsListFragment"
             app:destination="@id/requestsListFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.ar.of_pro.fragments.HistoryFragment"
@@ -43,6 +44,7 @@
         <action
             android:id="@+id/action_requestsListFragment_to_providerRequestsFragment"
             app:destination="@id/providerRequestsFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/proposalFragment"

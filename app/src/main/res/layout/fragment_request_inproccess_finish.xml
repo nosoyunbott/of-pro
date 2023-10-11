@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.RequestFragmentProccessFinish">
+
+    <ImageView
+        android:id="@+id/photoImageView"
+        android:layout_width="140dp"
+        android:layout_height="100dp"
+        android:layout_weight="2"
+        android:src="@drawable/agus"
+        android:scaleType="centerCrop"
+        android:background="@drawable/rounded_background"
+        android:layout_marginTop="200px"
+        />
+
+    <!-- First Section: Person Information -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="60dp"
+
+        >
+
+        <!-- Left Half: Photo Image (Rounded) -->
+
+
+
+        <!-- Right Half: Information about the Person -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="400px">
+
+            <!-- Full Name -->
+            <TextView
+                android:id="@+id/fullNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hector Medina"
+                android:textSize="18sp"
+                android:textColor="#000"
+                />
+
+            <!-- Zone -->
+            <TextView
+                android:id="@+id/zoneTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Almagro"
+                android:textSize="18sp"
+                android:textColor="#000"/>
+
+            <!-- Ranking -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/rankingTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4.5 (5)"
+                    android:textSize="18sp"
+                    android:textColor="#000"/>
+
+
+
+                <ImageView
+                    android:id="@+id/favorite_button"
+                    android:layout_width="10dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/toecu"
+                    android:layout_centerHorizontal="true"
+                    android:background="#00ffffff" />
+
+
+
+            </LinearLayout>
+
+            <!-- Legend -->
+            <TextView
+                android:id="@+id/legendTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Plomería,Pintura,Electricidad"
+                android:textSize="18sp"
+                android:textColor="#000"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Second Section: Paragraph -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="260dp"
+        android:background="@android:color/darker_gray"
+        android:padding="16dp"
+        >
+
+        <TextView
+            android:id="@+id/paragraphTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:text="Pintor de Buenos Aires, Caballito. Especializado en interiores. Calidad para tu espacio. Experiencia y resultados confiables."/>
+    </LinearLayout>
+
+    <!-- Third Section: Big Black Letters Legend -->
+    <TextView
+        android:id="@+id/bigLegendTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="$30.000 - TRABAJO X"
+        android:textSize="30sp"
+        android:textColor="#000"
+        android:layout_marginTop="445sp"
+        android:textAlignment="center"/>
+
+    <!-- Fourth Section: Button and Rating Component -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="560dp">
+
+        <!-- Finish Button -->
+        <Button
+            android:id="@+id/finishButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Finalizar"
+            android:background="@color/black"
+            android:textColor="#fff"
+            android:layout_marginLeft="430px"/>
+
+        <!-- Rating Component -->
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:rating="3.5"
+            android:stepSize="0.5"
+            android:visibility="gone"
+            android:layout_marginLeft="200px"
+
+            />
+
+
+        <!-- You can add a RatingBar or custom view here -->
+
+    </LinearLayout>
+
+
+
+
+
+
+</FrameLayout>
