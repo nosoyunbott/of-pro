@@ -4,8 +4,12 @@
 
     <item android:title="Solicitudes"
         android:id="@+id/requestsListFragment"/>
+    <item android:title="Solicitudes"
+        android:id="@+id/requestListProviderFragment"/>
     <item android:title="Historial"
         android:id="@+id/requestsHistoryFragment"/>
+    <item android:title="Perfil"
+        android:id="@+id/providerProfileFragment"/>
     <item android:title="Solicitar"
         android:id="@+id/requestFragment"/>
 </menu>
