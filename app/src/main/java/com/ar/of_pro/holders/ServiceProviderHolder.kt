@@ -14,7 +14,7 @@ class ServiceProviderHolder(v: View) : RecyclerView.ViewHolder(v){
     }
 
     fun setName(name: String ) {
-        val txt : TextView = view.findViewById(R.id.txtName)
+        val txt : TextView = view.findViewById(R.id.txtFullName)
         txt.text = name
     }
 
@@ -22,7 +22,7 @@ class ServiceProviderHolder(v: View) : RecyclerView.ViewHolder(v){
         val txt : TextView = view.findViewById(R.id.txtBidAmount)
         txt.text = bidAmount.toString()
     }
-    fun setCalification(calification: Double) {
+    fun setCalification(calification: Float) {
         val txt: TextView = view.findViewById(R.id.txtCalification)
         txt.text = calification.toString()
     }

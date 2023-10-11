@@ -5,6 +5,15 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,11 +23,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-
-            <TableRow
-                android:layout_width="207dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/btnAccept"
@@ -78,6 +82,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Nombre" />
+
                         </com.google.android.material.textfield.TextInputLayout>
                     </com.google.android.material.textfield.TextInputLayout>
 
