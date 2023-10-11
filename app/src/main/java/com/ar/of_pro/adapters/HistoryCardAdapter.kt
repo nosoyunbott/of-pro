@@ -25,7 +25,7 @@ class HistoryCardAdapter(private val requestList: MutableList<Request>, private 
         val request = requestList[position]
         holder.setTitle(request.requestTitle)
         holder.setDate(request.date)
-        holder.setName(request.categoryOcupation)
+        holder.setName(request.categoryOcupation) //TODO en vez de category ocupation traer usuario y ponerle el nombre de usuario @Moragues
         holder.getCardLayout().setOnClickListener {
             onItemClick.onViewItemDetail(request)
     }

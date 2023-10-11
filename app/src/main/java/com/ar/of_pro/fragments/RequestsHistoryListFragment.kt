@@ -94,6 +94,8 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                 request
             )
         )
+
+        //TODO segun el tipo de cliente ir hacia pantalla de finalizacion de cliente o de proveedor (la unica q esta hecha es la de proveedor) @Moragues
     }
 
 
