@@ -63,6 +63,7 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                         date,
                         maxCost,
                         clientId,
+                        ""
                     )
 
                     requestList.add(r)
