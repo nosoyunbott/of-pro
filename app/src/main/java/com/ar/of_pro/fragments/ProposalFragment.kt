@@ -1,6 +1,7 @@
 package com.ar.of_pro.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -64,25 +65,36 @@ class ProposalFragment : Fragment() {
 
         btnProposal.setOnClickListener{
 
-            val bid = edtBudget.text.toString().toFloat()
-            val commentary = edtComment.text.toString()
-            val idProvider = "19238913" //TODO Mandar idProvider desde la sesión
-            val idRequest = "940909012"//TODO Mandar idRequest desde la sesión
-            val p = Proposal(
-                idProvider,
-                idRequest,
-                bid,
-                commentary
-            )
+            val users = db.collection("Users")
+            users.get().addOnSuccessListener { querySnapshot -> //ESTE LISTENER ES PARA LA DEMO
+                val userIds = ArrayList<String>()
 
-            val newDocProposal = db.collection("Proposals").document()
-            db.collection("Proposals").document(newDocProposal.id).set(p)
+                for (document in querySnapshot) {
+                    val userId = document.id
+                    userIds.add(userId)
+                }
+                val bid = edtBudget.text.toString().toFloat()
+                val commentary = edtComment.text.toString()
+                val idProvider = userIds[userIds.count()-1] //TODO Mandar idProvider desde la sesión
+                val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
+                val p = Proposal(
+                    idProvider,
+                    idRequest,
+                    bid,
+                    commentary
+                )
+
+                val newDocProposal = db.collection("Proposals").document()
+                db.collection("Proposals").document(newDocProposal.id).set(p)
 
 
-            val action =
-                //agregar que edit text carguen el objeto a la db y crear entity Proposal
-                ProposalFragmentDirections.actionProposalFragmentToRequestListProviderFragment()
-            v.findNavController().navigate(action)
+                val action =
+                    //agregar que edit text carguen el objeto a la db y crear entity Proposal
+                    ProposalFragmentDirections.actionProposalFragmentToRequestListProviderFragment()
+                v.findNavController().navigate(action)
+            }
+
+
         }
     }
 

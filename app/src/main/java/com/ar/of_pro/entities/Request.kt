@@ -13,6 +13,7 @@ class Request(
     date: String?,
     maxCost: Int?,
     clientId: String?,
+    requestId: String?,
 ) : Parcelable {
 
 
@@ -26,6 +27,7 @@ class Request(
     var maxCost: Int = 0
     var clientId: String = ""
     var providerId: String = "" //no se pasa inicialmente
+    var requestId: String = ""
 
 
     constructor(parcel: Parcel) : this(
@@ -38,7 +40,9 @@ class Request(
         parcel.readString(),
         parcel.readInt(),
         parcel.readString(),
+        parcel.readString()
     )
+
 
     init {
         this.requestTitle = requestTitle!!
@@ -50,6 +54,7 @@ class Request(
         this.date = date!!
         this.maxCost = maxCost!!
         this.clientId = clientId!!
+        this.requestId = requestId!!
 
     }
 

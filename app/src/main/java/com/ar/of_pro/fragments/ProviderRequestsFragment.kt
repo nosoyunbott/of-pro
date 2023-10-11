@@ -14,6 +14,7 @@ import com.ar.of_pro.R
 import com.ar.of_pro.adapters.ProposalInformationAdapter
 import com.ar.of_pro.entities.Proposal
 import com.ar.of_pro.entities.ProposalInformation
+import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.User
 import com.ar.of_pro.listeners.OnProposalInformationClickedListener
 import com.google.android.material.snackbar.Snackbar
@@ -34,6 +35,7 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
 
     lateinit var txtTitle: TextView
 
+    lateinit var request: Request
 
     lateinit var userObj: User
     lateinit var proposalInfo: ProposalInformation
@@ -43,10 +45,11 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        request = ProposalFragmentArgs.fromBundle(requireArguments()).request
         var providerId: String = ""
         var bid: Float = 0f
         val requestId = "WmU6lopxhoshV8j50mk5"
-        getProposalsFromRequestId(requestId)
+        getProposalsFromRequestId(request.requestId)
 
     }
 
@@ -89,9 +92,8 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         val userDoc = usersCollection.document(proposal.providerId)
         userDoc.get().addOnSuccessListener { user ->
             if(user != null){
-
-                userObj = User(user.getString("fullName")!!, user.getDouble("rating")!!)
-                proposalInfo = ProposalInformation(userObj.name, proposal.bid, userObj.rating, proposal.commentary, user.getLong("ratingsQuantity")?.toInt(), proposal.requestId, proposal.providerId  )
+                userObj = User(user.getString("fullName")!!, user.getDouble("rating")!!, user.id)
+                proposalInfo = ProposalInformation(userObj.name, proposal.bid, userObj.rating, proposal.commentary, user.getLong("ratingsQuantity")?.toInt(), proposal.requestId, proposal.providerId  ) //user.id tiene que ser proposal.providerId
                 providerList.add(proposalInfo)
 
                 //TODO desranciar esto
@@ -114,7 +116,7 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
 
     override fun onStart() {
         super.onStart()
-        val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
+        //val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
         txtTitle.text = request.requestTitle
 
         recProviderList.setHasFixedSize(true)
