@@ -42,6 +42,9 @@ class RequestsHistoryListFragment : Fragment() {
         return v
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onStart() {
         super.onStart()
@@ -56,6 +59,10 @@ class RequestsHistoryListFragment : Fragment() {
             .setCancelable(true)
             .create()
         dialog.show()
+    }
+
+    override fun onViewItemDetail(request: Request) {
+
     }
 
 

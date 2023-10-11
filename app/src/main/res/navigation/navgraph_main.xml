@@ -18,11 +18,6 @@
             android:id="@+id/action_appFragment_to_requestsListFragment"
             app:destination="@id/requestsListFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/historyFragment"
-        android:name="com.ar.of_pro.fragments.HistoryFragment"
-        android:label="fragment_history"
-        tools:layout="@layout/fragment_history" />
 
     <fragment
         android:id="@+id/requestsHistoryFragment"
