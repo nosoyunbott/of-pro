@@ -23,7 +23,11 @@
         android:id="@+id/requestsHistoryFragment"
         android:name="com.ar.of_pro.fragments.RequestsHistoryListFragment"
         android:label="fragment_request_history_list"
-        tools:layout="@layout/fragment_request_history_list" />
+        tools:layout="@layout/fragment_request_history_list" >
+        <action
+            android:id="@+id/action_requestsHistoryFragment_to_requestFragmentProccessFinishProvider"
+            app:destination="@id/requestFragmentProccessFinishProvider" />
+    </fragment>
 
     <fragment
         android:id="@+id/requestFragment"
@@ -104,5 +108,14 @@
         <action
             android:id="@+id/action_requestListProviderFragment_to_proposalFragment"
             app:destination="@id/proposalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestFragmentProccessFinishProvider"
+        android:name="com.ar.of_pro.fragments.RequestFragmentProccessFinishProvider"
+        android:label="fragment_request_proccess_finish_provider"
+        tools:layout="@layout/fragment_request_proccess_finish_provider" >
+        <argument
+            android:name="request"
+            app:argType="com.ar.of_pro.entities.Request" />
     </fragment>
 </navigation>
