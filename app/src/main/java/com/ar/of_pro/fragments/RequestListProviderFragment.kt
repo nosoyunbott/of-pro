@@ -47,31 +47,33 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
 
         requestsCollection.get().addOnSuccessListener { documents ->
             for (document in documents) {
-                val title = document.getString("requestTitle") ?: ""
-                val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
-                val selectedOcupation = document.getString("categoryOcupation") ?: ""
-                val selectedServiceType = document.getString("categoryService") ?: ""
-                val description = document.getString("description") ?: ""
-                val state = document.getString("state") ?: ""
-                val date = document.getString("date") ?: ""
-                val maxCost = document.getLong("maxCost")?.toInt() ?: 0
-                val clientId = document.getString("clientId") ?: ""
-                val requestId = document.id
+                if(document.getString("providerId") == "") {
+                    val title = document.getString("requestTitle") ?: ""
+                    val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
+                    val selectedOcupation = document.getString("categoryOcupation") ?: ""
+                    val selectedServiceType = document.getString("categoryService") ?: ""
+                    val description = document.getString("description") ?: ""
+                    val state = document.getString("state") ?: ""
+                    val date = document.getString("date") ?: ""
+                    val maxCost = document.getLong("maxCost")?.toInt() ?: 0
+                    val clientId = document.getString("clientId") ?: ""
+                    val requestId = document.id
 
-                val r = Request(
-                    title,
-                    requestBidAmount,
-                    selectedOcupation,
-                    selectedServiceType,
-                    description,
-                    state,
-                    date,
-                    maxCost,
-                    clientId,
-                    requestId
-                )
+                    val r = Request(
+                        title,
+                        requestBidAmount,
+                        selectedOcupation,
+                        selectedServiceType,
+                        description,
+                        state,
+                        date,
+                        maxCost,
+                        clientId,
+                        requestId
+                    )
 
-                requestList.add(r)
+                    requestList.add(r)
+                }
 
             }
 
