@@ -34,6 +34,7 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
 
     lateinit var txtTitle: TextView
 
+
     lateinit var userObj: User
     lateinit var proposalInfo: ProposalInformation
     var userName: String = ""
@@ -44,7 +45,7 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         super.onCreate(savedInstanceState)
         var providerId: String = ""
         var bid: Float = 0f
-        val requestId = "hWBRuBnA27zwNCV6gYlO"
+        val requestId = "WmU6lopxhoshV8j50mk5"
         getProposalsFromRequestId(requestId)
 
     }
@@ -73,6 +74,9 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         }.addOnFailureListener { Exception ->
             Log.d("Error getting documents:", Exception.toString())
         }
+
+
+
     }
     /**
      * Retrieves provider information based on the given provider ID and bid,
@@ -86,7 +90,7 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         userDoc.get().addOnSuccessListener { user ->
             if(user != null){
 
-                userObj = User(user.getString("fullName")!!, user.getLong("rating")?.toFloat()!!)
+                userObj = User(user.getString("fullName")!!, user.getDouble("rating")!!)
                 proposalInfo = ProposalInformation(userObj.name, proposal.bid, userObj.rating, proposal.commentary, user.getLong("ratingsQuantity")?.toInt(), proposal.requestId, proposal.providerId  )
                 providerList.add(proposalInfo)
 

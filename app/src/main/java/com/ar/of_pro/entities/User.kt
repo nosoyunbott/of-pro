@@ -3,14 +3,14 @@ package com.ar.of_pro.entities
 import android.os.Parcel
 import android.os.Parcelable
 
-class User(name: String?, rating: Float?) : Parcelable {
+class User(name: String?, rating: Double?) : Parcelable {
 
     var name: String = ""
-    var rating: Float = 0f
+    var rating: Double = 0.0
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
-        parcel.readFloat()
+        parcel.readDouble()
     )
 
     init {
@@ -20,7 +20,7 @@ class User(name: String?, rating: Float?) : Parcelable {
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
-        parcel.writeFloat(rating)
+        parcel.writeDouble(rating)
     }
 
     override fun describeContents(): Int {
