@@ -89,13 +89,23 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
 
     override fun onViewItemDetail(request: Request) {
 
-        v.findNavController().navigate(
-            RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishProvider(
-                request
+        if (true) {
+            // va a provider
+            v.findNavController().navigate(
+                RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishProvider(
+                    request
+                )
             )
-        )
+        } else {
+            // va a cliente
+            v.findNavController().navigate(
+                RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishClient(
+                    request
+                )
+            )
+        }
 
-        //TODO segun el tipo de cliente ir hacia pantalla de finalizacion de cliente o de proveedor (la unica q esta hecha es la de proveedor) @Moragues
+        //TODO segun el tipo de cliente ir hacia pantalla de finalizacion de cliente o de proveedor / O SEA, HACER IFs @Moragues
     }
 
 

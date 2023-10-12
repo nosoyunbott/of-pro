@@ -28,7 +28,7 @@ class RequestFragmentProccessFinishProvider : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
+        val request = RequestFragmentProccessFinishProviderArgs.fromBundle(requireArguments()).request
 
         //TODO traer todos los datos de la request linea 31 y cargarlos en el fragment desde la db @Moragues
 
