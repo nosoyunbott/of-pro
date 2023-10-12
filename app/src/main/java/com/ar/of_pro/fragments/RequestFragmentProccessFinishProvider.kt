@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ar.of_pro.R
+import com.ar.of_pro.fragments.provider.ProposalFragmentArgs
 
 class RequestFragmentProccessFinishProvider : Fragment() {
 

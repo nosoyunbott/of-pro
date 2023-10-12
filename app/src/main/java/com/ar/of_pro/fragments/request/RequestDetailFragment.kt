@@ -1,8 +1,7 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.request
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +11,6 @@ import android.widget.TextView
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.services.RequestsService
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
 class RequestDetailFragment : Fragment() {
     lateinit var v: View
@@ -49,8 +45,11 @@ class RequestDetailFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onStart() {
         super.onStart()
-        val action = RequestDetailFragmentDirections.actionRequestDetailFragmentToRequestsListFragment()
-        val proposalInfo = RequestDetailFragmentArgs.fromBundle(requireArguments()).proposalInformation
+        val action =
+            RequestDetailFragmentDirections.actionRequestDetailFragmentToRequestsListFragment()
+        val proposalInfo = RequestDetailFragmentArgs.fromBundle(
+            requireArguments()
+        ).proposalInformation
         txtDesc.text = proposalInfo.commentary
         txtBid.text = "$${proposalInfo.bidAmount}"
         txtName.text = proposalInfo.name

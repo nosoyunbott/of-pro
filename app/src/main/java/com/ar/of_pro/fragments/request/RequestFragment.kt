@@ -1,6 +1,5 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.request
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -21,7 +20,6 @@ import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.ServiceType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 
 
 class RequestFragment : Fragment() {

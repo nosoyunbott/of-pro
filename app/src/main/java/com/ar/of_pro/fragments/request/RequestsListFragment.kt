@@ -1,7 +1,6 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.request
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,6 @@ import com.ar.of_pro.adapters.RequestCardAdapter
 import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.listeners.OnViewItemClickedListener
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 
 //TODO Actualizar cantidad de proposals para que figuren en el recycler view
@@ -131,7 +129,9 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     override fun onViewItemDetail(request: Request) {
 
         val action2 =
-            RequestsListFragmentDirections.actionRequestsListFragmentToProviderRequestsFragment(request)
+            RequestsListFragmentDirections.actionRequestsListFragmentToProviderRequestsFragment(
+                request
+            )
         val navController = v.findNavController()
         navController.navigate(action2)
 

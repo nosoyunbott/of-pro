@@ -1,4 +1,4 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.provider
 
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +16,7 @@ import com.ar.of_pro.entities.Proposal
 import com.ar.of_pro.entities.ProposalInformation
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.User
+import com.ar.of_pro.fragments.provider.ProposalFragmentArgs
 import com.ar.of_pro.listeners.OnProposalInformationClickedListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
@@ -128,7 +129,10 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
     }
 
     override fun onViewItemDetail(proposalInformation: ProposalInformation) {
-        val action = ProviderRequestsFragmentDirections.actionProviderRequestsFragmentToRequestDetailFragment(proposalInformation)
+        val action =
+            com.ar.of_pro.fragments.provider.ProviderRequestsFragmentDirections.actionProviderRequestsFragmentToRequestDetailFragment(
+                proposalInformation
+            )
         v.findNavController().navigate(action)
         Snackbar.make(v, proposalInformation.name, Snackbar.LENGTH_SHORT).show()
     }

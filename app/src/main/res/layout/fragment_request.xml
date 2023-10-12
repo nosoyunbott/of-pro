@@ -5,7 +5,7 @@
     android:id="@+id/layoutRequest"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.RequestFragment" >
+    tools:context=".fragments.request.RequestFragment" >
 
     <TextView
         android:id="@+id/txtRequests"

@@ -1,4 +1,4 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.request
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -18,6 +18,8 @@ import com.ar.of_pro.listeners.OnViewItemClickedListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 
+
+//REQUEST LIST COMO PROVEEDOR
 class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
 
 
@@ -109,7 +111,7 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
             btnFilter.textSize = 16F
             btnFilter.background = resources.getDrawable(R.drawable.rounded_button)
 
-            // botones del carrousel de rubros
+            //botones del carrousel de rubros
             btnFilter.setOnClickListener {
                 val filter = btnFilter.text.toString()
                 val filteredList =

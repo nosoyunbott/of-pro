@@ -1,4 +1,4 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.login
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -28,17 +28,22 @@ class LoginFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
         goToApp()
     }
 
     private fun goToApp() {
         txtClient.setOnClickListener {
-            val action = LoginFragmentDirections.actionLoginFragmentToMainActivity(client)
+            val action =
+                com.ar.of_pro.fragments.login.LoginFragmentDirections.actionLoginFragmentToMainActivity(
+                    client
+                )
             v.findNavController().navigate(action)
         }
         txtProvider.setOnClickListener {
-            val action = LoginFragmentDirections.actionLoginFragmentToMainActivity(provider)
+            val action =
+                com.ar.of_pro.fragments.login.LoginFragmentDirections.actionLoginFragmentToMainActivity(
+                    provider
+                )
             v.findNavController().navigate(action)
         }
     }

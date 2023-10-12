@@ -1,4 +1,4 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,24 +10,25 @@ import androidx.navigation.findNavController
 import com.ar.of_pro.R
 
 
-class ProviderProfileFragment : Fragment() {
+class ProviderProfileEditFragment : Fragment() {
 
     lateinit var v : View
-    lateinit var btnEdit : Button
+    lateinit var btnAccept: Button
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_provider_profile, container, false)
-        btnEdit = v.findViewById(R.id.btnEdit)
+        v = inflater.inflate(R.layout.fragment_provider_profile_edit, container, false)
+        btnAccept = v.findViewById(R.id.btnAccept)
         return v
     }
 
     override fun onStart() {
         super.onStart()
-        btnEdit.setOnClickListener{
-            val action = ProviderProfileFragmentDirections.actionProviderProfileFragmentToProviderProfileEditFragment()
+        btnAccept.setOnClickListener{
+            val action =
+                ProviderProfileEditFragmentDirections.actionProviderProfileEditFragmentToProviderProfileFragment()
             v.findNavController().navigate(action)
         }
     }

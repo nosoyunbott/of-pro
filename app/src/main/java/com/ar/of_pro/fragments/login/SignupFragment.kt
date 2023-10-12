@@ -1,4 +1,4 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.login
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
