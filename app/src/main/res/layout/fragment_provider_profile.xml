@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="20sp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -95,11 +96,12 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/txtCorreo"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_weight="1"
-                    android:text="lorem@ipsum.com" />
+                    android:text="lorem@ipsum.com"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -118,11 +120,12 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/providerPhone"
+                    android:id="@+id/txtTelefono"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_weight="1"
-                    android:text="1121654455" />
+                    android:text="1121654455"
+                    android:textSize="18dp" />
 
             </LinearLayout>
 
@@ -159,7 +162,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/txtRate2"
+                android:id="@+id/numRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
