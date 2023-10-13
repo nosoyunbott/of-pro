@@ -47,8 +47,9 @@ class ProviderProfileFragment : Fragment() {
         userRequest.get().addOnSuccessListener { snapshots ->
             for (snapshot in snapshots) {
 
-                if (snapshot.getString("mail") == "asd@123.com") {
-                    txtNombre.text=snapshot.getString("fullname")
+                if (snapshot.getString("mail") == "pepito@pepe.com") {
+                    val fullName = snapshot.getString("fullName") ?: ""
+                    txtNombre.text = fullName
 
                 }
             }
