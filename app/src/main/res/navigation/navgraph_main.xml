@@ -26,10 +26,14 @@
         tools:layout="@layout/fragment_request_history_list" >
         <action
             android:id="@+id/action_requestsHistoryFragment_to_requestFragmentProccessFinishProvider"
-            app:destination="@id/requestFragmentProccessFinishProvider" />
+            app:destination="@id/requestFragmentProccessFinishProvider"
+            app:popUpTo="@id/requestsHistoryFragment"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_requestsHistoryFragment_to_requestFragmentProccessFinishClient"
-            app:destination="@id/requestFragmentProccessFinishClient" />
+            app:destination="@id/requestFragmentProccessFinishClient"
+            app:popUpTo="@id/requestsHistoryFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment
