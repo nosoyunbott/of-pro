@@ -124,7 +124,7 @@ class RequestFragment : Fragment() {
                 selectedServiceType,
                 edtDescripcion.text.toString(),
                 Request.PENDING,
-                timestamp,
+                timestamp, //TODO cambiar el string a su tipo correspondiente
                 edtPriceMax.text.toString().toIntOrNull(),
                 clientId,
                 ""
