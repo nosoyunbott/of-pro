@@ -6,6 +6,7 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,6 +47,7 @@ class RequestFragment : Fragment() {
     var ocupationList: List<String> = Ocupation().getList()
     lateinit var ocupationAdapter: ArrayAdapter<String>
     lateinit var selectedOcupation: String
+    lateinit var timestamp: String
 
     var serviceTypesList: List<String> = ServiceType().getList()
     lateinit var serviceTypesAdapter: ArrayAdapter<String>
@@ -63,6 +65,7 @@ class RequestFragment : Fragment() {
             requireContext(),
             { _, year, month, dayOfMonth ->
                 val selectedTimestamp = createTimestamp(year, month, dayOfMonth)
+                timestamp = selectedTimestamp.toString()
                 edtTime.setText(formatTimestamp(selectedTimestamp))
             },
             currentYear,
@@ -121,7 +124,7 @@ class RequestFragment : Fragment() {
                 selectedServiceType,
                 edtDescripcion.text.toString(),
                 Request.PENDING,
-                edtTime.text.toString(),
+                timestamp,
                 edtPriceMax.text.toString().toIntOrNull(),
                 clientId,
                 ""
