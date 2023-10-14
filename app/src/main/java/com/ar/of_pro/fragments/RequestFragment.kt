@@ -2,6 +2,7 @@ package com.ar.of_pro.fragments
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -22,6 +23,10 @@ import com.ar.of_pro.entities.ServiceType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 
 class RequestFragment : Fragment() {
@@ -48,7 +53,35 @@ class RequestFragment : Fragment() {
 
     private val db = FirebaseFirestore.getInstance()
     private var userId = FirebaseAuth.getInstance().currentUser?.uid
+    private fun showDatePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+        val currentMonth = calendar.get(Calendar.MONTH)
+        val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
 
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            { _, year, month, dayOfMonth ->
+                val selectedTimestamp = createTimestamp(year, month, dayOfMonth)
+                edtTime.setText(formatTimestamp(selectedTimestamp))
+            },
+            currentYear,
+            currentMonth,
+            currentDay
+        )
+        datePickerDialog.show()
+    }
+
+    private fun createTimestamp(year: Int, month: Int, day: Int): Long {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day)
+        return calendar.timeInMillis
+    }
+
+    private fun formatTimestamp(timestamp: Long): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return dateFormat.format(Date(timestamp))
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,6 +96,9 @@ class RequestFragment : Fragment() {
         edtPriceMax = v.findViewById(R.id.edtPriceMax)
         edtDescripcion = v.findViewById(R.id.edtDescripcion)
         edtTime = v.findViewById(R.id.edtTime)
+        edtTime.setOnClickListener{
+            showDatePickerDialog()
+        }
         return v
     }
 
@@ -72,6 +108,7 @@ class RequestFragment : Fragment() {
         setupSpinner(spnOcupation, ocupationAdapter)
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
         setOnClickListener(btnAttach)
+
 
         btnRequest.setOnClickListener {
             val title = edtTitle.text.toString()
