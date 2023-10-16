@@ -1,5 +1,6 @@
 package com.ar.of_pro.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -88,14 +89,23 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
     }
 
     override fun onViewItemDetail(request: Request) {
+        val sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        val userType = sharedPreferences.getString("userType", "")  // Retrieve the 'userType' attribute from SharedPreferences
 
-        v.findNavController().navigate(
-            RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishProvider(
-                request
+        if(userType == "provider") {
+            v.findNavController().navigate(
+                RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishProvider(request)
             )
-        )
+        } else if (userType == "client") {
+            v.findNavController().navigate(
+                RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishClient(request)
+            )
+        } else {
+            // Handle the case where 'userType' is neither 'provider' nor 'client'
+            // You can provide a default action or show an error message.
+        }
 
-        //TODO segun el tipo de cliente ir hacia pantalla de finalizacion de cliente o de proveedor (la unica q esta hecha es la de proveedor) @Moragues
+
     }
 
 

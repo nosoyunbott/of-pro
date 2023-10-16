@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.RatingBar
-import android.widget.TextView
 import com.ar.of_pro.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -37,7 +36,7 @@ class RequestFragmentProccessFinish : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_request_inproccess_finish, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_request_proccess_finish_client, container, false)
 
         // Find references to your button and component
 

@@ -1,5 +1,7 @@
 package com.ar.of_pro.fragments
 
+import android.content.SharedPreferences
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +17,8 @@ class LoginFragment : Fragment() {
     lateinit var txtProvider : TextView
     val client : String = "CLIENT"
     val provider : String = "PROVIDER"
+    // Define your SharedPreferences variable
+    lateinit var sharedPreferences: SharedPreferences
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -23,6 +27,8 @@ class LoginFragment : Fragment() {
         v = inflater.inflate(R.layout.fragment_login, container, false)
         txtClient = v.findViewById(R.id.txtClient)
         txtProvider= v.findViewById(R.id.txtProvider)
+        // Initialize SharedPreferences in onCreateView
+        sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
         return v
     }
 
@@ -35,10 +41,21 @@ class LoginFragment : Fragment() {
     private fun goToApp() {
         txtClient.setOnClickListener {
             val action = LoginFragmentDirections.actionLoginFragmentToMainActivity(client)
+            //SharedPreference set for client
+            //DUDA: Es necesario setear el atributo userType del objeto User?
+            val editor = sharedPreferences.edit()
+            editor.putString("userType", "client")
+            editor.apply()
+
             v.findNavController().navigate(action)
         }
         txtProvider.setOnClickListener {
             val action = LoginFragmentDirections.actionLoginFragmentToMainActivity(provider)
+            val editor = sharedPreferences.edit()
+            editor.putString("userType", "provider")
+            editor.apply()
+            //DUDA: Es necesario setear el atributo userType del objeto User?
+            //SharedPreference set for provider
             v.findNavController().navigate(action)
         }
     }
