@@ -92,7 +92,8 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         val userDoc = usersCollection.document(proposal.providerId)
         userDoc.get().addOnSuccessListener { user ->
             if(user != null){
-                userObj = User(user.getString("fullName")!!, user.getDouble("rating")!!, user.id)
+                val fullName = user.getString("lastName")!! + " " + user.getString("name")!!
+                userObj = User(fullName, user.getDouble("rating")!!, user.id)
                 proposalInfo = ProposalInformation(userObj.name, proposal.bid, userObj.rating, proposal.commentary, user.getLong("ratingsQuantity")?.toInt(), proposal.requestId, proposal.providerId  ) //user.id tiene que ser proposal.providerId
                 providerList.add(proposalInfo)
 
