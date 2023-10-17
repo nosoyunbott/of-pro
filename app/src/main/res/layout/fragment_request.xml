@@ -85,7 +85,10 @@
             android:layout_height="50dp"
             android:hint="Fecha y hora"
             android:ems="10"
-            android:inputType="time" />
+            android:inputType="none"
+            android:focusable="false"
+
+            />
 
         <Button
             android:id="@+id/btnAttach"
