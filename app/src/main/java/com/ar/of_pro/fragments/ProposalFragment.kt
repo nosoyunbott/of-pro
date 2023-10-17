@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.Proposal
 import com.ar.of_pro.entities.Request
+import com.ar.of_pro.services.RequestsService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -75,7 +76,7 @@ class ProposalFragment : Fragment() {
                 }
                 val bid = edtBudget.text.toString().toFloat()
                 val commentary = edtComment.text.toString()
-                val idProvider = userIds[userIds.count()-1] //TODO Mandar idProvider desde la sesión
+                val idProvider = userIds[userIds.count()-2] //TODO Mandar idProvider desde la sesión
                 val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
                 val p = Proposal(
                     idProvider,
@@ -86,7 +87,8 @@ class ProposalFragment : Fragment() {
 
                 val newDocProposal = db.collection("Proposals").document()
                 db.collection("Proposals").document(newDocProposal.id).set(p)
-
+                //update request in BD
+                RequestsService.updateProposalsQtyFromId(request.requestId, request.requestBidAmount)
 
                 val action =
                     //agregar que edit text carguen el objeto a la db y crear entity Proposal
