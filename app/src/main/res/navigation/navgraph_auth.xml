@@ -3,28 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navgraph_auth"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/userLoginFragment">
 
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.ar.of_pro.fragments.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_loginFragment_to_signupFragment"
-            app:destination="@id/signupFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_mainActivity"
-            app:destination="@id/mainActivity" />
-    </fragment>
     <fragment
         android:id="@+id/signupFragment"
         android:name="com.ar.of_pro.fragments.SignupFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" >
         <action
-            android:id="@+id/action_signupFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            android:id="@+id/action_signupFragment_to_userLoginFragment"
+            app:destination="@id/userLoginFragment" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -35,4 +23,15 @@
             android:name="userType"
             app:argType="string" />
     </activity>
+    <fragment
+        android:id="@+id/userLoginFragment"
+        android:name="com.ar.of_pro.fragments.UserLoginFragment"
+        android:label="UserLoginFragment" >
+        <action
+            android:id="@+id/action_userLoginFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
+        <action
+            android:id="@+id/action_userLoginFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
+    </fragment>
 </navigation>
