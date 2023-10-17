@@ -95,7 +95,7 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
 
         refreshRecyclerView()
     }
-
+//TODO Sacar la cantidad de proposals en el recyclerview (proovedor no tiene que ver eso)
     fun refreshRecyclerView() {
         for (filterName in ocupationList) {
             val btnFilter = Button(context)
