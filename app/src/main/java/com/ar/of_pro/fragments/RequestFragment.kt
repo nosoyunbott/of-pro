@@ -17,14 +17,27 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.ServiceType
+import com.ar.of_pro.models.Image
+import com.ar.of_pro.services.ActivityServiceApiBuilder
+import com.ar.of_pro.services.UploadService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -33,6 +46,8 @@ import java.util.Locale
 
 
 class RequestFragment : Fragment() {
+
+
 
     lateinit var v: View
     lateinit var spnOcupation: Spinner
@@ -214,6 +229,7 @@ class RequestFragment : Fragment() {
             if (data != null) {
                 val selectedMediaUri = data.data
                 val blob = uriToBlob(selectedMediaUri!!)
+
                 if (selectedMediaUri != null) {
                     requireContext().openFileOutput("foto", Context.MODE_PRIVATE).use {
                         it.write(blob)
@@ -221,15 +237,8 @@ class RequestFragment : Fragment() {
                 } else {
                     Log.d("asd", "mal")
                 }
-                val photo = File(requireContext().filesDir, "foto")
-                Log.d("file", photo.name)
-                requireContext().openFileInput("foto").bufferedReader().useLines { lines ->
 
-                    val a = lines.fold("") { some, text ->
-                        "$some\n$text"
-                    }
-                    //Log.d("a", a)
-                }
+                loadImage(selectedMediaUri, blob)
             }
         }
     }
@@ -239,5 +248,36 @@ class RequestFragment : Fragment() {
         inputStream?.close()
         return byteArray
     }
+
+    fun loadImage(uri: Uri, blob: ByteArray) {
+        val file = File("/data/media/0/Download/FirstKittensFoster1501sak_1124x554.jpg")
+
+        Log.d("asd", file.toString())
+//        val service=Retrofit.Builder()
+//            .baseUrl("https://api.imgur.com/3/")
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build().create<UploadService>()
+        val service = ActivityServiceApiBuilder.create()
+        val requestBody = RequestBody.create(MediaType.parse(requireContext().contentResolver.getType(uri)),file )
+        val a = MultipartBody.Part.createFormData("image", file.name, requestBody)
+
+
+        service.uploadImage(a).enqueue(object : Callback<Image> {
+            override fun onResponse(call: Call<Image>, response: Response<Image>) {
+                Log.e("Example", "Esta va segundo")
+
+                if (response.isSuccessful) {
+                    val responseImage = response.body()
+                    Log.d("image", responseImage.toString())
+
+                }
+            }
+
+            override fun onFailure(call: Call<Image>, t: Throwable) {
+                Log.d("Example", t.stackTraceToString())
+            }
+        })
+    }
+
 
 }
