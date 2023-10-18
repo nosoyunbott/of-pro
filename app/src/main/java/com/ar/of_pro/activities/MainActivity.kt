@@ -30,7 +30,7 @@ class  MainActivity : AppCompatActivity() {
 
         bottomNavigation = findViewById(R.id.bottomNavView)
         if(userType == "CLIENT"){
-            bottomNavigation.menu.findItem(R.id.providerProfileFragment).isVisible = false
+            bottomNavigation.menu.findItem(R.id.profileFragment).isVisible = false
             bottomNavigation.menu.findItem(R.id.requestListProviderFragment).isVisible = false
         }else{
             bottomNavigation.menu.findItem(R.id.requestFragment).isVisible = false

@@ -10,13 +10,10 @@ import android.widget.TextView
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.google.firebase.firestore.FirebaseFirestore
-import com.ar.of_pro.R.layout.fragment_provider_profile
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 
 
-class ProviderProfileFragment : Fragment() {
+class ProfileFragment : Fragment() {
 
     lateinit var v: View
     lateinit var btnEdit: Button
@@ -42,7 +39,7 @@ class ProviderProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_provider_profile, container, false)
+        v = inflater.inflate(R.layout.fragment_profile, container, false)
         btnEdit = v.findViewById(R.id.btnEdit)
         txtNombre = v.findViewById(R.id.txtNombre)
         txtLocalidad = v.findViewById(R.id.txtLocalidad)
@@ -100,7 +97,7 @@ class ProviderProfileFragment : Fragment() {
         super.onStart()
         btnEdit.setOnClickListener {
             val action =
-                ProviderProfileFragmentDirections.actionProviderProfileFragmentToProviderProfileEditFragment()
+                ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment()
             v.findNavController().navigate(action)
         }
     }
