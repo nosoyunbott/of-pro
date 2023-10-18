@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,6 +25,7 @@ import com.ar.of_pro.entities.ServiceType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -108,6 +110,20 @@ class RequestFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        val filename = "myfile"
+        val fileContents = "Hello world!"
+        requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
+            it.write(fileContents.toByteArray())
+        }
+        val file = File(requireContext().filesDir, "myfile")
+        Log.d("file", file.path)
+        requireContext().openFileInput(filename).bufferedReader().useLines { lines ->
+
+            val a = lines.fold("") { some, text ->
+                "$some\n$text"
+            }
+            Log.d("a", a)
+        }
         setupSpinner(spnOcupation, ocupationAdapter)
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
         setOnClickListener(btnAttach)
@@ -191,4 +207,37 @@ class RequestFragment : Fragment() {
 
         }
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_MEDIA_REQUEST && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                val selectedMediaUri = data.data
+                val blob = uriToBlob(selectedMediaUri!!)
+                if (selectedMediaUri != null) {
+                    requireContext().openFileOutput("foto", Context.MODE_PRIVATE).use {
+                        it.write(blob)
+                    }
+                } else {
+                    Log.d("asd", "mal")
+                }
+                val photo = File(requireContext().filesDir, "foto")
+                Log.d("file", photo.name)
+                requireContext().openFileInput("foto").bufferedReader().useLines { lines ->
+
+                    val a = lines.fold("") { some, text ->
+                        "$some\n$text"
+                    }
+                    //Log.d("a", a)
+                }
+            }
+        }
+    }
+    fun uriToBlob(uri: Uri): ByteArray {
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+        val byteArray = inputStream?.readBytes() ?: byteArrayOf()
+        inputStream?.close()
+        return byteArray
+    }
+
 }
