@@ -73,14 +73,14 @@
 
 
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Rubro1,Rubro2,Rubro3"
-                android:textSize="20sp"
-                android:layout_marginBottom="20dp"
-                />
+<!--            <TextView-->
+<!--                android:id="@+id/txtServiceType"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Rubro1,Rubro2,Rubro3"-->
+<!--                android:textSize="20sp"-->
+<!--                android:layout_marginBottom="20dp"-->
+<!--                />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -136,7 +136,7 @@
             android:layout_height="24dp" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/txtDescriptionTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -146,7 +146,7 @@
             />
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/txtDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from &quot;de Finibus Bonorum et Malorum&quot; by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham." />
