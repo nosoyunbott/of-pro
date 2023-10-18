@@ -92,24 +92,26 @@
         android:hint="Celular"
         android:background="@drawable/edittext_border" />
 
-    <EditText
-        android:id="@+id/userTypeEdt"
+
+    <Spinner
+        android:id="@+id/spnUserType"
         android:layout_width="300dp"
-        android:layout_height="55dp"
         android:layout_below="@+id/phoneEdt"
+        android:layout_height="55dp"
+        android:layout_centerHorizontal="true"
+        android:autofillHints="Tipo de Usuario"
+        android:paddingStart="12dp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:paddingStart="12dp"
-        android:layout_centerHorizontal="true"
-        android:hint="Tipo de usuario"
         android:background="@drawable/edittext_border" />
+
 
     <EditText
         android:id="@+id/passwordEdt"
         android:layout_width="300dp"
         android:layout_height="55dp"
-        android:layout_below="@+id/userTypeEdt"
+        android:layout_below="@+id/spnUserType"
         android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -120,7 +122,7 @@
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/logInButton"
+        android:id="@+id/registerButton"
         android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/passwordEdt"
@@ -135,7 +137,7 @@
         android:id="@+id/logInTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/logInButton"
+        android:layout_below="@+id/registerButton"
         android:layout_centerHorizontal="true"
         android:text="Ya tenes una cuenta? Inicia Sesión"
         android:layout_marginTop="10dp"
