@@ -22,9 +22,9 @@ class RequestHistoryHolder(view: View) : RecyclerView.ViewHolder(view) {
         txt.text = title
     }
 
-    fun setDate(date: String) {
+    fun setDate(date: Long) {
         val txt : TextView = view.findViewById(R.id.rec_dateTextView)
-        txt.text = date
+        txt.text = date.toString()
     }
 
     fun setName(name: String) {

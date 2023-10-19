@@ -58,7 +58,7 @@ class ProposalFragment : Fragment() {
         txtTitle.text = request.requestTitle
         txtOcupation.text = request.categoryOcupation
         txtServiceType.text = request.categoryService
-        txtTime.text = request.date
+        txtTime.text = request.date.toString()
         txtPricing.text = request.maxCost.toString()
         txtDescription.text = request.description
 

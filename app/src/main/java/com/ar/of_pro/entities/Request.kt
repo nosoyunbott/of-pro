@@ -10,7 +10,7 @@ class Request(
     categoryService: String?,
     description: String?,
     state: String?,
-    date: String?,
+    date: Long?,
     maxCost: Int?,
     clientId: String?,
     requestId: String?,
@@ -23,7 +23,7 @@ class Request(
     var categoryService: String = ""
     var description: String = ""
     var state: String = ""
-    var date: String = ""
+    var date: Long = 0
     var maxCost: Int = 0
     var clientId: String = ""
     var providerId: String = "" //no se pasa inicialmente
@@ -36,7 +36,7 @@ class Request(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString(),
+        parcel.readLong(),
         parcel.readInt(),
         parcel.readString(),
         parcel.readString()

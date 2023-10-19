@@ -48,7 +48,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
                     val selectedServiceType = document.getString("categoryService") ?: ""
                     val description = document.getString("description") ?: ""
                     val state = document.getString("state") ?: ""
-                    val date = document.getString("date") ?: ""
+                    val date = document.getLong("date") ?: 0
                     val maxCost = document.getLong("maxCost")?.toInt() ?: 0
                     val clientId = document.getString("clientId") ?: ""
                     val requestId = document.id

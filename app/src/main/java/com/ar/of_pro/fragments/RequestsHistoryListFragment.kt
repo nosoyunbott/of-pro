@@ -12,6 +12,7 @@ import com.ar.of_pro.R
 import com.ar.of_pro.adapters.HistoryCardAdapter
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.listeners.OnViewItemClickedListener
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
@@ -39,42 +40,76 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val validStatesEnCurso = "EN CURSO"
+        val validStatesFinalizada = "FINALIZADA"
 
-        requestsCollection.get().addOnSuccessListener { documents ->
-            for (document in documents) {
-                if (document.getString("state") == "EN CURSO") {
-                    val title = document.getString("requestTitle") ?: ""
-                    val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
-                    val selectedOcupation = document.getString("categoryOcupation") ?: ""
-                    val selectedServiceType = document.getString("categoryService") ?: ""
-                    val description = document.getString("description") ?: ""
-                    val state = document.getString("state") ?: ""
-                    val date = document.getString("date") ?: ""
-                    val maxCost = document.getLong("maxCost")?.toInt() ?: 0
-                    val clientId = document.getString("clientId") ?: ""
+        val enCursoRequests = mutableListOf<Request>()
+        val finalizadaRequests = mutableListOf<Request>()
 
-                    val r = Request(
-                        title,
-                        requestBidAmount,
-                        selectedOcupation,
-                        selectedServiceType,
-                        description,
-                        state,
-                        date,
-                        maxCost,
-                        clientId,
-                        ""
-                    )
-
-                    requestList.add(r)
+// Query for "EN CURSO" requests
+        requestsCollection
+            .whereEqualTo("state", validStatesEnCurso)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    // Parse and add "EN CURSO" requests to the enCursoRequests list
+                    val r = parseRequestFromDocument(document)
+                    enCursoRequests.add(r)
                 }
-            }
 
-            requestListAdapter.notifyDataSetChanged()
-        }
-            .addOnFailureListener { Exception ->
-                println("Error getting documents: $Exception")
+                // Query for "FINALIZADA" requests
+                requestsCollection
+                    .whereEqualTo("state", validStatesFinalizada)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            // Parse and add "FINALIZADA" requests to the finalizadaRequests list
+                            val r = parseRequestFromDocument(document)
+                            finalizadaRequests.add(r)
+                        }
+
+                        // Combine the results into a single list
+                        val combinedRequests = enCursoRequests + finalizadaRequests
+
+                        // Sort the combinedRequests by date in descending order
+                        combinedRequests.sortedByDescending { it.date }
+
+                        // Update your requestList with the combined and sorted requests
+                        requestList.addAll(combinedRequests)
+                        requestListAdapter.notifyDataSetChanged()
+                    }
+                    .addOnFailureListener { exception ->
+                        println("Error getting FINALIZADA documents: $exception")
+                    }
             }
+            .addOnFailureListener { exception ->
+                println("Error getting EN CURSO documents: $exception")
+            }
+    }
+
+    // Helper function to parse a Request object from a Firestore document
+    private fun parseRequestFromDocument(document: DocumentSnapshot): Request {
+        val title = document.getString("requestTitle") ?: ""
+        val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
+        val selectedOcupation = document.getString("categoryOcupation") ?: ""
+        val selectedServiceType = document.getString("categoryService") ?: ""
+        val description = document.getString("description") ?: ""
+        val state = document.getString("state") ?: ""
+        val date = document.getLong("date") ?: 0
+        val maxCost = document.getLong("maxCost")?.toInt() ?: 0
+        val clientId = document.getString("clientId") ?: ""
+        return Request(
+            title,
+            requestBidAmount,
+            selectedOcupation,
+            selectedServiceType,
+            description,
+            state,
+            date,
+            maxCost,
+            clientId,
+            ""
+        )
     }
 
     override fun onStart() {
