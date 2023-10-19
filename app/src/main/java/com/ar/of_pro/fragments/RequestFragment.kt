@@ -39,6 +39,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import java.io.File
+import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -237,8 +238,11 @@ class RequestFragment : Fragment() {
                 } else {
                     Log.d("asd", "mal")
                 }
-
-                loadImage(selectedMediaUri, blob)
+                try {
+                    loadImage(selectedMediaUri, blob)
+                }catch (e: FileNotFoundException){
+                    Log.d("Exc", e.toString())
+                }
             }
         }
     }
@@ -250,7 +254,9 @@ class RequestFragment : Fragment() {
     }
 
     fun loadImage(uri: Uri, blob: ByteArray) {
-        val file = File("/data/media/0/Download/FirstKittensFoster1501sak_1124x554.jpg")
+        Log.d("path", requireContext().filesDir.toString())
+
+        val file = File(requireContext().filesDir, "foto")
 
         Log.d("asd", file.toString())
 //        val service=Retrofit.Builder()
@@ -260,12 +266,11 @@ class RequestFragment : Fragment() {
         val service = ActivityServiceApiBuilder.create()
         val requestBody = RequestBody.create(MediaType.parse(requireContext().contentResolver.getType(uri)),file )
         val a = MultipartBody.Part.createFormData("image", file.name, requestBody)
-
+        Log.d("sa", requestBody.toString())
 
         service.uploadImage(a).enqueue(object : Callback<Image> {
             override fun onResponse(call: Call<Image>, response: Response<Image>) {
                 Log.e("Example", "Esta va segundo")
-
                 if (response.isSuccessful) {
                     val responseImage = response.body()
                     Log.d("image", responseImage.toString())
