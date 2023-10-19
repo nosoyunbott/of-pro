@@ -17,36 +17,33 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.ServiceType
-import com.ar.of_pro.models.Image
 import com.ar.of_pro.services.ActivityServiceApiBuilder
-import com.ar.of_pro.services.UploadService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 
-class RequestFragment : Fragment() {
+class RequestFragment<OutputStream> : Fragment() {
 
 
 
@@ -131,15 +128,7 @@ class RequestFragment : Fragment() {
         requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
             it.write(fileContents.toByteArray())
         }
-        val file = File(requireContext().filesDir, "myfile")
-        Log.d("file", file.path)
-        requireContext().openFileInput(filename).bufferedReader().useLines { lines ->
 
-            val a = lines.fold("") { some, text ->
-                "$some\n$text"
-            }
-            Log.d("a", a)
-        }
         setupSpinner(spnOcupation, ocupationAdapter)
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
         setOnClickListener(btnAttach)
@@ -254,35 +243,45 @@ class RequestFragment : Fragment() {
     }
 
     fun loadImage(uri: Uri, blob: ByteArray) {
-        Log.d("path", requireContext().filesDir.toString())
-
         val file = File(requireContext().filesDir, "foto")
+        try {
 
-        Log.d("asd", file.toString())
-//        val service=Retrofit.Builder()
-//            .baseUrl("https://api.imgur.com/3/")
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build().create<UploadService>()
-        val service = ActivityServiceApiBuilder.create()
-        val requestBody = RequestBody.create(MediaType.parse(requireContext().contentResolver.getType(uri)),file )
-        val a = MultipartBody.Part.createFormData("image", file.name, requestBody)
-        Log.d("sa", requestBody.toString())
+            val service = ActivityServiceApiBuilder.create()
+            val requestBody = RequestBody.create(MediaType.parse(requireContext().contentResolver.getType(uri)), file)
+            val imagePart = MultipartBody.Part.createFormData("image", file.name, requestBody)
 
-        service.uploadImage(a).enqueue(object : Callback<Image> {
-            override fun onResponse(call: Call<Image>, response: Response<Image>) {
-                Log.e("Example", "Esta va segundo")
-                if (response.isSuccessful) {
-                    val responseImage = response.body()
-                    Log.d("image", responseImage.toString())
-
+            service.uploadImage(imagePart).enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if (response.isSuccessful) {
+                        try {
+                            val responseData = response.body()?.string()
+                            val jsonResponse = JSONObject(responseData)
+                            val dataObject = jsonResponse.getJSONObject("data")
+                            val imageUrl = dataObject.getString("link")
+                            Log.d("image", "Image URL: $imageUrl")
+                            // Handle imageUrl as needed (e.g., display it in your app)
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                            // Handle JSON parsing error
+                        }
+                    } else {
+                        // Handle unsuccessful response here
+                        Log.e("image", "Upload failed")
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<Image>, t: Throwable) {
-                Log.d("Example", t.stackTraceToString())
-            }
-        })
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    // Handle network errors or errors in the server
+                    Log.e("image", "Error: " + t.message)
+                }
+            })
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+            // Handle file IO exception
+        }
     }
+
 
 
 }
