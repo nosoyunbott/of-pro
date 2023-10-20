@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,17 +21,32 @@ import androidx.fragment.app.Fragment
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.Request
+import com.ar.of_pro.entities.RequestFB
 import com.ar.of_pro.entities.ServiceType
+import com.ar.of_pro.services.ActivityServiceApiBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import org.json.JSONException
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 
-class RequestFragment : Fragment() {
+class RequestFragment<OutputStream> : Fragment() {
+
+
 
     lateinit var v: View
     lateinit var spnOcupation: Spinner
@@ -48,6 +64,7 @@ class RequestFragment : Fragment() {
     lateinit var ocupationAdapter: ArrayAdapter<String>
     lateinit var selectedOcupation: String
     lateinit var timestamp: String
+    lateinit var imageUrl: String
 
     var serviceTypesList: List<String> = ServiceType().getList()
     lateinit var serviceTypesAdapter: ArrayAdapter<String>
@@ -108,16 +125,24 @@ class RequestFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        val filename = "myfile"
+        val fileContents = "Hello world!"
+        requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
+            it.write(fileContents.toByteArray())
+        }
+
         setupSpinner(spnOcupation, ocupationAdapter)
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
         setOnClickListener(btnAttach)
 
 
         btnRequest.setOnClickListener {
-            val title = edtTitle.text.toString()
-            val clientId = "1"
+            val sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+            val clientId = sharedPreferences.getString("clientId", "")  // Retrieve the 'userType' attribute from SharedPreferences
 
-            val r = Request(
+            val title = edtTitle.text.toString()
+
+            val r = RequestFB(
                 title,
                 0,
                 selectedOcupation,
@@ -127,7 +152,7 @@ class RequestFragment : Fragment() {
                 timestamp, //TODO cambiar el string a su tipo correspondiente
                 edtPriceMax.text.toString().toIntOrNull(),
                 clientId,
-                ""
+                imageUrl
             )
 
             val newDocRequest = db.collection("Requests").document()
@@ -191,4 +216,77 @@ class RequestFragment : Fragment() {
 
         }
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_MEDIA_REQUEST && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                val selectedMediaUri = data.data
+                val blob = uriToBlob(selectedMediaUri!!)
+
+                if (selectedMediaUri != null) {
+                    requireContext().openFileOutput("foto", Context.MODE_PRIVATE).use {
+                        it.write(blob)
+                    }
+                } else {
+                    Log.d("asd", "mal")
+                }
+                try {
+                    loadImage(selectedMediaUri, blob)
+                }catch (e: FileNotFoundException){
+                    Log.d("Exc", e.toString())
+                }
+            }
+        }
+    }
+    fun uriToBlob(uri: Uri): ByteArray {
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+        val byteArray = inputStream?.readBytes() ?: byteArrayOf()
+        inputStream?.close()
+        return byteArray
+    }
+
+    fun loadImage(uri: Uri, blob: ByteArray) {
+        val file = File(requireContext().filesDir, "foto")
+        try {
+
+            val service = ActivityServiceApiBuilder.create()
+            val requestBody = RequestBody.create(MediaType.parse(requireContext().contentResolver.getType(uri)), file)
+            val imagePart = MultipartBody.Part.createFormData("image", file.name, requestBody)
+
+            service.uploadImage(imagePart).enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if (response.isSuccessful) {
+                        try {
+                            val responseData = response.body()?.string()
+                            val jsonResponse = JSONObject(responseData)
+                            val dataObject = jsonResponse.getJSONObject("data")
+                            val imageUrll = dataObject.getString("link")
+                            imageUrl = dataObject.getString("link")
+                            Log.d("image", "Image URL: $imageUrll")
+                            // Handle imageUrl as needed (e.g., display it in your app)
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                            // Handle JSON parsing error
+                        }
+                    } else {
+                        // Handle unsuccessful response here
+                        Log.e("image", "Upload failed")
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    // Handle network errors or errors in the server
+                    Log.e("image", "Error: " + t.message)
+                }
+            })
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+            // Handle file IO exception
+        }
+    }
+
+
+
 }

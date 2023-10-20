@@ -63,7 +63,9 @@ class UserLoginFragment : Fragment() {
                     if(passwordEdt.text.toString() == user.getString("password").toString()) {
                         val editor = sharedPreferences.edit()
                         editor.putString("userType", user.getString("userType"))
+                        editor.putString("clientId", user.id)
                         editor.apply()
+
                         val action = UserLoginFragmentDirections.actionUserLoginFragmentToMainActivity(user.getString("userType").toString())
                         v.findNavController().navigate(action)
                     }

@@ -64,12 +64,12 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         proposalsCollection.get().addOnSuccessListener { proposals ->
 
             for (proposal in proposals) {
-                if(proposal.getString("requestId") == requestId) {
+                if (proposal.getString("requestId") == requestId) {
                     val bid = proposal.getLong("bid")?.toFloat()
                     val providerId = proposal.getString("providerId")!!
                     val commentary = proposal.getString("commentary")
 
-                    val p = Proposal(providerId!!,requestId, bid!!, commentary!!)
+                    val p = Proposal(providerId!!, requestId, bid!!, commentary!!)
                     getProviderFromProviderId(p)
 
                 }
@@ -79,8 +79,8 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         }
 
 
-
     }
+
     /**
      * Retrieves provider information based on the given provider ID and bid,
      * and adds the provider's data to the [providerList] for later display in the UI.
@@ -88,13 +88,31 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
      * @param id The unique identifier of the provider in Firestore.
      * @param bid The bid associated with the provider for a specific proposal.
      */
-    private fun getProviderFromProviderId(proposal: Proposal)  {
+    private fun getProviderFromProviderId(proposal: Proposal) {
         val userDoc = usersCollection.document(proposal.providerId)
         userDoc.get().addOnSuccessListener { user ->
-            if(user != null){
-                userObj = User(user.getString("name")!!, user.getString("lastName")!!, user.getString("address")!!, user.getString("location")!!, user.getString("mail")!!, user.getString("password")!!, user.getString("phoneNumber")!!
-                    .toInt()!!, user.getDouble("rating")!!, user.getString("ratingsQuantity")!!.toInt()!!, user.getString("userType")!!)
-                proposalInfo = ProposalInformation(userObj.name, proposal.bid, userObj.rating, proposal.commentary, user.getLong("ratingsQuantity")?.toInt(), proposal.requestId, proposal.providerId  ) //user.id tiene que ser proposal.providerId
+            if (user != null) {
+                userObj = User(
+                    user.getString("name")!!,
+                    user.getString("lastName")!!,
+                    user.getString("address")!!,
+                    user.getString("location")!!,
+                    user.getString("mail")!!,
+                    user.getString("password")!!,
+                    user.getLong("phone")?.toInt(),
+                    user.getDouble("rating")!!,
+                    user.getLong("ratingQuantity")!!.toInt()!!,
+                    user.getString("userType")!!
+                )
+                proposalInfo = ProposalInformation(
+                    userObj.name,
+                    proposal.bid,
+                    userObj.rating,
+                    proposal.commentary,
+                    user.getLong("ratingQuantity")?.toInt(),
+                    proposal.requestId,
+                    proposal.providerId
+                ) //user.id tiene que ser proposal.providerId
                 providerList.add(proposalInfo)
 
                 //TODO desranciar esto
@@ -109,7 +127,7 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        v= inflater.inflate(R.layout.fragment_provider_requests, container, false)
+        v = inflater.inflate(R.layout.fragment_provider_requests, container, false)
         txtTitle = v.findViewById(R.id.txtTitle)
         recProviderList = v.findViewById(R.id.rec_providers)
         return v
@@ -129,7 +147,10 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
     }
 
     override fun onViewItemDetail(proposalInformation: ProposalInformation) {
-        val action = ProviderRequestsFragmentDirections.actionProviderRequestsFragmentToRequestDetailFragment(proposalInformation)
+        val action =
+            ProviderRequestsFragmentDirections.actionProviderRequestsFragmentToRequestDetailFragment(
+                proposalInformation
+            )
         v.findNavController().navigate(action)
         Snackbar.make(v, proposalInformation.name, Snackbar.LENGTH_SHORT).show()
     }

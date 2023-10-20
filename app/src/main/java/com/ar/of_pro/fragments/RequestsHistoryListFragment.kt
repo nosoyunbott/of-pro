@@ -46,7 +46,7 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
 
         requestsCollection.get().addOnSuccessListener { documents ->
             for (document in documents) {
-                if (document.getString("state") == "EN CURSO") {
+                if (document.getString("state") == "EN CURSO" || document.getString("state") == "FINALIZADA") {
                     val title = document.getString("requestTitle") ?: ""
                     val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
                     val selectedOcupation = document.getString("categoryOcupation") ?: ""
@@ -57,7 +57,9 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                     val maxCost = document.getLong("maxCost")?.toInt() ?: 0
                     val clientId = document.getString("clientId") ?: ""
                     val providerId=document.getString("providerId")?:""
-                    val requestId=document.getString("requestId")?:""
+                    val requestId=document.id
+                    val imageUrl = document.getString("imageUrl") ?: ""
+
 
                     val r = Request(
                         title,
@@ -69,7 +71,8 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                         date,
                         maxCost,
                         clientId,
-                       requestId
+                       requestId,
+                        imageUrl
                     )
 
                     usersCollection.document(clientId)
