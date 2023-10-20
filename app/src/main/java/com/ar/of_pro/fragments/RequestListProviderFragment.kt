@@ -58,6 +58,7 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
                     val maxCost = document.getLong("maxCost")?.toInt() ?: 0
                     val clientId = document.getString("clientId") ?: ""
                     val requestId = document.id
+                    val imageUrl = document.getString("imageUrl") ?: ""
 
                     val r = Request(
                         title,
@@ -69,7 +70,8 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
                         date,
                         maxCost,
                         clientId,
-                        requestId
+                        requestId,
+                        imageUrl
                     )
 
                     requestList.add(r)

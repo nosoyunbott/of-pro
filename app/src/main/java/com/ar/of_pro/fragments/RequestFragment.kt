@@ -63,6 +63,7 @@ class RequestFragment<OutputStream> : Fragment() {
     lateinit var ocupationAdapter: ArrayAdapter<String>
     lateinit var selectedOcupation: String
     lateinit var timestamp: String
+    lateinit var imageUrl: String
 
     var serviceTypesList: List<String> = ServiceType().getList()
     lateinit var serviceTypesAdapter: ArrayAdapter<String>
@@ -148,7 +149,8 @@ class RequestFragment<OutputStream> : Fragment() {
                 timestamp, //TODO cambiar el string a su tipo correspondiente
                 edtPriceMax.text.toString().toIntOrNull(),
                 clientId,
-                ""
+                "",
+                imageUrl
             )
 
             val newDocRequest = db.collection("Requests").document()
@@ -257,8 +259,9 @@ class RequestFragment<OutputStream> : Fragment() {
                             val responseData = response.body()?.string()
                             val jsonResponse = JSONObject(responseData)
                             val dataObject = jsonResponse.getJSONObject("data")
-                            val imageUrl = dataObject.getString("link")
-                            Log.d("image", "Image URL: $imageUrl")
+                            val imageUrll = dataObject.getString("link")
+                            imageUrl = dataObject.getString("link")
+                            Log.d("image", "Image URL: $imageUrll")
                             // Handle imageUrl as needed (e.g., display it in your app)
                         } catch (e: JSONException) {
                             e.printStackTrace()

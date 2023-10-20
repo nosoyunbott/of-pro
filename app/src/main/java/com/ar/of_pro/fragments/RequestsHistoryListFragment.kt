@@ -52,6 +52,7 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                     val date = document.getString("date") ?: ""
                     val maxCost = document.getLong("maxCost")?.toInt() ?: 0
                     val clientId = document.getString("clientId") ?: ""
+                    val imageUrl = document.getString("imageUrl") ?: ""
 
                     val r = Request(
                         title,
@@ -63,7 +64,8 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                         date,
                         maxCost,
                         clientId,
-                        ""
+                        "",
+                        imageUrl
                     )
 
                     requestList.add(r)

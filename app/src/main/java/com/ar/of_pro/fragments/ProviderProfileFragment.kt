@@ -31,7 +31,7 @@ class ProviderProfileFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         Glide.with(requireContext())
-            .load("content://com.google.android.apps.photos.contentprovider/-1/1/content%3A%2F%2Fmedia%2Fexternal%2Fimages%2Fmedia%2F1000000033/ORIGINAL/NONE/image%2Fjpeg/850193783")
+            .load("https://i.imgur.com/GMF3hgM.jpg")
             .into(photo);
         btnEdit.setOnClickListener{
             val action = ProviderProfileFragmentDirections.actionProviderProfileFragmentToProviderProfileEditFragment()

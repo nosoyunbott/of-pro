@@ -14,6 +14,7 @@ class Request(
     maxCost: Int?,
     clientId: String?,
     requestId: String?,
+    imageUrl: String?,
 ) : Parcelable {
 
 
@@ -28,6 +29,7 @@ class Request(
     var clientId: String = ""
     var providerId: String = "" //no se pasa inicialmente
     var requestId: String = ""
+    var imageUrl: String = ""
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -38,6 +40,7 @@ class Request(
         parcel.readString(),
         parcel.readString(),
         parcel.readInt(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readString()
     )
@@ -54,7 +57,7 @@ class Request(
         this.maxCost = maxCost!!
         this.clientId = clientId!!
         this.requestId = requestId!!
-
+        this.imageUrl = imageUrl!!
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
