@@ -94,7 +94,7 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
             if(user != null){
                 val fullName = user.getString("lastName")!! + " " + user.getString("name")!!
                 userObj = User(fullName, user.getDouble("rating")!!, user.id)
-                proposalInfo = ProposalInformation(userObj.name, proposal.bid, userObj.rating, proposal.commentary, user.getLong("ratingsQuantity")?.toInt(), proposal.requestId, proposal.providerId  ) //user.id tiene que ser proposal.providerId
+                proposalInfo = ProposalInformation(userObj.name, proposal.bid, userObj.rating, proposal.commentary, user.getLong("ratingQuantity")?.toInt(), proposal.requestId, proposal.providerId  ) //user.id tiene que ser proposal.providerId
                 providerList.add(proposalInfo)
 
                 //TODO desranciar esto
