@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.findNavController
@@ -15,6 +16,7 @@ import com.ar.of_pro.R
 import com.ar.of_pro.entities.Proposal
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.services.RequestsService
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -30,6 +32,8 @@ class ProposalFragment : Fragment() {
     lateinit var txtDescription : TextView
     lateinit var edtBudget : EditText
     lateinit var edtComment : EditText
+    lateinit var imageUrl: String
+    lateinit var imageView: ImageView
     private val db = FirebaseFirestore.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +50,8 @@ class ProposalFragment : Fragment() {
         txtDescription = v.findViewById(R.id.txtDescription)
         edtBudget = v.findViewById(R.id.edtBudget)
         edtComment = v.findViewById(R.id.edtComment)
+        imageView = v.findViewById(R.id.requestImageView)
+
 
         //id request, coment, presupuesto, idproveedor
         return v
@@ -61,7 +67,10 @@ class ProposalFragment : Fragment() {
         txtTime.text = request.date
         txtPricing.text = request.maxCost.toString()
         txtDescription.text = request.description
-
+        imageUrl = request.imageUrl
+        Glide.with(requireContext())
+            .load(imageUrl)
+            .into(imageView);
 
 
         btnProposal.setOnClickListener{
