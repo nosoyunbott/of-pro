@@ -3,7 +3,7 @@ package com.ar.of_pro.entities
 import android.os.Parcel
 import android.os.Parcelable
 
-class Request(
+class RequestFB(
     requestTitle: String?,
     requestBidAmount: Int?,
     categoryOcupation: String?,
@@ -13,7 +13,6 @@ class Request(
     date: String?,
     maxCost: Int?,
     clientId: String?,
-    requestId: String?,
     imageUrl: String?,
 ) : Parcelable {
 
@@ -28,7 +27,6 @@ class Request(
     var maxCost: Int = 0
     var clientId: String = ""
     var providerId: String = "" //no se pasa inicialmente
-    var requestId: String = ""
     var imageUrl: String = ""
 
     constructor(parcel: Parcel) : this(
@@ -40,7 +38,6 @@ class Request(
         parcel.readString(),
         parcel.readString(),
         parcel.readInt(),
-        parcel.readString(),
         parcel.readString(),
         parcel.readString()
     )
@@ -56,7 +53,6 @@ class Request(
         this.date = date!!
         this.maxCost = maxCost!!
         this.clientId = clientId!!
-        this.requestId = requestId!!
         this.imageUrl = imageUrl!!
     }
 
