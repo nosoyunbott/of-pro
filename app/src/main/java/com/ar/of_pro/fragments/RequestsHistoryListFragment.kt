@@ -1,6 +1,8 @@
 package com.ar.of_pro.fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ar.of_pro.R
 import com.ar.of_pro.adapters.HistoryCardAdapter
 import com.ar.of_pro.entities.Request
+import com.ar.of_pro.entities.RequestHistory
 import com.ar.of_pro.listeners.OnViewItemClickedListener
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -20,10 +23,11 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
     lateinit var recRequestList: RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var requestListAdapter: HistoryCardAdapter
-    var requestList: MutableList<Request> = ArrayList()
+    var requestList: MutableList<RequestHistory> = ArrayList()
 
     val db = FirebaseFirestore.getInstance()
     val requestsCollection = db.collection("Requests")
+    val usersCollection=db.collection("Users")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +56,8 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                     val date = document.getString("date") ?: ""
                     val maxCost = document.getLong("maxCost")?.toInt() ?: 0
                     val clientId = document.getString("clientId") ?: ""
+                    val providerId=document.getString("providerId")?:""
+                    val requestId=document.getString("requestId")?:""
 
                     val r = Request(
                         title,
@@ -63,17 +69,48 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                         date,
                         maxCost,
                         clientId,
-                        ""
+                       requestId
                     )
 
-                    requestList.add(r)
+                    usersCollection.document(clientId)
+                        .get()
+                        .addOnSuccessListener { clientDocument ->
+                            val clientName = clientDocument.getString("name")?:""
+
+                            // Query the user collection to get the provider's name
+                            usersCollection.document(providerId)
+                                .get()
+                                .addOnSuccessListener { providerDocument ->
+                                    val providerName = providerDocument.getString("name")?:"" + providerDocument.getString("lastName")?:""
+
+                                    // Create a RequestHistory object and add it to the list
+                                    val requestHistory = RequestHistory(r, clientName, providerName)
+                                    requestList.add(requestHistory)
+                                    requestListAdapter.notifyDataSetChanged()
+                                }
+                                .addOnFailureListener { providerException ->
+
+
+                                }
+                        }
+                        .addOnFailureListener { clientException ->
+                            val requestHistory = RequestHistory(r, "clientName", "providerName")
+                            requestList.add(requestHistory)
+                        }
+
+
+
+
                 }
+
             }
 
-            requestListAdapter.notifyDataSetChanged()
+
+
         }
             .addOnFailureListener { Exception ->
                 println("Error getting documents: $Exception")
+                Log.e("ERROR DE DB","$Exception")
             }
     }
 
@@ -88,14 +125,23 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
     }
 
     override fun onViewItemDetail(request: Request) {
+        val sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        val userType = sharedPreferences.getString("userType", "")  // Retrieve the 'userType' attribute from SharedPreferences
 
-        v.findNavController().navigate(
-            RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishProvider(
-                request
+        if(userType == "PROVIDER") {
+            v.findNavController().navigate(
+                RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishProvider(request)
             )
-        )
+        } else if (userType == "CLIENT") {
+            v.findNavController().navigate(
+                RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishClient(request)
+            )
+        } else {
+            // Handle the case where 'userType' is neither 'provider' nor 'client'
+            // You can provide a default action or show an error message.
+        }
 
-        //TODO segun el tipo de cliente ir hacia pantalla de finalizacion de cliente o de proveedor (la unica q esta hecha es la de proveedor) @Moragues
+
     }
 
 

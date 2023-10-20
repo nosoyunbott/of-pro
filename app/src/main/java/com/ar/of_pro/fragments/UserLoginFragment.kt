@@ -1,5 +1,7 @@
 package com.ar.of_pro.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -14,6 +16,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -25,6 +28,7 @@ class UserLoginFragment : Fragment() {
     lateinit var logInButton: Button
     lateinit var errorMessageTextView: TextView
     lateinit var registerTextView: TextView
+    lateinit var sharedPreferences: SharedPreferences
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -38,6 +42,9 @@ class UserLoginFragment : Fragment() {
         logInButton = v.findViewById(R.id.logInButton)
         errorMessageTextView = v.findViewById(R.id.errorMessageTextView)
         registerTextView = v.findViewById(R.id.registerTextView)
+
+        sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+
         return v
     }
 
@@ -54,6 +61,9 @@ class UserLoginFragment : Fragment() {
                 errorMessageTextView.visibility = View.GONE;
                 for(user in users){
                     if(passwordEdt.text.toString() == user.getString("password").toString()) {
+                        val editor = sharedPreferences.edit()
+                        editor.putString("userType", user.getString("userType"))
+                        editor.apply()
                         val action = UserLoginFragmentDirections.actionUserLoginFragmentToMainActivity(user.getString("userType").toString())
                         v.findNavController().navigate(action)
                     }

@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_requestsHistoryFragment_to_requestFragmentProccessFinishProvider"
             app:destination="@id/requestFragmentProccessFinishProvider" />
+        <action
+            android:id="@+id/action_requestsHistoryFragment_to_requestFragmentProccessFinishClient"
+            app:destination="@id/requestFragmentProccessFinishClient" />
     </fragment>
 
     <fragment
@@ -114,6 +117,15 @@
         android:name="com.ar.of_pro.fragments.RequestFragmentProccessFinishProvider"
         android:label="fragment_request_proccess_finish_provider"
         tools:layout="@layout/fragment_request_proccess_finish_provider" >
+        <argument
+            android:name="request"
+            app:argType="com.ar.of_pro.entities.Request" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestFragmentProccessFinishClient"
+        android:name="com.ar.of_pro.fragments.RequestFragmentProccessFinish"
+        android:label="fragment_request_proccess_finish_client"
+        tools:layout="@layout/fragment_request_proccess_finish_client" >
         <argument
             android:name="request"
             app:argType="com.ar.of_pro.entities.Request" />
