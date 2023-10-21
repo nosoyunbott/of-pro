@@ -30,7 +30,11 @@
         android:id="@+id/requestFragment"
         android:name="com.ar.of_pro.fragments.request.RequestFragment"
         android:label="fragment_request"
-        tools:layout="@layout/fragment_request" />
+        tools:layout="@layout/fragment_request" >
+        <action
+            android:id="@+id/action_requestFragment_to_requestsListFragment"
+            app:destination="@id/requestsListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/requestsListFragment"
         android:name="com.ar.of_pro.fragments.request.RequestsListFragment"
@@ -42,6 +46,9 @@
         <action
             android:id="@+id/action_requestsListFragment_to_proposalFragment3"
             app:destination="@id/proposalFragment" />
+        <action
+            android:id="@+id/action_requestsListFragment_to_requestFragment"
+            app:destination="@id/requestFragment" />
 
     </fragment>
     <fragment
