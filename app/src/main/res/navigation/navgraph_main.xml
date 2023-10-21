@@ -90,29 +90,29 @@
             app:argType="com.ar.of_pro.entities.Request" />
     </fragment>
     <fragment
-        android:id="@+id/providerProfileFragment"
-        android:name="com.ar.of_pro.fragments.profile.ProviderProfileFragment"
-        android:label="ProviderProfileFragment" >
-        <action
-            android:id="@+id/action_providerProfileFragment_to_providerProfileEditFragment"
-            app:destination="@id/providerProfileEditFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/providerProfileEditFragment"
-        android:name="com.ar.of_pro.fragments.profile.ProviderProfileEditFragment"
-        android:label="ProviderProfileEditFragment" >
-        <action
-            android:id="@+id/action_providerProfileEditFragment_to_providerProfileFragment"
-            app:destination="@id/providerProfileFragment"
-            app:popUpTo="@id/providerProfileFragment"
-            app:popUpToInclusive="false" />
-    </fragment>
-    <fragment
         android:id="@+id/requestFragmentProccessFinishClient"
         android:name="com.ar.of_pro.fragments.request.RequestProcessFinishFragment"
         android:label="fragment_request_proccess_finish_client">
         <argument
             android:name="request"
             app:argType="com.ar.of_pro.entities.Request" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.ar.of_pro.fragments.profile.ProfileFragment"
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_profileEditFragment"
+            app:destination="@id/profileEditFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileEditFragment"
+        android:name="com.ar.of_pro.fragments.profile.ProfileEditFragment"
+        android:label="ProfileEditFragment" >
+        <action
+            android:id="@+id/action_profileEditFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 </navigation>

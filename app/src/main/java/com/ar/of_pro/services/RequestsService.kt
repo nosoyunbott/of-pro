@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
              )
              requestDoc.update(updates)
              updateRequestState(Request.IN_COURSE, requestId)
+
          }
 
          fun updateRequestState(state: String, requestId: String) {

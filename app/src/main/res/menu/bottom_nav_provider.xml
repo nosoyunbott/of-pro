@@ -7,7 +7,7 @@
     <item android:title="Historial"
         android:id="@+id/requestsHistoryFragment"/>
     <item android:title="Perfil"
-        android:id="@+id/providerProfileFragment"/>
+        android:id="@+id/profileFragment"/>
     <item android:title="Solicitar"
         android:id="@+id/requestFragment"/>
 </menu>

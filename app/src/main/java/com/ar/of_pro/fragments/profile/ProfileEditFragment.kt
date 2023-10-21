@@ -10,7 +10,7 @@ import androidx.navigation.findNavController
 import com.ar.of_pro.R
 
 
-class ProviderProfileEditFragment : Fragment() {
+class ProfileEditFragment : Fragment() {
 
     lateinit var v : View
     lateinit var btnAccept: Button
@@ -19,7 +19,7 @@ class ProviderProfileEditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_provider_profile_edit, container, false)
+        v = inflater.inflate(R.layout.fragment_profile_edit, container, false)
         btnAccept = v.findViewById(R.id.btnAccept)
         return v
     }
@@ -27,10 +27,10 @@ class ProviderProfileEditFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         btnAccept.setOnClickListener{
-            val action =
-                ProviderProfileEditFragmentDirections.actionProviderProfileEditFragmentToProviderProfileFragment()
+            val action = ProfileEditFragmentDirections.actionProfileEditFragmentToProfileFragment()
             v.findNavController().navigate(action)
         }
+
     }
 
 }
