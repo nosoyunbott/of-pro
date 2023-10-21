@@ -43,7 +43,7 @@ class ProposalFragment : Fragment() {
         txtServiceType = v.findViewById(R.id.txtServiceType)
         txtTime = v.findViewById(R.id.txtTime)
         txtPricing = v.findViewById(R.id.txtPricing)
-        txtDescription = v.findViewById(R.id.txtDescription)
+        txtDescription = v.findViewById(R.id.txtBioDescription)
         edtBudget = v.findViewById(R.id.edtBudget)
         edtComment = v.findViewById(R.id.edtComment)
         imageView = v.findViewById(R.id.requestImageView)

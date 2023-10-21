@@ -30,8 +30,8 @@ class ProfileFragment : Fragment() {
     lateinit var txtCorreo: TextView
     lateinit var txtTelefono: TextView
     lateinit var txtNumRating: TextView
-    lateinit var txtDescription: TextView
-    lateinit var txtDescriptionTitle: TextView
+    lateinit var txtBioDescription: TextView
+    lateinit var txtBio: TextView
     lateinit var txtRateQuantity2: TextView
     lateinit var sharedPreferences: SharedPreferences
     //lateinit var txtServiceType: TextView
@@ -48,9 +48,9 @@ class ProfileFragment : Fragment() {
         txtTelefono = v.findViewById(R.id.txtTelefono)
         txtNumRating = v.findViewById(R.id.numRating)
         txtRateQuantity2 = v.findViewById(R.id.txtRateQuantity2)
-        txtDescription =
-            v.findViewById(R.id.txtDescription) //TODO traer txt de descripcion y mostrar si el userType es provider
-        txtDescriptionTitle = v.findViewById(R.id.txtDescriptionTitle)
+        txtBioDescription =
+            v.findViewById(R.id.txtBioDescription) //TODO traer txt de descripcion y mostrar si el userType es provider
+        txtBio = v.findViewById(R.id.txtBio)
         //txtServiceType = v.findViewById(R.id.txtServiceType) //TODO traer txt de rubro y mostrar si el userType es provider ? dinamico
 
         sharedPreferences =
@@ -68,8 +68,7 @@ class ProfileFragment : Fragment() {
                 //db.collection('books').where(firebase.firestore.FieldPath.documentId(), '==', 'fK3ddutEpD2qQqRMXNW5').get()
 
 
-                if (snapshot.getString("mail") == mail)
-                {
+                if (snapshot.getString("mail") == mail) {
                     val name = snapshot.getString("name") ?: ""
                     val surname = snapshot.getString("lastName") ?: ""
                     val location = snapshot.getString("location") ?: ""
@@ -82,10 +81,10 @@ class ProfileFragment : Fragment() {
                     txtTelefono.text = phoneNumber
                     txtNumRating.text = numRating.toString() + " "
                     if (snapshot.getString("userType") == "PROVIDER") {
-                        //TODO get description from provider id
+                        txtBioDescription.text = snapshot.getString("bio")
                     } else {
-                        txtDescriptionTitle.text = ""
-                        txtDescription.text = ""
+                        txtBio.text = ""
+                        txtBioDescription.text = ""
                         txtNumRating.text = ""
                         txtRateQuantity2.text = ""
 
