@@ -47,7 +47,7 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
 
         requestsCollection.get().addOnSuccessListener { documents ->
             for (document in documents) {
-                if(document.getString("providerId") == "") {
+                if (document.getString("providerId") == "") {
                     val title = document.getString("requestTitle") ?: ""
                     val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
                     val selectedOcupation = document.getString("categoryOcupation") ?: ""
@@ -86,6 +86,7 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
             }
 
     }
+
     override fun onStart() {
         super.onStart()
 
@@ -97,7 +98,8 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
 
         refreshRecyclerView()
     }
-//TODO Sacar la cantidad de proposals en el recyclerview (proovedor no tiene que ver eso)
+
+    //TODO Sacar la cantidad de proposals en el recyclerview (proovedor no tiene que ver eso)
     fun refreshRecyclerView() {
         for (filterName in ocupationList) {
             val btnFilter = Button(context)

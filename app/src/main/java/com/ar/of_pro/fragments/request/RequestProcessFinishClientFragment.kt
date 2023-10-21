@@ -18,7 +18,7 @@ class RequestProcessFinishClientFragment : Fragment() {
 
     val db = FirebaseFirestore.getInstance()
     val requestsCollection = db.collection("Requests")
-    val usersCollection=db.collection("Users")
+    val usersCollection = db.collection("Users")
 
 
     override fun onCreateView(
@@ -60,9 +60,8 @@ class RequestProcessFinishClientFragment : Fragment() {
         fun handleRatingFinishRequest(rating: Float) {
 
 
-
-            RequestsService.updateRequestState("FINALIZADA",request.requestId)
-            UserService.updateRatingOfUser(rating,request.clientId)
+            RequestsService.updateRequestState("FINALIZADA", request.requestId)
+            UserService.updateRatingOfUser(rating, request.clientId)
             //ir a historial . Ver de hacer el pop.
         }
 
@@ -85,13 +84,14 @@ class RequestProcessFinishClientFragment : Fragment() {
 
             legendTextView.text =
                 document.getString("categoryOcupation") + " " + document.getString("categoryService")
-//            paragraphTextView.text = document.getString("description") ?: "" // Set the description
-            paragraphTextView.text = "VIVA LA DROGA CLIENT" // Set the description
+            paragraphTextView.text = document.getString("description") ?: "" // Set the description
+
             bigLegendTextView.text = document.getLong("maxCost")
                 .toString() + " " + document.getString("requestTitle") // Set the big legend
 
             usersCollection.document(request.clientId).get().addOnSuccessListener { userDocument ->
-                fullNameTextView.text = userDocument.getString("name") + " " + userDocument.getString("lastName") // Client
+                fullNameTextView.text =
+                    userDocument.getString("name") + " " + userDocument.getString("lastName") // Client
                 zoneTextView.text = userDocument.getString("location")//Client
                 rankingTextView.text = userDocument.getDouble("rating").toString() // Client
 

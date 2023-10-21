@@ -16,7 +16,7 @@ class RequestProcessFinishProviderFragment : Fragment() {
 
     val db = FirebaseFirestore.getInstance()
     val requestsCollection = db.collection("Requests")
-    val usersCollection=db.collection("Users")
+    val usersCollection = db.collection("Users")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,12 +42,14 @@ class RequestProcessFinishProviderFragment : Fragment() {
         requestsCollection.document(request.requestId).get().addOnSuccessListener { document ->
             // Populate the views with data from the Request object
 
-            legendTextView.text = document.getString("categoryOcupation") + " " + document.getString("categoryService")
-            //            paragraphTextView.text = document.getString("description") ?: "" // Set the description
-            paragraphTextView.text = "VIVA LA DROGA PROVIDER" // Set the description
-            bigLegendTextView.text = document.getLong("maxCost").toString() + " " +document.getString("requestTitle") // Set the big legend
+            legendTextView.text =
+                document.getString("categoryOcupation") + " " + document.getString("categoryService")
+            paragraphTextView.text = document.getString("description") ?: "" // Set the description
 
-            usersCollection.document(request.clientId).get().addOnSuccessListener { userDocument->
+            bigLegendTextView.text = document.getLong("maxCost")
+                .toString() + " " + document.getString("requestTitle") // Set the big legend
+
+            usersCollection.document(request.clientId).get().addOnSuccessListener { userDocument ->
                 fullNameTextView.text = userDocument.getString("name") // Client
                 zoneTextView.text = userDocument.getString("location")//Client
                 rankingTextView.text = userDocument.getDouble("rating").toString() // Client
@@ -61,13 +63,8 @@ class RequestProcessFinishProviderFragment : Fragment() {
     }
 
 
-
     override fun onStart() {
         super.onStart()
-
-
-
-
 
 
     }
