@@ -1,44 +1,41 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.request
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.of_pro.R
-import com.ar.of_pro.adapters.RequestCardAdapter
-import com.ar.of_pro.entities.Ocupation
+import com.ar.of_pro.adapters.HistoryCardAdapter
 import com.ar.of_pro.entities.Request
+import com.ar.of_pro.entities.RequestHistory
 import com.ar.of_pro.listeners.OnViewItemClickedListener
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 
-class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
-
-
-    lateinit var filterContainer: LinearLayout
-    var ocupationList: List<String> = Ocupation().getList()
+class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
 
     lateinit var v: View
     lateinit var recRequestList: RecyclerView
-    var requestList: MutableList<Request> = ArrayList()
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private lateinit var requestListAdapter: RequestCardAdapter
+    private lateinit var requestListAdapter: HistoryCardAdapter
+    var requestList: MutableList<RequestHistory> = ArrayList()
 
     val db = FirebaseFirestore.getInstance()
     val requestsCollection = db.collection("Requests")
+    val usersCollection = db.collection("Users")
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_request_list_provider, container, false)
-        recRequestList = v.findViewById(R.id.rec_requestsList)
-        filterContainer = v.findViewById(R.id.filterContainer)
+        v = inflater.inflate(R.layout.fragment_request_history_list, container, false)
+
+        recRequestList = v.findViewById(R.id.rec_requestsHistoryList)
+
         return v
     }
 
@@ -47,7 +44,7 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
 
         requestsCollection.get().addOnSuccessListener { documents ->
             for (document in documents) {
-                if(document.getString("providerId") == "") {
+                if (document.getString("state") == "EN CURSO" || document.getString("state") == "FINALIZADA") {
                     val title = document.getString("requestTitle") ?: ""
                     val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
                     val selectedOcupation = document.getString("categoryOcupation") ?: ""
@@ -57,8 +54,10 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
                     val date = document.getString("date") ?: ""
                     val maxCost = document.getLong("maxCost")?.toInt() ?: 0
                     val clientId = document.getString("clientId") ?: ""
+                    val providerId = document.getString("providerId") ?: ""
                     val requestId = document.id
                     val imageUrl = document.getString("imageUrl") ?: ""
+
 
                     val r = Request(
                         title,
@@ -74,66 +73,58 @@ class RequestListProviderFragment : Fragment(), OnViewItemClickedListener {
                         imageUrl
                     )
 
-                    requestList.add(r)
+                    usersCollection.document(clientId).get()
+                        .addOnSuccessListener { clientDocument ->
+                            val clientName = clientDocument.getString("name") ?: ""
+
+                            // Query the user collection to get the provider's name
+                            usersCollection.document(providerId).get()
+                                .addOnSuccessListener { providerDocument ->
+                                    val providerName = providerDocument.getString("name")
+                                        ?: "" + providerDocument.getString("lastName") ?: ""
+
+                                    // Create a RequestHistory object and add it to the list
+                                    val requestHistory = RequestHistory(r, clientName, providerName)
+                                    requestList.add(requestHistory)
+                                    requestListAdapter.notifyDataSetChanged()
+                                }.addOnFailureListener { providerException ->
+
+
+                                }
+                        }.addOnFailureListener { clientException ->
+                            val requestHistory = RequestHistory(r, "clientName", "providerName")
+                            requestList.add(requestHistory)
+                        }
+
+
                 }
 
             }
 
-            requestListAdapter.notifyDataSetChanged()
-        }
-            .addOnFailureListener { Exception ->
-                println("Error getting documents: $Exception")
-            }
 
+        }.addOnFailureListener { Exception ->
+            println("Error getting documents: $Exception")
+            Log.e("ERROR DE DB", "$Exception")
+        }
     }
+
     override fun onStart() {
         super.onStart()
 
         recRequestList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
         recRequestList.layoutManager = linearLayoutManager
-        requestListAdapter = RequestCardAdapter(requestList, this)
+        requestListAdapter = HistoryCardAdapter(requestList, this)
         recRequestList.adapter = requestListAdapter
-
-        refreshRecyclerView()
-    }
-//TODO Sacar la cantidad de proposals en el recyclerview (proovedor no tiene que ver eso)
-    fun refreshRecyclerView() {
-        for (filterName in ocupationList) {
-            val btnFilter = Button(context)
-            btnFilter.text = filterName
-            val layoutParams = ViewGroup.MarginLayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, // Width
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            layoutParams.setMargins(10, 5, 10, 0)
-            btnFilter.layoutParams = layoutParams
-            btnFilter.textSize = 16F
-            btnFilter.background = resources.getDrawable(R.drawable.rounded_button)
-
-            // botones del carrousel de rubros
-            btnFilter.setOnClickListener {
-                val filter = btnFilter.text.toString()
-                val filteredList =
-                    requestList.filter { it.categoryOcupation == filter } as MutableList
-                requestListAdapter =
-                    RequestCardAdapter(filteredList, this@RequestListProviderFragment)
-                recRequestList.adapter = requestListAdapter
-            }
-
-            filterContainer.addView(btnFilter)
-        }
     }
 
     override fun onViewItemDetail(request: Request) {
-        //for service provider
-        val action =
-            RequestListProviderFragmentDirections.actionRequestListProviderFragmentToProposalFragment(
+        v.findNavController().navigate(
+            RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishClient(
                 request
             )
-        v.findNavController().navigate(action)
-        Snackbar.make(v, request.requestTitle, Snackbar.LENGTH_SHORT).show()
-
-
+        )
     }
+
+
 }

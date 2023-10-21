@@ -1,4 +1,4 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.login
 
 import android.app.AlertDialog
 import android.content.Context
@@ -7,7 +7,6 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,14 +16,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
-import androidx.core.view.get
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
-import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.User
 import com.ar.of_pro.entities.UserType
 import com.google.firebase.firestore.FirebaseFirestore
-import java.util.UUID
 
 class SignupFragment : Fragment() {
 
@@ -101,7 +98,8 @@ class SignupFragment : Fragment() {
             val newDocUser = db.collection("Users").document()
             db.collection("Users").document(newDocUser.id).set(user)
 
-            val action = SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
+            val action =
+                SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
             v.findNavController().navigate(action)
         }
     }
@@ -148,7 +146,8 @@ class SignupFragment : Fragment() {
 
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(v: View) {
-                val action = SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
+                val action =
+                    SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
                 v.findNavController().navigate(action)
             }
         }
