@@ -1,19 +1,19 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.provider
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.Proposal
-import com.ar.of_pro.entities.Request
-import com.google.firebase.auth.FirebaseAuth
+import com.ar.of_pro.services.RequestsService
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ProposalFragment : Fragment() {
@@ -28,6 +28,8 @@ class ProposalFragment : Fragment() {
     lateinit var txtDescription : TextView
     lateinit var edtBudget : EditText
     lateinit var edtComment : EditText
+    lateinit var imageUrl: String
+    lateinit var imageView: ImageView
     private val db = FirebaseFirestore.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +46,8 @@ class ProposalFragment : Fragment() {
         txtDescription = v.findViewById(R.id.txtDescription)
         edtBudget = v.findViewById(R.id.edtBudget)
         edtComment = v.findViewById(R.id.edtComment)
+        imageView = v.findViewById(R.id.requestImageView)
+
 
         //id request, coment, presupuesto, idproveedor
         return v
@@ -59,30 +63,45 @@ class ProposalFragment : Fragment() {
         txtTime.text = request.date
         txtPricing.text = request.maxCost.toString()
         txtDescription.text = request.description
-
+        imageUrl = request.imageUrl
+        Glide.with(requireContext())
+            .load(imageUrl)
+            .into(imageView);
 
 
         btnProposal.setOnClickListener{
 
-            val bid = edtBudget.text.toString().toFloat()
-            val commentary = edtComment.text.toString()
-            val idProvider = "19238913" //TODO Mandar idProvider desde la sesión
-            val idRequest = "940909012"//TODO Mandar idRequest desde la sesión
-            val p = Proposal(
-                idProvider,
-                idRequest,
-                bid,
-                commentary
-            )
+            val users = db.collection("Users")
+            users.get().addOnSuccessListener { querySnapshot -> //ESTE LISTENER ES PARA LA DEMO
+                val userIds = ArrayList<String>()
 
-            val newDocProposal = db.collection("Proposals").document()
-            db.collection("Proposals").document(newDocProposal.id).set(p)
+                for (document in querySnapshot) {
+                    val userId = document.id
+                    userIds.add(userId)
+                }
+                val bid = edtBudget.text.toString().toFloat()
+                val commentary = edtComment.text.toString()
+                val idProvider = userIds[userIds.count()-2] //TODO Mandar idProvider desde la sesión
+                val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
+                val p = Proposal(
+                    idProvider,
+                    idRequest,
+                    bid,
+                    commentary
+                )
+
+                val newDocProposal = db.collection("Proposals").document()
+                db.collection("Proposals").document(newDocProposal.id).set(p)
+                //update request in BD
+                RequestsService.updateProposalsQtyFromId(request.requestId, request.requestBidAmount)
+
+                val action =
+                    //agregar que edit text carguen el objeto a la db y crear entity Proposal
+                    ProposalFragmentDirections.actionProposalFragmentToRequestsListFragment()
+                v.findNavController().navigate(action)
+            }
 
 
-            val action =
-                //agregar que edit text carguen el objeto a la db y crear entity Proposal
-                ProposalFragmentDirections.actionProposalFragmentToRequestListProviderFragment()
-            v.findNavController().navigate(action)
         }
     }
 

@@ -5,7 +5,7 @@
     android:id="@+id/layoutRequest"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.RequestFragment" >
+    tools:context=".fragments.request.RequestFragment" >
 
     <TextView
         android:id="@+id/txtRequests"
@@ -85,7 +85,10 @@
             android:layout_height="50dp"
             android:hint="Fecha y hora"
             android:ems="10"
-            android:inputType="time" />
+            android:inputType="none"
+            android:focusable="false"
+
+            />
 
         <Button
             android:id="@+id/btnAttach"

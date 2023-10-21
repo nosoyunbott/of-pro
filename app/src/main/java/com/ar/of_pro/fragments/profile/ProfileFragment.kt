@@ -1,5 +1,7 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.profile
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -31,12 +33,11 @@ class ProfileFragment : Fragment() {
     lateinit var txtDescription: TextView
     lateinit var txtDescriptionTitle: TextView
     lateinit var txtRateQuantity2: TextView
+    lateinit var sharedPreferences: SharedPreferences
     //lateinit var txtServiceType: TextView
 
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_profile, container, false)
@@ -52,6 +53,9 @@ class ProfileFragment : Fragment() {
         txtDescriptionTitle = v.findViewById(R.id.txtDescriptionTitle)
         //txtServiceType = v.findViewById(R.id.txtServiceType) //TODO traer txt de rubro y mostrar si el userType es provider ? dinamico
 
+        sharedPreferences =
+            requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+
         return v
     }
 
@@ -61,7 +65,10 @@ class ProfileFragment : Fragment() {
         userRequest.get().addOnSuccessListener { snapshots ->
             for (snapshot in snapshots) {
 
-                if (snapshot.getString("mail") == "pepito@pepe.com") //TODO add validation from line 27
+                //db.collection('books').where(firebase.firestore.FieldPath.documentId(), '==', 'fK3ddutEpD2qQqRMXNW5').get()
+
+
+                if (snapshot.getString("mail") == mail)
                 {
                     val name = snapshot.getString("name") ?: ""
                     val surname = snapshot.getString("lastName") ?: ""
@@ -96,8 +103,7 @@ class ProfileFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         btnEdit.setOnClickListener {
-            val action =
-                ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment()
+            val action = ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment()
             v.findNavController().navigate(action)
         }
     }

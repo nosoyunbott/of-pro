@@ -3,12 +3,12 @@ package com.ar.of_pro.entities
 import android.os.Parcel
 import android.os.Parcelable
 
-class ProposalInformation(name: String?, bidAmount: Float?, calification: Float?, commentary: String?,
+class ProposalInformation(name: String?, bidAmount: Float?, calification: Double?, commentary: String?,
                           calificationQty: Int?, requestId: String?, providerId: String?): Parcelable {
     //TODO cambiar nombre de la clase porque nuestros usuarios estan todos bajo la entity User
     var name: String = ""
     var bidAmount: Float = 0f
-    var calification: Float = 0f
+    var calification: Double = 0.0
     var commentary: String = ""
     var calificationQty: Int = 0
     var requestId: String = ""
@@ -18,7 +18,7 @@ class ProposalInformation(name: String?, bidAmount: Float?, calification: Float?
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readFloat(),
-        parcel.readFloat(),
+        parcel.readDouble(),
         parcel.readString(),
         parcel.readInt(),
         parcel.readString(),
@@ -37,7 +37,7 @@ class ProposalInformation(name: String?, bidAmount: Float?, calification: Float?
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeFloat(bidAmount)
-        parcel.writeFloat(calification)
+        parcel.writeDouble(calification)
         parcel.writeString(commentary)
         parcel.writeInt(calificationQty)
         parcel.writeString(requestId)
