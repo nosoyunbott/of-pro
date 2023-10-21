@@ -21,27 +21,28 @@ import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.User
 import com.ar.of_pro.entities.UserType
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class SignupFragment : Fragment() {
 
-    lateinit var v : View
-    lateinit var nameEdt : EditText
-    lateinit var lastNameEdt : EditText
-    lateinit var addressEdt : EditText
-    lateinit var locationEdt : EditText
-    lateinit var emailEdt : EditText
-    lateinit var phoneEdt : EditText
+    lateinit var v: View
+    lateinit var nameEdt: EditText
+    lateinit var lastNameEdt: EditText
+    lateinit var addressEdt: EditText
+    lateinit var locationEdt: EditText
+    lateinit var emailEdt: EditText
+    lateinit var phoneEdt: EditText
 
 
-    lateinit var spnUserType : Spinner
+    lateinit var spnUserType: Spinner
     var userTypeList: List<String> = UserType().getList()
     lateinit var userTypeAdapter: ArrayAdapter<String>
     lateinit var selectedUserType: String
 
-    lateinit var passwordEdt : EditText
-    lateinit var registerButton : Button
-    lateinit var logInTextView : TextView
+    lateinit var passwordEdt: EditText
+    lateinit var registerButton: Button
+    lateinit var logInTextView: TextView
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -69,7 +70,7 @@ class SignupFragment : Fragment() {
         super.onStart()
 
         setupSpinner(spnUserType, userTypeAdapter)
-        goToLogIn()
+        signUp()
         goToLogInByTextView()
     }
 
@@ -78,29 +79,39 @@ class SignupFragment : Fragment() {
 
         userTypeAdapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, userTypeList)
-        }
+    }
 
-    private fun goToLogIn() {
+
+    private fun signUp() {
         registerButton.setOnClickListener {
-            val user = User(
-                nameEdt.text.toString(),
-                lastNameEdt.text.toString(),
-                addressEdt.text.toString(),
-                locationEdt.text.toString(),
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(
                 emailEdt.text.toString(),
-                passwordEdt.text.toString(),
-                phoneEdt.text.toString().toInt(),
-                0.0,
-                0,
-                selectedUserType,
-            )
+                passwordEdt.text.toString()
+            ).addOnCompleteListener {
+                val user = User(
+                    nameEdt.text.toString(),
+                    lastNameEdt.text.toString(),
+                    addressEdt.text.toString(),
+                    locationEdt.text.toString(),
+                    emailEdt.text.toString(),
+                    passwordEdt.text.toString(),
+                    phoneEdt.text.toString().toInt(),
+                    0.0,
+                    0,
+                    selectedUserType,
+                )
 
-            val newDocUser = db.collection("Users").document()
-            db.collection("Users").document(newDocUser.id).set(user)
+                val newDocUser = db.collection("Users").document()
+                db.collection("Users").document(newDocUser.id).set(user)
 
-            val action =
-                SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
-            v.findNavController().navigate(action)
+                if (it.isSuccessful) {
+                    val action =
+                        SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
+                    v.findNavController().navigate(action)
+                }
+
+            }
+
         }
     }
 
@@ -116,9 +127,9 @@ class SignupFragment : Fragment() {
                 when (spinner) {
                     spnUserType -> selectedUserType = userTypeList[position]
                 }
-                if(selectedUserType == "CLIENTE"){
+                if (selectedUserType == "CLIENTE") {
                     selectedUserType = "CLIENT"
-                }else if(selectedUserType == "PROVEEDOR"){
+                } else if (selectedUserType == "PROVEEDOR") {
                     selectedUserType = "PROVIDER"
                 }
             }
@@ -151,7 +162,12 @@ class SignupFragment : Fragment() {
                 v.findNavController().navigate(action)
             }
         }
-        spannableString.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(
+            clickableSpan,
+            startIndex,
+            endIndex,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         logInTextView.text = spannableString
         logInTextView.movementMethod = LinkMovementMethod.getInstance()
     }
