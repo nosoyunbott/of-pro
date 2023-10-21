@@ -1,15 +1,16 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.request
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.ar.of_pro.R
+import com.ar.of_pro.fragments.provider.ProposalFragmentArgs
 import com.google.firebase.firestore.FirebaseFirestore
 
-class RequestFragmentProccessFinishProvider : Fragment() {
+class RequestProcessFinishProviderFragment : Fragment() {
 
     lateinit var v: View
 
@@ -42,7 +43,8 @@ class RequestFragmentProccessFinishProvider : Fragment() {
             // Populate the views with data from the Request object
 
             legendTextView.text = document.getString("categoryOcupation") + " " + document.getString("categoryService")
-            paragraphTextView.text = document.getString("description")?: "" // Set the description
+            //            paragraphTextView.text = document.getString("description") ?: "" // Set the description
+            paragraphTextView.text = "VIVA LA DROGA PROVIDER" // Set the description
             bigLegendTextView.text = document.getLong("maxCost").toString() + " " +document.getString("requestTitle") // Set the big legend
 
             usersCollection.document(request.clientId).get().addOnSuccessListener { userDocument->

@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/requestsHistoryFragment"
-        android:name="com.ar.of_pro.fragments.RequestsHistoryListFragment"
+        android:name="com.ar.of_pro.fragments.request.RequestsHistoryListFragment"
         android:label="fragment_request_history_list"
         tools:layout="@layout/fragment_request_history_list" >
         <action
@@ -34,12 +34,12 @@
 
     <fragment
         android:id="@+id/requestFragment"
-        android:name="com.ar.of_pro.fragments.RequestFragment"
+        android:name="com.ar.of_pro.fragments.request.RequestFragment"
         android:label="fragment_request"
         tools:layout="@layout/fragment_request" />
     <fragment
         android:id="@+id/requestsListFragment"
-        android:name="com.ar.of_pro.fragments.RequestsListFragment"
+        android:name="com.ar.of_pro.fragments.request.RequestsListFragment"
         android:label="fragment_requests_list"
         tools:layout="@layout/fragment_requests_list" >
         <action
@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/proposalFragment"
-        android:name="com.ar.of_pro.fragments.ProposalFragment"
+        android:name="com.ar.of_pro.fragments.provider.ProposalFragment"
         android:label="fragment_proposal"
         tools:layout="@layout/fragment_proposal" >
         <argument
@@ -61,7 +61,7 @@
     </fragment>
     <fragment
         android:id="@+id/requestDetailFragment"
-        android:name="com.ar.of_pro.fragments.RequestDetailFragment"
+        android:name="com.ar.of_pro.fragments.request.RequestDetailFragment"
         android:label="fragment_request_detail"
         tools:layout="@layout/fragment_request_detail" >
         <argument
@@ -75,7 +75,7 @@
     </fragment>
     <fragment
         android:id="@+id/providerRequestsFragment"
-        android:name="com.ar.of_pro.fragments.ProviderRequestsFragment"
+        android:name="com.ar.of_pro.fragments.provider.ProviderRequestsFragment"
         android:label="fragment_provider_requests"
         tools:layout="@layout/fragment_provider_requests" >
         <action
@@ -87,7 +87,7 @@
     </fragment>
     <fragment
         android:id="@+id/providerProfileFragment"
-        android:name="com.ar.of_pro.fragments.ProviderProfileFragment"
+        android:name="com.ar.of_pro.fragments.profile.ProviderProfileFragment"
         android:label="ProviderProfileFragment" >
         <action
             android:id="@+id/action_providerProfileFragment_to_providerProfileEditFragment"
@@ -95,7 +95,7 @@
     </fragment>
     <fragment
         android:id="@+id/providerProfileEditFragment"
-        android:name="com.ar.of_pro.fragments.ProviderProfileEditFragment"
+        android:name="com.ar.of_pro.fragments.profile.ProviderProfileEditFragment"
         android:label="ProviderProfileEditFragment" >
         <action
             android:id="@+id/action_providerProfileEditFragment_to_providerProfileFragment"
@@ -105,7 +105,7 @@
     </fragment>
     <fragment
         android:id="@+id/requestListProviderFragment"
-        android:name="com.ar.of_pro.fragments.RequestListProviderFragment"
+        android:name="com.ar.of_pro.fragments.request.RequestListProviderFragment"
         android:label="fragment_request_list_provider"
         tools:layout="@layout/fragment_request_list_provider" >
         <action
@@ -114,7 +114,7 @@
     </fragment>
     <fragment
         android:id="@+id/requestFragmentProccessFinishProvider"
-        android:name="com.ar.of_pro.fragments.RequestFragmentProccessFinishProvider"
+        android:name="com.ar.of_pro.fragments.request.RequestProcessFinishProviderFragment"
         android:label="fragment_request_proccess_finish_provider"
         tools:layout="@layout/fragment_request_proccess_finish_provider" >
         <argument
@@ -123,9 +123,8 @@
     </fragment>
     <fragment
         android:id="@+id/requestFragmentProccessFinishClient"
-        android:name="com.ar.of_pro.fragments.RequestFragmentProccessFinish"
-        android:label="fragment_request_proccess_finish_client"
-        tools:layout="@layout/fragment_request_proccess_finish_client" >
+        android:name="com.ar.of_pro.fragments.request.RequestProcessFinishClientFragment"
+        android:label="fragment_request_proccess_finish_client">
         <argument
             android:name="request"
             app:argType="com.ar.of_pro.entities.Request" />

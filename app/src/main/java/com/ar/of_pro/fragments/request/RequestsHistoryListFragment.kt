@@ -1,4 +1,4 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.request
 
 import android.content.Context
 import android.os.Bundle
@@ -133,11 +133,15 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
 
         if(userType == "PROVIDER") {
             v.findNavController().navigate(
-                RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishProvider(request)
+                RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishProvider(
+                    request
+                )
             )
         } else if (userType == "CLIENT") {
             v.findNavController().navigate(
-                RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishClient(request)
+                RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishClient(
+                    request
+                )
             )
         } else {
             // Handle the case where 'userType' is neither 'provider' nor 'client'

@@ -1,4 +1,4 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.login
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -16,7 +16,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -66,7 +65,10 @@ class UserLoginFragment : Fragment() {
                         editor.putString("clientId", user.id)
                         editor.apply()
 
-                        val action = UserLoginFragmentDirections.actionUserLoginFragmentToMainActivity(user.getString("userType").toString())
+                        val action =
+                            UserLoginFragmentDirections.actionUserLoginFragmentToMainActivity(
+                                user.getString("userType").toString()
+                            )
                         v.findNavController().navigate(action)
                     }
                     else{
@@ -87,7 +89,8 @@ class UserLoginFragment : Fragment() {
 
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(v: View) {
-                val action = UserLoginFragmentDirections.actionUserLoginFragmentToSignupFragment()
+                val action =
+                    UserLoginFragmentDirections.actionUserLoginFragmentToSignupFragment()
                 v.findNavController().navigate(action)
             }
         }
