@@ -26,6 +26,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/navHostView"
         app:layout_constraintStart_toStartOf="parent"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_provider"/>
 
 
