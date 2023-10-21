@@ -1,5 +1,6 @@
 package com.ar.of_pro.fragments.request
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,7 +40,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         //TODO filtrar solicitudes por id de cliente
         requestsCollection.get().addOnSuccessListener { documents ->
             for (document in documents) {
-                if(document.getString("providerId") == "") {
+                if (document.getString("providerId") == "") {
                     val title = document.getString("requestTitle") ?: ""
                     val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
                     val selectedOcupation = document.getString("categoryOcupation") ?: ""
@@ -70,7 +71,6 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
                 }
 
 
-
             }
 
             requestListAdapter.notifyDataSetChanged()
@@ -79,6 +79,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
                 println("Error getting documents: $Exception")
             }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -129,13 +130,23 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     }
 
     override fun onViewItemDetail(request: Request) {
-
-        val action2 =
+        val sharedPreferences =
+            requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        // Retrieve the 'userType' attribute from SharedPreferences
+        val userType = sharedPreferences.getString("userType", "")
+        val actionForClient =
             RequestsListFragmentDirections.actionRequestsListFragmentToProviderRequestsFragment(
                 request
             )
+        val actionForProvider =
+            RequestsListFragmentDirections.actionRequestsListFragmentToProposalFragment3(request)
         val navController = v.findNavController()
-        navController.navigate(action2)
+
+        if (userType == "CLIENT") {
+            navController.navigate(actionForClient)
+        } else {
+            navController.navigate(actionForProvider)
+        }
 
     }
 }
