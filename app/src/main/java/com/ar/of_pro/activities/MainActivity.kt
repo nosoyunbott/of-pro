@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.navHostView) as NavHostFragment
 
         bottomNavigation = findViewById(R.id.bottomNavView)
+
         if (userType == "PROVIDER") {
             bottomNavigation.menu.findItem(R.id.requestFragment).isVisible = false
         }
