@@ -22,9 +22,6 @@
         android:label="fragment_request_history_list"
         tools:layout="@layout/fragment_request_history_list" >
         <action
-            android:id="@+id/action_requestsHistoryFragment_to_requestFragmentProccessFinishProvider"
-            app:destination="@id/requestFragmentProccessFinishProvider" />
-        <action
             android:id="@+id/action_requestsHistoryFragment_to_requestFragmentProccessFinishClient"
             app:destination="@id/requestFragmentProccessFinishClient" />
     </fragment>
@@ -104,22 +101,8 @@
             app:popUpToInclusive="false" />
     </fragment>
     <fragment
-        android:id="@+id/requestListProviderFragment"
-        android:name="com.ar.of_pro.fragments.request.RequestListProviderFragment"
-        android:label="fragment_request_list_provider"
-        tools:layout="@layout/fragment_request_list_provider" />
-    <fragment
-        android:id="@+id/requestFragmentProccessFinishProvider"
-        android:name="com.ar.of_pro.fragments.request.RequestProcessFinishProviderFragment"
-        android:label="fragment_request_proccess_finish_provider"
-        tools:layout="@layout/fragment_request_proccess_finish_provider" >
-        <argument
-            android:name="request"
-            app:argType="com.ar.of_pro.entities.Request" />
-    </fragment>
-    <fragment
         android:id="@+id/requestFragmentProccessFinishClient"
-        android:name="com.ar.of_pro.fragments.request.RequestProcessFinishClientFragment"
+        android:name="com.ar.of_pro.fragments.request.RequestProcessFinishFragment"
         android:label="fragment_request_proccess_finish_client">
         <argument
             android:name="request"

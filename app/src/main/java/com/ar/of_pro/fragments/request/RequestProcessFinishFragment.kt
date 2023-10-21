@@ -14,7 +14,7 @@ import com.ar.of_pro.services.RequestsService
 import com.ar.of_pro.services.UserService
 import com.google.firebase.firestore.FirebaseFirestore
 
-class RequestProcessFinishClientFragment : Fragment() {
+class RequestProcessFinishFragment : Fragment() {
 
     val db = FirebaseFirestore.getInstance()
     val requestsCollection = db.collection("Requests")
@@ -22,18 +22,13 @@ class RequestProcessFinishClientFragment : Fragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
 
         val v = inflater.inflate(R.layout.fragment_request_proccess_finish_client, container, false)
-
         // Find references to your button and component
-
         val finishButton: Button = v.findViewById<Button>(R.id.finishButton)
-
-
         val ratingBar: RatingBar = v.findViewById<RatingBar>(R.id.ratingBar)
 
 

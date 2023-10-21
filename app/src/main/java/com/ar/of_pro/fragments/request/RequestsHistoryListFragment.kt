@@ -1,6 +1,5 @@
 package com.ar.of_pro.fragments.request
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,11 +26,10 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
 
     val db = FirebaseFirestore.getInstance()
     val requestsCollection = db.collection("Requests")
-    val usersCollection=db.collection("Users")
+    val usersCollection = db.collection("Users")
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_request_history_list, container, false)
@@ -56,8 +54,8 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                     val date = document.getString("date") ?: ""
                     val maxCost = document.getLong("maxCost")?.toInt() ?: 0
                     val clientId = document.getString("clientId") ?: ""
-                    val providerId=document.getString("providerId")?:""
-                    val requestId=document.id
+                    val providerId = document.getString("providerId") ?: ""
+                    val requestId = document.id
                     val imageUrl = document.getString("imageUrl") ?: ""
 
 
@@ -71,37 +69,32 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                         date,
                         maxCost,
                         clientId,
-                       requestId,
+                        requestId,
                         imageUrl
                     )
 
-                    usersCollection.document(clientId)
-                        .get()
+                    usersCollection.document(clientId).get()
                         .addOnSuccessListener { clientDocument ->
-                            val clientName = clientDocument.getString("name")?:""
+                            val clientName = clientDocument.getString("name") ?: ""
 
                             // Query the user collection to get the provider's name
-                            usersCollection.document(providerId)
-                                .get()
+                            usersCollection.document(providerId).get()
                                 .addOnSuccessListener { providerDocument ->
-                                    val providerName = providerDocument.getString("name")?:"" + providerDocument.getString("lastName")?:""
+                                    val providerName = providerDocument.getString("name")
+                                        ?: "" + providerDocument.getString("lastName") ?: ""
 
                                     // Create a RequestHistory object and add it to the list
                                     val requestHistory = RequestHistory(r, clientName, providerName)
                                     requestList.add(requestHistory)
                                     requestListAdapter.notifyDataSetChanged()
-                                }
-                                .addOnFailureListener { providerException ->
+                                }.addOnFailureListener { providerException ->
 
 
                                 }
-                        }
-                        .addOnFailureListener { clientException ->
+                        }.addOnFailureListener { clientException ->
                             val requestHistory = RequestHistory(r, "clientName", "providerName")
                             requestList.add(requestHistory)
                         }
-
-
 
 
                 }
@@ -109,12 +102,10 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
             }
 
 
-
+        }.addOnFailureListener { Exception ->
+            println("Error getting documents: $Exception")
+            Log.e("ERROR DE DB", "$Exception")
         }
-            .addOnFailureListener { Exception ->
-                println("Error getting documents: $Exception")
-                Log.e("ERROR DE DB","$Exception")
-            }
     }
 
     override fun onStart() {
@@ -128,27 +119,11 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
     }
 
     override fun onViewItemDetail(request: Request) {
-        val sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-        val userType = sharedPreferences.getString("userType", "")  // Retrieve the 'userType' attribute from SharedPreferences
-
-        if(userType == "PROVIDER") {
-            v.findNavController().navigate(
-                RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishProvider(
-                    request
-                )
+        v.findNavController().navigate(
+            RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishClient(
+                request
             )
-        } else if (userType == "CLIENT") {
-            v.findNavController().navigate(
-                RequestsHistoryListFragmentDirections.actionRequestsHistoryFragmentToRequestFragmentProccessFinishClient(
-                    request
-                )
-            )
-        } else {
-            // Handle the case where 'userType' is neither 'provider' nor 'client'
-            // You can provide a default action or show an error message.
-        }
-
-
+        )
     }
 
 
