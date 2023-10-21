@@ -1,11 +1,11 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.profile
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
 
@@ -27,7 +27,8 @@ class ProviderProfileEditFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         btnAccept.setOnClickListener{
-            val action = ProviderProfileEditFragmentDirections.actionProviderProfileEditFragmentToProviderProfileFragment()
+            val action =
+                ProviderProfileEditFragmentDirections.actionProviderProfileEditFragmentToProviderProfileFragment()
             v.findNavController().navigate(action)
         }
     }

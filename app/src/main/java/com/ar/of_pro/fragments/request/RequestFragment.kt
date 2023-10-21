@@ -1,4 +1,4 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.request
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -18,6 +18,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.Request
@@ -82,7 +83,7 @@ class RequestFragment<OutputStream> : Fragment() {
             requireContext(),
             { _, year, month, dayOfMonth ->
                 val selectedTimestamp = createTimestamp(year, month, dayOfMonth)
-                timestamp = selectedTimestamp.toString()
+                timestamp = selectedTimestamp.toString() //VALIDAR
                 edtTime.setText(formatTimestamp(selectedTimestamp))
             },
             currentYear,
@@ -157,12 +158,12 @@ class RequestFragment<OutputStream> : Fragment() {
 
             val newDocRequest = db.collection("Requests").document()
             db.collection("Requests").document(newDocRequest.id).set(r)
+            val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
+            v.findNavController().navigate(action)
 
-            Toast.makeText(
-                context,
-                "state: ${Request.FINISHED}, Precio máximo: ${r.maxCost}",
-                Toast.LENGTH_SHORT
-            ).show()
+
+
+
 
         }
     }
@@ -233,7 +234,18 @@ class RequestFragment<OutputStream> : Fragment() {
                 }
                 try {
                     loadImage(selectedMediaUri, blob)
+                    Toast.makeText(
+                        context,
+                        "la img subio ok",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
                 }catch (e: FileNotFoundException){
+                    Toast.makeText(
+                        context,
+                        "la imagen no subio",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     Log.d("Exc", e.toString())
                 }
             }

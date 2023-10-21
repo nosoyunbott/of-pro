@@ -1,4 +1,4 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -34,7 +34,8 @@ class ProviderProfileFragment : Fragment() {
             .load("https://i.imgur.com/GMF3hgM.jpg")
             .into(photo);
         btnEdit.setOnClickListener{
-            val action = ProviderProfileFragmentDirections.actionProviderProfileFragmentToProviderProfileEditFragment()
+            val action =
+                ProviderProfileFragmentDirections.actionProviderProfileFragmentToProviderProfileEditFragment()
             v.findNavController().navigate(action)
         }
     }

@@ -1,12 +1,11 @@
-package com.ar.of_pro.fragments
+package com.ar.of_pro.fragments.profile
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.navigation.findNavController
+import androidx.fragment.app.Fragment
 import com.ar.of_pro.R
 
 
