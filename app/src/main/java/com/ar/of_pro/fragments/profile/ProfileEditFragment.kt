@@ -8,6 +8,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
+import com.google.firebase.auth.FirebaseAuth
 
 
 class ProfileEditFragment : Fragment() {
@@ -27,6 +28,9 @@ class ProfileEditFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         btnAccept.setOnClickListener{
+
+            //TODO actualizar todos los datos en la db
+
             val action = ProfileEditFragmentDirections.actionProfileEditFragmentToProfileFragment()
             v.findNavController().navigate(action)
         }
