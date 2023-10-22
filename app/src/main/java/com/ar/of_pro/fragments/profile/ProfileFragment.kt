@@ -67,18 +67,17 @@ class ProfileFragment : Fragment() {
 
                 //db.collection('books').where(firebase.firestore.FieldPath.documentId(), '==', 'fK3ddutEpD2qQqRMXNW5').get()
 
-
                 if (snapshot.getString("mail") == mail) {
                     val name = snapshot.getString("name") ?: ""
                     val surname = snapshot.getString("lastName") ?: ""
                     val location = snapshot.getString("location") ?: ""
                     val mail = snapshot.getString("mail") ?: ""
-                    val phoneNumber = snapshot.getString("phoneNumber") ?: ""
+                    val phoneNumber = snapshot.getLong("phone")?.toInt() ?: 0
                     val numRating = snapshot.getLong("rating")?.toInt() ?: 0
                     txtNombre.text = name + " " + surname
                     txtLocalidad.text = location
                     txtCorreo.text = mail
-                    txtTelefono.text = phoneNumber
+                    txtTelefono.text = phoneNumber.toString()
                     txtNumRating.text = numRating.toString() + " "
                     if (snapshot.getString("userType") == "PROVIDER") {
                         txtBioDescription.text = snapshot.getString("bio")
