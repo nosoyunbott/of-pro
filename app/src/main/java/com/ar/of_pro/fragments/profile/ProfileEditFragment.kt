@@ -21,6 +21,8 @@ class ProfileEditFragment : Fragment() {
 
     lateinit var v : View
     lateinit var btnAccept: Button
+    lateinit var btnCancel: Button
+
     lateinit var txtNombre: EditText
     lateinit var txtTelefono: EditText
     lateinit var txtLocalidad: EditText
@@ -39,6 +41,7 @@ class ProfileEditFragment : Fragment() {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_profile_edit, container, false)
         btnAccept = v.findViewById(R.id.btnAccept)
+        btnCancel = v.findViewById(R.id.btnCancel)
         txtNombre = v.findViewById(R.id.txtNombre)
         txtTelefono = v.findViewById(R.id.txtTelefono)
         txtLocalidad = v.findViewById(R.id.txtLocalidad)
@@ -57,6 +60,12 @@ class ProfileEditFragment : Fragment() {
 
             //TODO actualizar todos los datos en la db
             updateName(txtNombre.text.toString(), txtSurname.text.toString() ,txtTelefono.text.toString(), txtLocalidad.text.toString(), txtBio.text.toString())
+
+            val action = ProfileEditFragmentDirections.actionProfileEditFragmentToProfileFragment()
+            v.findNavController().navigate(action)
+        }
+
+        btnCancel.setOnClickListener {
 
             val action = ProfileEditFragmentDirections.actionProfileEditFragmentToProfileFragment()
             v.findNavController().navigate(action)
