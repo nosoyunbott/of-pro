@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="15dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +17,7 @@
             android:orientation="horizontal">
 
             <TableRow
-                android:layout_width="200dp"
+                android:layout_width="170dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
@@ -40,7 +41,7 @@
 
         <LinearLayout
             android:layout_width="407dp"
-            android:layout_height="match_parent"
+            android:layout_height="300dp"
             android:baselineAligned="false"
             android:orientation="vertical">
 
@@ -62,7 +63,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="170dp"
                     android:orientation="vertical">
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -73,7 +74,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/txtNombre"
                             android:layout_width="251dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="50dp"
                             android:hint="Nombre" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -86,7 +87,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/txtApellido"
                             android:layout_width="251dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="50dp"
                             android:hint="Apellido" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -99,7 +100,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/txtLocalidad"
                             android:layout_width="251dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="50dp"
                             android:hint="Localidad" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -132,7 +133,7 @@
                         android:id="@+id/txtTelefono"
                         android:layout_width="251dp"
                         android:layout_height="50dp"
-                        android:hint="01123456789" />
+                        android:hint="158882222" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

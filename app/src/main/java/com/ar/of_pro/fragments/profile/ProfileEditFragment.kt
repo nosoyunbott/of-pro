@@ -3,6 +3,7 @@ package com.ar.of_pro.fragments.profile
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,7 @@ class ProfileEditFragment : Fragment() {
     private val db = FirebaseFirestore.getInstance()
     private val usersCollection = db.collection("Users")
     lateinit var sharedPreferences: SharedPreferences
+
 
 
     override fun onCreateView(
