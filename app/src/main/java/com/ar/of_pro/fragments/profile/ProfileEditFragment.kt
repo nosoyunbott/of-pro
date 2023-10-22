@@ -25,6 +25,7 @@ class ProfileEditFragment : Fragment() {
     lateinit var txtTelefono: EditText
     lateinit var txtLocalidad: EditText
     lateinit var txtBio: EditText
+    lateinit var txtSurname: EditText
 
     private val db = FirebaseFirestore.getInstance()
     private val usersCollection = db.collection("Users")
@@ -42,6 +43,7 @@ class ProfileEditFragment : Fragment() {
         txtTelefono = v.findViewById(R.id.txtTelefono)
         txtLocalidad = v.findViewById(R.id.txtLocalidad)
         txtBio = v.findViewById(R.id.txtDescripcion)
+        txtSurname = v.findViewById(R.id.txtApellido)
 
         sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
@@ -54,7 +56,7 @@ class ProfileEditFragment : Fragment() {
         btnAccept.setOnClickListener{
 
             //TODO actualizar todos los datos en la db
-            updateName(txtNombre.text.toString(), txtTelefono.text.toString(), txtLocalidad.text.toString(), txtBio.text.toString())
+            updateName(txtNombre.text.toString(), txtSurname.text.toString() ,txtTelefono.text.toString(), txtLocalidad.text.toString(), txtBio.text.toString())
 
             val action = ProfileEditFragmentDirections.actionProfileEditFragmentToProfileFragment()
             v.findNavController().navigate(action)
@@ -62,7 +64,7 @@ class ProfileEditFragment : Fragment() {
 
     }
 
-    fun updateName(name: String?, phone: String?, ubi: String?, description: String?) {
+    fun updateName(name: String?, apellido: String?, phone: String?, ubi: String?, description: String?) {
 
         val userDoc = usersCollection.document(sharedPreferences.getString("clientId", "").toString())
 
@@ -70,6 +72,12 @@ class ProfileEditFragment : Fragment() {
         if (name!!.isNotEmpty()) {
             val name = hashMapOf<String, Any?>("name" to name) //TODO validar
             userDoc.update(name)
+        }
+
+        //lastName
+        if (apellido!!.isNotEmpty()) {
+            val lastName = hashMapOf<String, Any?>("lastName" to apellido) //TODO validar
+            userDoc.update(lastName)
         }
 
         //Phone
