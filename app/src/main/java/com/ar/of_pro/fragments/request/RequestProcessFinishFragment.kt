@@ -1,5 +1,6 @@
 package com.ar.of_pro.fragments.request
 
+import android.media.Rating
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,9 @@ class RequestProcessFinishFragment : Fragment() {
     val requestsCollection = db.collection("Requests")
     val usersCollection = db.collection("Users")
 
+    lateinit var finishbutton: Button
+    lateinit var ratingBar: RatingBar
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -28,32 +32,12 @@ class RequestProcessFinishFragment : Fragment() {
 
         val v = inflater.inflate(R.layout.fragment_request_proccess_finish_client, container, false)
         // Find references to your button and component
-        val finishButton: Button = v.findViewById<Button>(R.id.finishButton)
-        val ratingBar: RatingBar = v.findViewById<RatingBar>(R.id.ratingBar)
+        finishbutton = v.findViewById(R.id.finishButton)
+        ratingBar = v.findViewById(R.id.ratingBar)
 
-
-        // Set an OnClickListener for the finishButton
-        finishButton.setOnClickListener {
-            // Hide the button
-            finishButton.visibility = View.GONE
-
-            // Show the component
-            ratingBar.visibility = View.VISIBLE
-
-            // Add any additional logic or actions you need here
-        }
-
-        /*
-        ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
-
-            ratingBar.onRatingBarChangeListener.onRatingChanged(this,v
-
-            ){}
-        }
-        */
+        finishButtonReview()
 
         fun handleRatingFinishRequest(rating: Float) {
-
 
             RequestsService.updateRequestState("FINALIZADA", request.requestId)
             UserService.updateRatingOfUser(rating, request.clientId)
@@ -94,6 +78,24 @@ class RequestProcessFinishFragment : Fragment() {
 
         }
         return v
+    }
+
+    fun finishButtonReview() {
+        val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
+        if (request.state != "FINALIZADA") {
+            // Set an OnClickListener for the finishButton
+            finishbutton.setOnClickListener {
+                // Hide the button
+                finishbutton.visibility = View.GONE
+
+                // Show the component
+                ratingBar.visibility = View.VISIBLE
+
+                // Add any additional logic or actions you need here
+            }
+        } else {
+            finishbutton.visibility = View.GONE
+        }
     }
 
 }
