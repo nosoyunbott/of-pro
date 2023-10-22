@@ -3,6 +3,7 @@ package com.ar.of_pro.fragments.profile
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +20,7 @@ class ProfileFragment : Fragment() {
 
     lateinit var v: View
     lateinit var btnEdit: Button
-
+    lateinit var btnLogout: Button
 
     val db = FirebaseFirestore.getInstance()
     val userRequest = db.collection("Users")
@@ -36,12 +37,15 @@ class ProfileFragment : Fragment() {
     lateinit var sharedPreferences: SharedPreferences
     //lateinit var txtServiceType: TextView
 
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_profile, container, false)
         btnEdit = v.findViewById(R.id.btnEdit)
+        btnLogout = v.findViewById(R.id.btnLogout)
         txtNombre = v.findViewById(R.id.txtNombre)
         txtLocalidad = v.findViewById(R.id.txtLocalidad)
         txtCorreo = v.findViewById(R.id.txtCorreo)
@@ -100,6 +104,19 @@ class ProfileFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
+        btnLogout.setOnClickListener {
+
+            Handler().postDelayed(
+
+                {
+                    auth.signOut()
+
+                    val action = ProfileFragmentDirections.actionProfileFragmentToAuthActivity()
+                    v.findNavController().navigate(action)
+                }, 300)
+        }
+
         btnEdit.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment()
             v.findNavController().navigate(action)

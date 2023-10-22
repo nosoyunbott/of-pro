@@ -106,6 +106,11 @@
             app:destination="@id/profileEditFragment"
             app:popUpTo="@id/profileFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_profileFragment_to_authActivity"
+            app:destination="@id/authActivity"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/profileEditFragment"
@@ -115,4 +120,9 @@
             android:id="@+id/action_profileEditFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
+    <activity
+        android:id="@+id/authActivity"
+        android:name="com.ar.of_pro.activities.AuthActivity"
+        android:label="activity_auth"
+        tools:layout="@layout/activity_auth" />
 </navigation>
