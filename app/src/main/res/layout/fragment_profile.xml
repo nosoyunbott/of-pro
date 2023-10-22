@@ -58,14 +58,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Nombre" />
+                        android:text="" />
 
                     <TextView
                         android:id="@+id/txtLocalidad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Localidad" />
+                        android:text="" />
 
                 </LinearLayout>
 
@@ -100,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_weight="1"
-                    android:text="lorem@ipsum.com"
+                    android:text=""
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -124,7 +124,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_weight="1"
-                    android:text="1121654455"
+                    android:text=""
                     android:textSize="18dp" />
 
             </LinearLayout>
@@ -136,20 +136,19 @@
             android:layout_height="24dp" />
 
         <TextView
-            android:id="@+id/txtDescriptionTitle"
+            android:id="@+id/txtBio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Descripcion"
-            android:textSize="20sp"
             android:layout_marginBottom="10dp"
-            />
+            android:layout_weight="1"
+            android:text="Bio"
+            android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/txtDescription"
+            android:id="@+id/txtBioDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from &quot;de Finibus Bonorum et Malorum&quot; by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham." />
+            android:text="" />
 
         <TableRow
             android:layout_width="match_parent"
@@ -166,7 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="4.7 "
+                android:text=" "
                 android:textAlignment="textEnd"
                 android:textSize="34sp" />
 

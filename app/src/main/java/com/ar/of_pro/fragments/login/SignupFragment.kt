@@ -99,6 +99,7 @@ class SignupFragment : Fragment() {
                     0.0,
                     0,
                     selectedUserType,
+                    "Bio del usuario."
                 )
 
                 val newDocUser = db.collection("Users").document()

@@ -103,7 +103,8 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
                     user.getLong("phone")?.toInt(),
                     user.getDouble("rating")!!,
                     user.getLong("ratingQuantity")!!.toInt()!!,
-                    user.getString("userType")!!
+                    user.getString("userType")!!,
+                    user.getString("bio")!!
                 )
                 proposalInfo = ProposalInformation(
                     userObj.name,
