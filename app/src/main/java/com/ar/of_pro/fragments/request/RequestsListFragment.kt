@@ -37,47 +37,94 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        val userType = sharedPreferences.getString("userType", "")  // Retrieve the 'userType' attribute from SharedPreferences
+        val userId = sharedPreferences.getString("clientId", "")  // Retrieve the 'clientId' attribute from SharedPreferences
+
         //TODO filtrar solicitudes por id de cliente
-        requestsCollection.get().addOnSuccessListener { documents ->
-            for (document in documents) {
-                if (document.getString("providerId") == "") {
-                    val title = document.getString("requestTitle") ?: ""
-                    val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
-                    val selectedOcupation = document.getString("categoryOcupation") ?: ""
-                    val selectedServiceType = document.getString("categoryService") ?: ""
-                    val description = document.getString("description") ?: ""
-                    val state = document.getString("state") ?: ""
-                    val date = document.getString("date") ?: ""
-                    val maxCost = document.getLong("maxCost")?.toInt() ?: 0
-                    val clientId = document.getString("clientId") ?: ""
-                    val requestId = document.id
-                    val imageUrl = document.getString("imageUrl") ?: ""
+        if(userType == "CLIENT") {
+            requestsCollection.get().addOnSuccessListener { documents ->
+                for (document in documents) {
+                    if (document.getString("providerId") == "" && document.getString("clientId") == userId) {
+                        val title = document.getString("requestTitle") ?: ""
+                        val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
+                        val selectedOcupation = document.getString("categoryOcupation") ?: ""
+                        val selectedServiceType = document.getString("categoryService") ?: ""
+                        val description = document.getString("description") ?: ""
+                        val state = document.getString("state") ?: ""
+                        val date = document.getString("date") ?: ""
+                        val maxCost = document.getLong("maxCost")?.toInt() ?: 0
+                        val clientId = document.getString("clientId") ?: ""
+                        val requestId = document.id
+                        val imageUrl = document.getString("imageUrl") ?: ""
 
-                    val r = Request(
-                        title,
-                        requestBidAmount,
-                        selectedOcupation,
-                        selectedServiceType,
-                        description,
-                        state,
-                        date,
-                        maxCost,
-                        clientId,
-                        requestId,
-                        imageUrl
-                    )
+                        val r = Request(
+                            title,
+                            requestBidAmount,
+                            selectedOcupation,
+                            selectedServiceType,
+                            description,
+                            state,
+                            date,
+                            maxCost,
+                            clientId,
+                            requestId,
+                            imageUrl
+                        )
 
-                    requestList.add(r)
+                        requestList.add(r)
+                    }
+
+
                 }
 
-
+                requestListAdapter.notifyDataSetChanged()
             }
+                .addOnFailureListener { Exception ->
+                    println("Error getting documents: $Exception")
+                }
+        }else if(userType == "PROVIDER"){
+            requestsCollection.get().addOnSuccessListener { documents ->
+                for (document in documents) {
+                    if (document.getString("providerId") == "") {
+                        val title = document.getString("requestTitle") ?: ""
+                        val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
+                        val selectedOcupation = document.getString("categoryOcupation") ?: ""
+                        val selectedServiceType = document.getString("categoryService") ?: ""
+                        val description = document.getString("description") ?: ""
+                        val state = document.getString("state") ?: ""
+                        val date = document.getString("date") ?: ""
+                        val maxCost = document.getLong("maxCost")?.toInt() ?: 0
+                        val clientId = document.getString("clientId") ?: ""
+                        val requestId = document.id
+                        val imageUrl = document.getString("imageUrl") ?: ""
 
-            requestListAdapter.notifyDataSetChanged()
+                        val r = Request(
+                            title,
+                            requestBidAmount,
+                            selectedOcupation,
+                            selectedServiceType,
+                            description,
+                            state,
+                            date,
+                            maxCost,
+                            clientId,
+                            requestId,
+                            imageUrl
+                        )
+
+                        requestList.add(r)
+                    }
+
+
+                }
+
+                requestListAdapter.notifyDataSetChanged()
+            }
+                .addOnFailureListener { Exception ->
+                    println("Error getting documents: $Exception")
+                }
         }
-            .addOnFailureListener { Exception ->
-                println("Error getting documents: $Exception")
-            }
 
 
 
