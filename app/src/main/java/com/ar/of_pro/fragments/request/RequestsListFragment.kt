@@ -78,6 +78,9 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
             .addOnFailureListener { Exception ->
                 println("Error getting documents: $Exception")
             }
+
+
+
     }
 
     override fun onCreateView(
