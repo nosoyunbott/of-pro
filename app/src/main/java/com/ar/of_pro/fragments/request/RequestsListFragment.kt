@@ -134,7 +134,11 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
                         if (userType == "CLIENT" && userId == clientId) {
                             requestList.add(r)
                         } else if (userType == "PROVIDER") {
-                            requestList.add(r)
+                            //comparar si el userId no coincide con ninguna de las proposals asociadas a la request actual
+                            if((proposals.any{it.requestId ==requestId}) && (proposals.any{it.providerId==userId})){
+                                requestList.add(r)
+                            }
+
                         }
 
                     }
