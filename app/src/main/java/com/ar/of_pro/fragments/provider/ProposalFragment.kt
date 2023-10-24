@@ -1,5 +1,6 @@
 package com.ar.of_pro.fragments.provider
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -79,9 +80,12 @@ class ProposalFragment : Fragment() {
                     val userId = document.id
                     userIds.add(userId)
                 }
+                val sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+
+
                 val bid = edtBudget.text.toString().toFloat()
                 val commentary = edtComment.text.toString()
-                val idProvider = userIds[userIds.count()-2] //TODO Mandar idProvider desde la sesión
+                val idProvider = sharedPreferences.getString("clientId", "")  // Retrieve the 'userType' attribute from SharedPreferences
                 val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
                 val p = Proposal(
                     idProvider,
