@@ -16,11 +16,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.User
 import com.ar.of_pro.entities.UserType
+import com.ar.of_pro.util.Sanitizer
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -44,6 +46,15 @@ class SignupFragment : Fragment() {
     lateinit var registerButton: Button
     lateinit var logInTextView: TextView
 
+    lateinit var errorNameTextView: TextView
+    lateinit var errorLastNameTextView: TextView
+    lateinit var errorAddressTextView: TextView
+    lateinit var errorLocationTextView: TextView
+    lateinit var errorEmailTextView: TextView
+    lateinit var errorPhoneTextView: TextView
+    lateinit var errorPasswordTextView: TextView
+
+
     private val db = FirebaseFirestore.getInstance()
 
 
@@ -63,6 +74,13 @@ class SignupFragment : Fragment() {
         passwordEdt = v.findViewById(R.id.passwordEdt)
         registerButton = v.findViewById(R.id.registerButton)
         logInTextView = v.findViewById(R.id.logInTextView)
+        errorAddressTextView = v.findViewById(R.id.errorAddressTextView)
+        errorEmailTextView = v.findViewById(R.id.errorEmailTextView)
+        errorPhoneTextView = v.findViewById(R.id.errorPhoneTextView)
+        errorLocationTextView = v.findViewById(R.id.errorLocationTextView)
+        errorNameTextView = v.findViewById(R.id.errorNameTextView)
+        errorLastNameTextView = v.findViewById(R.id.errorLastNameTextView)
+        errorPasswordTextView = v.findViewById(R.id.errorPasswordTextView)
         return v
     }
 
@@ -84,35 +102,36 @@ class SignupFragment : Fragment() {
 
     private fun signUp() {
         registerButton.setOnClickListener {
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(
-                emailEdt.text.toString(),
-                passwordEdt.text.toString()
-            ).addOnCompleteListener {
-                val user = User(
-                    nameEdt.text.toString(),
-                    lastNameEdt.text.toString(),
-                    addressEdt.text.toString(),
-                    locationEdt.text.toString(),
+            if (validateForm()) {
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(
                     emailEdt.text.toString(),
-                    passwordEdt.text.toString(),
-                    phoneEdt.text.toString().toInt(),
-                    0.0,
-                    0,
-                    selectedUserType,
-                    "Bio del usuario."
-                )
+                    passwordEdt.text.toString()
+                ).addOnCompleteListener {
+                    val user = User(
+                        nameEdt.text.toString(),
+                        lastNameEdt.text.toString(),
+                        addressEdt.text.toString(),
+                        locationEdt.text.toString(),
+                        emailEdt.text.toString(),
+                        passwordEdt.text.toString(),
+                        phoneEdt.text.toString().toInt(),
+                        0.0,
+                        0,
+                        selectedUserType,
+                        "Bio del usuario."
+                    )
 
-                val newDocUser = db.collection("Users").document()
-                db.collection("Users").document(newDocUser.id).set(user)
+                    val newDocUser = db.collection("Users").document()
+                    db.collection("Users").document(newDocUser.id).set(user)
 
-                if (it.isSuccessful) {
-                    val action =
-                        SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
-                    v.findNavController().navigate(action)
+                    if (it.isSuccessful) {
+                        val action =
+                            SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
+                        v.findNavController().navigate(action)
+                    }
+
                 }
-
             }
-
         }
     }
 
@@ -173,4 +192,64 @@ class SignupFragment : Fragment() {
         logInTextView.movementMethod = LinkMovementMethod.getInstance()
     }
 
+    private fun validateForm(): Boolean {
+        var phoneValidate = true
+        var nameValidate = true
+        var lastNameValidate = true
+        var addressValidate = true
+        var locationValidate = true
+        var emailValidate = true
+        var allValidate = false
+        if (!Sanitizer().validateOnlyLetters(nameEdt.text.toString())) {
+            nameValidate = false
+            errorNameTextView.visibility = View.VISIBLE
+        } else {
+            errorNameTextView.visibility = View.GONE
+        }
+        if (!Sanitizer().validateOnlyLetters(lastNameEdt.text.toString())) {
+            lastNameValidate = false
+            errorLastNameTextView.visibility = View.VISIBLE
+        } else {
+            errorLastNameTextView.visibility = View.GONE
+        }
+        if (!Sanitizer().validateLettersNumericAndSpaces(addressEdt.text.toString())) {
+            addressValidate = false
+            errorAddressTextView.visibility = View.VISIBLE
+        } else {
+            errorAddressTextView.visibility = View.GONE
+        }
+        if (!Sanitizer().validateLettersAndSpaces(locationEdt.text.toString())) {
+            locationValidate = false
+            errorLocationTextView.visibility = View.VISIBLE
+        } else {
+            errorLocationTextView.visibility = View.GONE
+        }
+        if (!Sanitizer().validateMail(emailEdt.text.toString())) {
+            emailValidate = false
+            errorEmailTextView.visibility = View.VISIBLE
+        } else {
+            errorEmailTextView.visibility = View.GONE
+        }
+        if (!Sanitizer().validateNumeric(phoneEdt.text.toString())) {
+            phoneValidate = false
+            errorPhoneTextView.visibility = View.VISIBLE
+        } else {
+            errorPhoneTextView.visibility = View.GONE
+        }
+        if (passwordEdt.text.toString().isNullOrBlank()) {
+            phoneValidate = false
+            errorPasswordTextView.visibility = View.VISIBLE
+        } else {
+            errorPasswordTextView.visibility = View.GONE
+        }
+        if (phoneValidate && nameValidate && lastNameValidate && addressValidate && locationValidate && emailValidate)
+            allValidate = true
+        return allValidate
+    }
 }
+
+
+
+
+
+
