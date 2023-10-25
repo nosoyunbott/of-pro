@@ -30,6 +30,7 @@ class ProposalFragment : Fragment() {
     lateinit var edtComment : EditText
     lateinit var imageUrl: String
     lateinit var imageView: ImageView
+    lateinit var errorMessageTextView: TextView
     private val db = FirebaseFirestore.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +48,7 @@ class ProposalFragment : Fragment() {
         edtBudget = v.findViewById(R.id.edtBudget)
         edtComment = v.findViewById(R.id.edtComment)
         imageView = v.findViewById(R.id.requestImageView)
+        errorMessageTextView = v.findViewById(R.id.errorMessageTextView)
 
 
         //id request, coment, presupuesto, idproveedor
@@ -71,37 +73,40 @@ class ProposalFragment : Fragment() {
 
         btnProposal.setOnClickListener{
 
-            val users = db.collection("Users")
-            users.get().addOnSuccessListener { querySnapshot -> //ESTE LISTENER ES PARA LA DEMO
-                val userIds = ArrayList<String>()
+            errorMessageTextView.visibility = View.GONE
+            if(request.maxCost > edtBudget.text.toString().toFloat()){
+                val users = db.collection("Users")
+                users.get().addOnSuccessListener { querySnapshot -> //ESTE LISTENER ES PARA LA DEMO
+                    val userIds = ArrayList<String>()
 
-                for (document in querySnapshot) {
-                    val userId = document.id
-                    userIds.add(userId)
+                    for (document in querySnapshot) {
+                        val userId = document.id
+                        userIds.add(userId)
+                    }
+                    val bid = edtBudget.text.toString().toFloat()
+                    val commentary = edtComment.text.toString()
+                    val idProvider = userIds[userIds.count()-2] //TODO Mandar idProvider desde la sesión
+                    val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
+                    val p = Proposal(
+                        idProvider,
+                        idRequest,
+                        bid,
+                        commentary
+                    )
+
+                    val newDocProposal = db.collection("Proposals").document()
+                    db.collection("Proposals").document(newDocProposal.id).set(p)
+                    //update request in BD
+                    RequestsService.updateProposalsQtyFromId(request.requestId, request.requestBidAmount)
+
+                    val action =
+                        //agregar que edit text carguen el objeto a la db y crear entity Proposal
+                        ProposalFragmentDirections.actionProposalFragmentToRequestsListFragment()
+                    v.findNavController().navigate(action)
                 }
-                val bid = edtBudget.text.toString().toFloat()
-                val commentary = edtComment.text.toString()
-                val idProvider = userIds[userIds.count()-2] //TODO Mandar idProvider desde la sesión
-                val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
-                val p = Proposal(
-                    idProvider,
-                    idRequest,
-                    bid,
-                    commentary
-                )
-
-                val newDocProposal = db.collection("Proposals").document()
-                db.collection("Proposals").document(newDocProposal.id).set(p)
-                //update request in BD
-                RequestsService.updateProposalsQtyFromId(request.requestId, request.requestBidAmount)
-
-                val action =
-                    //agregar que edit text carguen el objeto a la db y crear entity Proposal
-                    ProposalFragmentDirections.actionProposalFragmentToRequestsListFragment()
-                v.findNavController().navigate(action)
+            }else {
+                errorMessageTextView.visibility = View.VISIBLE
             }
-
-
         }
     }
 

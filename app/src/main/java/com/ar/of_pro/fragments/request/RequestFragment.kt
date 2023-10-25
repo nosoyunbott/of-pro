@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -48,7 +49,6 @@ import java.util.Locale
 class RequestFragment<OutputStream> : Fragment() {
 
 
-
     lateinit var v: View
     lateinit var spnOcupation: Spinner
     lateinit var spnServiceTypes: Spinner
@@ -70,6 +70,9 @@ class RequestFragment<OutputStream> : Fragment() {
     var serviceTypesList: List<String> = ServiceType().getList()
     lateinit var serviceTypesAdapter: ArrayAdapter<String>
     lateinit var selectedServiceType: String
+
+    lateinit var errorDateTextView: TextView
+
 
     private val db = FirebaseFirestore.getInstance()
     private var userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -103,6 +106,7 @@ class RequestFragment<OutputStream> : Fragment() {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         return dateFormat.format(Date(timestamp))
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -117,7 +121,8 @@ class RequestFragment<OutputStream> : Fragment() {
         edtPriceMax = v.findViewById(R.id.edtPriceMax)
         edtDescripcion = v.findViewById(R.id.edtDescripcion)
         edtTime = v.findViewById(R.id.edtTime)
-        edtTime.setOnClickListener{
+        errorDateTextView = v.findViewById(R.id.errorDateTextView)
+        edtTime.setOnClickListener {
             showDatePickerDialog()
         }
         return v
@@ -138,33 +143,39 @@ class RequestFragment<OutputStream> : Fragment() {
 
 
         btnRequest.setOnClickListener {
-            val sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-            val clientId = sharedPreferences.getString("clientId", "")  // Retrieve the 'userType' attribute from SharedPreferences
+            errorDateTextView.visibility = View.GONE
+            if (edtTime.text.toString().isNotEmpty()) {
+                val sharedPreferences =
+                    requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+                val clientId = sharedPreferences.getString(
+                    "clientId",
+                    ""
+                )  // Retrieve the 'userType' attribute from SharedPreferences
 
-            val title = edtTitle.text.toString()
+                val title = edtTitle.text.toString()
 
-            val r = RequestFB(
-                title,
-                0,
-                selectedOcupation,
-                selectedServiceType,
-                edtDescripcion.text.toString(),
-                Request.PENDING,
-                timestamp, //TODO cambiar el string a su tipo correspondiente
-                edtPriceMax.text.toString().toIntOrNull(),
-                clientId,
-                imageUrl
-            )
+                val r = RequestFB(
+                    title,
+                    0,
+                    selectedOcupation,
+                    selectedServiceType,
+                    edtDescripcion.text.toString(),
+                    Request.PENDING,
+                    timestamp, //TODO cambiar el string a su tipo correspondiente
+                    edtPriceMax.text.toString().toIntOrNull(),
+                    clientId,
+                    imageUrl
+                )
 
-            val newDocRequest = db.collection("Requests").document()
-            db.collection("Requests").document(newDocRequest.id).set(r)
-            val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
-            v.findNavController().navigate(action)
-
-
+                val newDocRequest = db.collection("Requests").document()
+                db.collection("Requests").document(newDocRequest.id).set(r)
+                val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
+                v.findNavController().navigate(action)
 
 
-
+            }else {
+                errorDateTextView.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -217,6 +228,7 @@ class RequestFragment<OutputStream> : Fragment() {
 
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -240,7 +252,7 @@ class RequestFragment<OutputStream> : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                }catch (e: FileNotFoundException){
+                } catch (e: FileNotFoundException) {
                     Toast.makeText(
                         context,
                         "la imagen no subio",
@@ -251,6 +263,7 @@ class RequestFragment<OutputStream> : Fragment() {
             }
         }
     }
+
     fun uriToBlob(uri: Uri): ByteArray {
         val inputStream = requireContext().contentResolver.openInputStream(uri)
         val byteArray = inputStream?.readBytes() ?: byteArrayOf()
@@ -263,11 +276,17 @@ class RequestFragment<OutputStream> : Fragment() {
         try {
 
             val service = ActivityServiceApiBuilder.create()
-            val requestBody = RequestBody.create(MediaType.parse(requireContext().contentResolver.getType(uri)), file)
+            val requestBody = RequestBody.create(
+                MediaType.parse(requireContext().contentResolver.getType(uri)),
+                file
+            )
             val imagePart = MultipartBody.Part.createFormData("image", file.name, requestBody)
 
             service.uploadImage(imagePart).enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
                     if (response.isSuccessful) {
                         try {
                             val responseData = response.body()?.string()
@@ -298,7 +317,6 @@ class RequestFragment<OutputStream> : Fragment() {
             // Handle file IO exception
         }
     }
-
 
 
 }

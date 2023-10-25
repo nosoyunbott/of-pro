@@ -26,4 +26,9 @@ class Sanitizer {
         val numberPattern = Regex("^[0-9]+$")
         return input.isNotEmpty() && numberPattern.matches(input)
     }
+
+    fun validateNumericWithCommaAndDot(input: String): Boolean {
+        val pattern = Regex("^[0-9,.]+$")
+        return input.isNotEmpty() && pattern.matches(input)
+    }
 }
