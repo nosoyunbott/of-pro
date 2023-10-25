@@ -1,5 +1,6 @@
 package com.ar.of_pro.fragments.provider
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -78,35 +79,31 @@ class ProposalFragment : Fragment() {
             val budget = edtBudget.text.toString().toInt()
             errorMessageTextView.visibility = View.GONE
             if(request.maxCost > budget){
-                val users = db.collection("Users")
-                users.get().addOnSuccessListener { querySnapshot -> //ESTE LISTENER ES PARA LA DEMO
-                    val userIds = ArrayList<String>()
+                val sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
 
-                    for (document in querySnapshot) {
-                        val userId = document.id
-                        userIds.add(userId)
-                    }
-                    val bid = edtBudget.text.toString().toFloat()
-                    val commentary = edtComment.text.toString()
-                    val idProvider = userIds[userIds.count()-2] //TODO Mandar idProvider desde la sesión
-                    val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
-                    val p = Proposal(
-                        idProvider,
-                        idRequest,
-                        bid,
-                        commentary
-                    )
 
-                    val newDocProposal = db.collection("Proposals").document()
-                    db.collection("Proposals").document(newDocProposal.id).set(p)
-                    //update request in BD
-                    RequestsService.updateProposalsQtyFromId(request.requestId, request.requestBidAmount)
+                val bid = edtBudget.text.toString().toFloat()
+                val commentary = edtComment.text.toString()
+                val idProvider = sharedPreferences.getString("clientId", "")  // Retrieve the 'userType' attribute from SharedPreferences
+                val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
+                val p = Proposal(
+                    idProvider,
+                    idRequest,
+                    bid,
+                    commentary
+                )
 
-                    val action =
-                        //agregar que edit text carguen el objeto a la db y crear entity Proposal
-                        ProposalFragmentDirections.actionProposalFragmentToRequestsListFragment()
-                    v.findNavController().navigate(action)
+                val newDocProposal = db.collection("Proposals").document()
+                db.collection("Proposals").document(newDocProposal.id).set(p)
+                //update request in BD
+                RequestsService.updateProposalsQtyFromId(request.requestId, request.requestBidAmount)
+
+                val action =
+                    //agregar que edit text carguen el objeto a la db y crear entity Proposal
+                    ProposalFragmentDirections.actionProposalFragmentToRequestsListFragment()
+                v.findNavController().navigate(action)
                 }
+
             }else {
                 errorMessageTextView.visibility = View.VISIBLE
             }

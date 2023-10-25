@@ -33,7 +33,9 @@
         tools:layout="@layout/fragment_request" >
         <action
             android:id="@+id/action_requestFragment_to_requestsListFragment"
-            app:destination="@id/requestsListFragment" />
+            app:destination="@id/requestsListFragment"
+            app:popUpTo="@id/requestsListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/requestsListFragment"
