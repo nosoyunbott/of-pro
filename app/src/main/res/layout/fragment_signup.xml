@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:textSize="45sp"
+        android:textSize="35sp"
         android:text="Registrarse" />
 
     <EditText
@@ -19,20 +19,30 @@
         android:layout_width="300dp"
         android:layout_height="55dp"
         android:layout_below="@+id/registerTextView"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="7dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
         android:hint="Nombre"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/edittext_border" /> <!-- Define un recurso para el borde con color negro -->
+        android:background="@drawable/edittext_border" />
+
+    <TextView
+        android:id="@+id/errorNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Nombre invalido"
+        android:layout_below="@+id/nameEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/lastNameEdt"
         android:layout_width="300dp"
         android:layout_height="55dp"
         android:layout_below="@+id/nameEdt"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
@@ -40,12 +50,22 @@
         android:hint="Apellido"
         android:background="@drawable/edittext_border" />
 
+    <TextView
+        android:id="@+id/errorLastNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Apellido invalido"
+        android:layout_below="@+id/lastNameEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
+
     <EditText
         android:id="@+id/addressEdt"
         android:layout_width="300dp"
         android:layout_height="55dp"
         android:layout_below="@+id/lastNameEdt"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
@@ -53,12 +73,22 @@
         android:hint="Direccion"
         android:background="@drawable/edittext_border" />
 
+    <TextView
+        android:id="@+id/errorAddressTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Direccion invalida"
+        android:layout_below="@+id/addressEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
+
     <EditText
         android:id="@+id/locationEdt"
         android:layout_width="300dp"
         android:layout_height="55dp"
         android:layout_below="@+id/addressEdt"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
@@ -66,12 +96,22 @@
         android:hint="Localidad"
         android:background="@drawable/edittext_border" />
 
+    <TextView
+        android:id="@+id/errorLocationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Localidad invalida"
+        android:layout_below="@+id/locationEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
+
     <EditText
         android:id="@+id/emailEdt"
         android:layout_width="300dp"
         android:layout_height="55dp"
         android:layout_below="@+id/locationEdt"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
@@ -79,18 +119,38 @@
         android:hint="Mail"
         android:background="@drawable/edittext_border" />
 
+    <TextView
+        android:id="@+id/errorEmailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Mail invalido"
+        android:layout_below="@+id/emailEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
+
     <EditText
         android:id="@+id/phoneEdt"
         android:layout_width="300dp"
         android:layout_height="55dp"
         android:layout_below="@+id/emailEdt"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
         android:layout_centerHorizontal="true"
         android:hint="Celular"
         android:background="@drawable/edittext_border" />
+
+    <TextView
+        android:id="@+id/errorPhoneTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Celular invalido"
+        android:layout_below="@+id/phoneEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
 
 
     <Spinner
@@ -101,7 +161,7 @@
         android:layout_centerHorizontal="true"
         android:autofillHints="Tipo de Usuario"
         android:paddingStart="12dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/edittext_border" />
@@ -112,7 +172,7 @@
         android:layout_width="300dp"
         android:layout_height="55dp"
         android:layout_below="@+id/spnUserType"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
@@ -121,12 +181,22 @@
         android:background="@drawable/edittext_border"
         android:inputType="textPassword" />
 
+    <TextView
+        android:id="@+id/errorPasswordTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Contraseña invalida"
+        android:layout_below="@+id/passwordEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/registerButton"
         android:layout_width="275dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/passwordEdt"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_centerHorizontal="true"

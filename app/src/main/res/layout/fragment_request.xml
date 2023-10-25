@@ -89,6 +89,15 @@
             android:focusable="false"
 
             />
+        <TextView
+            android:id="@+id/errorDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="La fecha y hora no puede estar vacia"
+            android:layout_below="@+id/edtBudget"
+            android:textColor="#FF0000"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnAttach"

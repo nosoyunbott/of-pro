@@ -2,6 +2,7 @@ package com.ar.of_pro.fragments.provider
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,7 @@ class ProposalFragment : Fragment() {
     lateinit var edtComment : EditText
     lateinit var imageUrl: String
     lateinit var imageView: ImageView
+    lateinit var errorMessageTextView: TextView
     private val db = FirebaseFirestore.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +50,7 @@ class ProposalFragment : Fragment() {
         edtBudget = v.findViewById(R.id.edtBudget)
         edtComment = v.findViewById(R.id.edtComment)
         imageView = v.findViewById(R.id.requestImageView)
+        errorMessageTextView = v.findViewById(R.id.errorMessageTextView)
 
 
         //id request, coment, presupuesto, idproveedor
@@ -70,16 +73,12 @@ class ProposalFragment : Fragment() {
             .into(imageView);
 
 
+
         btnProposal.setOnClickListener{
 
-            val users = db.collection("Users")
-            users.get().addOnSuccessListener { querySnapshot -> //ESTE LISTENER ES PARA LA DEMO
-                val userIds = ArrayList<String>()
-
-                for (document in querySnapshot) {
-                    val userId = document.id
-                    userIds.add(userId)
-                }
+            val budget = edtBudget.text.toString().toInt()
+            errorMessageTextView.visibility = View.GONE
+            if(request.maxCost > budget){
                 val sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
 
 
@@ -103,9 +102,11 @@ class ProposalFragment : Fragment() {
                     //agregar que edit text carguen el objeto a la db y crear entity Proposal
                     ProposalFragmentDirections.actionProposalFragmentToRequestsListFragment()
                 v.findNavController().navigate(action)
+                }
+
+            }else {
+                errorMessageTextView.visibility = View.VISIBLE
             }
-
-
         }
     }
 
