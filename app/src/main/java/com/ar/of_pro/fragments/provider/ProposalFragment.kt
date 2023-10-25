@@ -1,6 +1,7 @@
 package com.ar.of_pro.fragments.provider
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,10 +72,12 @@ class ProposalFragment : Fragment() {
             .into(imageView);
 
 
+
         btnProposal.setOnClickListener{
 
+            val budget = edtBudget.text.toString().toInt()
             errorMessageTextView.visibility = View.GONE
-            if(request.maxCost > edtBudget.text.toString().toFloat()){
+            if(request.maxCost > budget){
                 val users = db.collection("Users")
                 users.get().addOnSuccessListener { querySnapshot -> //ESTE LISTENER ES PARA LA DEMO
                     val userIds = ArrayList<String>()
