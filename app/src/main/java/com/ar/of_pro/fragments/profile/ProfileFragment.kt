@@ -9,7 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,6 +36,8 @@ class ProfileFragment : Fragment() {
     lateinit var txtBioDescription: TextView
     lateinit var txtBio: TextView
     lateinit var txtRateQuantity2: TextView
+    lateinit var profilePicture: ImageView
+
     lateinit var sharedPreferences: SharedPreferences
     //lateinit var txtServiceType: TextView
 
@@ -56,6 +60,8 @@ class ProfileFragment : Fragment() {
             v.findViewById(R.id.txtBioDescription) //TODO traer txt de descripcion y mostrar si el userType es provider
         txtBio = v.findViewById(R.id.txtBio)
         //txtServiceType = v.findViewById(R.id.txtServiceType) //TODO traer txt de rubro y mostrar si el userType es provider ? dinamico
+
+        profilePicture = v.findViewById(R.id.profilePicture)
 
         sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
