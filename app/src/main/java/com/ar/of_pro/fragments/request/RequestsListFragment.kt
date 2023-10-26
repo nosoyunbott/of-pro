@@ -123,7 +123,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
             }
 
             for(r in requests){
-                if (userType == "CLIENT" && userId == r.clientId) {
+                if (userType == "CLIENT" && userId == r.clientId && r.providerId=="") {
                             requestList.add(toRequest(r))
                         } else if (userType == "PROVIDER") {
                             //comparar si el userId no coincide con ninguna de las proposals asociadas a la request actual
