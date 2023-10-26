@@ -2,12 +2,14 @@ package com.ar.of_pro.fragments.request
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +18,10 @@ import com.ar.of_pro.adapters.RequestCardAdapter
 import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.listeners.OnViewItemClickedListener
+import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 //TODO Actualizar cantidad de proposals para que figuren en el recycler view
 //TODO  dejar la demo linda para el miercoles
@@ -34,9 +39,89 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
     val db = FirebaseFirestore.getInstance()
     val requestsCollection = db.collection("Requests")
+    val proposalsCollection = db.collection("Proposals")
+
+
+    private suspend fun getProposals(): List<ProposalModel> {
+        return try {
+            val querySnapshot = proposalsCollection.get().await()
+
+            val proposalsList = mutableListOf<ProposalModel>() // Replace with your request model
+
+            for (document in querySnapshot) {
+                val proposal = document.toObject(ProposalModel::class.java)
+                proposalsList.add(proposal)
+            }
+
+            proposalsList // Return the list of requests
+
+        } catch (e: Exception) {
+            // Handle errors
+            e.printStackTrace()
+            emptyList() // Return an empty list or handle the error as needed
+        }
+    }
+    private suspend fun getProposalsByRequestId(requestId: String): List<ProposalModel> {
+        return try {
+            val querySnapshot = proposalsCollection.get().await()
+
+            val proposalsList = mutableListOf<ProposalModel>() // Replace with your request model
+
+            for (document in querySnapshot) {
+                val proposal = document.toObject(ProposalModel::class.java)
+                if(proposal.requestId == requestId) {
+                    proposalsList.add(proposal)
+                }
+            }
+
+            proposalsList // Return the list of requests
+
+        } catch (e: Exception) {
+            // Handle errors
+            e.printStackTrace()
+            emptyList() // Return an empty list or handle the error as needed
+        }
+    }
+
+    private suspend fun getRequests(): List<RequestModel> {
+        return try {
+            val querySnapshot = requestsCollection.get().await()
+
+            val requestsList = mutableListOf<RequestModel>() // Replace with your request model
+
+
+            for (document in querySnapshot) {
+                Log.d("requestId", document.id)
+                //val request = document.toObject(RequestModel::class.java)
+                val title = document.getString("requestTitle") ?: ""
+                val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
+                val selectedOcupation = document.getString("categoryOcupation") ?: ""
+                val selectedServiceType = document.getString("categoryService") ?: ""
+                val description = document.getString("description") ?: ""
+                val state = document.getString("state") ?: ""
+                val date = document.getString("date") ?: ""
+                val maxCost = document.getLong("maxCost")?.toInt() ?: 0
+                val clientId = document.getString("clientId") ?: ""
+                val requestId = document.id
+                val imageUrl = document.getString("imageUrl") ?: ""
+                val providerId = document.getString("providerId") ?: ""
+                val request = RequestModel(selectedOcupation, selectedServiceType, clientId, date, description, imageUrl, maxCost, providerId, requestBidAmount, title, state, requestId  )
+                requestsList.add(request)
+            }
+
+            requestsList // Return the list of requests
+
+        } catch (e: Exception) {
+            // Handle errors
+            e.printStackTrace()
+            emptyList() // Return an empty list or handle the error as needed
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         val sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
         val userType = sharedPreferences.getString(
@@ -47,52 +132,29 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
             "clientId",
             ""
         )  // Retrieve the 'clientId' attribute from SharedPreferences
+        lifecycleScope.launch {
 
-        //TODO filtrar solicitudes por id de cliente
+            val requests = getRequests()
 
-        requestsCollection.get().addOnSuccessListener { documents ->
-            for (document in documents) {
-                if (document.getString("providerId") == "") {
-                    val title = document.getString("requestTitle") ?: ""
-                    val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
-                    val selectedOcupation = document.getString("categoryOcupation") ?: ""
-                    val selectedServiceType = document.getString("categoryService") ?: ""
-                    val description = document.getString("description") ?: ""
-                    val state = document.getString("state") ?: ""
-                    val date = document.getString("date") ?: ""
-                    val maxCost = document.getLong("maxCost")?.toInt() ?: 0
-                    val clientId = document.getString("clientId") ?: ""
-                    val requestId = document.id
-                    val imageUrl = document.getString("imageUrl") ?: ""
-
-                    val r = Request(
-                        title,
-                        requestBidAmount,
-                        selectedOcupation,
-                        selectedServiceType,
-                        description,
-                        state,
-                        date,
-                        maxCost,
-                        clientId,
-                        requestId,
-                        imageUrl
-                    )
-                    if (userType == "CLIENT" && userId == clientId) {
-                        requestList.add(r)
-                    } else if (userType == "PROVIDER") {
-                        requestList.add(r)
-                    }
-
-                }
-
+            for (x in requests) {
+                Log.d("request", x.toString())
             }
 
+            for(r in requests){
+                val proposalsOfCurrentRequest = getProposalsByRequestId(r.id)
+                if (userType == "CLIENT" && userId == r.clientId && r.providerId=="") {
+                            requestList.add(toRequest(r))
+                        } else if (userType == "PROVIDER" && !(proposalsOfCurrentRequest.any { it.providerId == userId })) {
+                            //comparar si el userId no coincide con ninguna de las proposals asociadas a la request actual
+                                requestList.add(toRequest(r))
+                        }
+
+            }
             requestListAdapter.notifyDataSetChanged()
         }
-            .addOnFailureListener { Exception ->
-                println("Error getting documents: $Exception")
-            }
+        //TODO filtrar solicitudes por id de cliente
+
+
 
 
     }
@@ -164,6 +226,39 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         } else {
             navController.navigate(actionForProvider)
         }
-
     }
+    fun toRequest(r: RequestModel) : Request{
+        return Request(r.requestTitle, r.requestBidAmount, r.categoryOcupation, r.categoryService, r.description, r.state, r.date, r.maxCost, r.clientId, r.id, r.imageUrl)
+    }
+    data class ProposalModel(
+        val bid: Int,
+        val commentary: String,
+        val disabled: Boolean,
+        val providerId: String,
+        val requestId: String,
+        val stability: Int
+    ) {
+        // Add a no-argument constructor
+        constructor() : this(0, "", false, "", "", 0)
+    }
+
+    data class RequestModel(
+        val categoryOcupation: String,
+        val categoryService: String,
+        val clientId: String,
+        val date: String,
+        val description: String,
+        val imageUrl: String,
+        val maxCost: Int,
+        val providerId: String,
+        val requestBidAmount: Int,
+        val requestTitle: String,
+        val state: String,
+        val id: String
+    ) {
+        constructor() : this(
+            "", "", "", "", "", "", 0, "", 0, "", "", ""
+        )
+    }
+
 }
