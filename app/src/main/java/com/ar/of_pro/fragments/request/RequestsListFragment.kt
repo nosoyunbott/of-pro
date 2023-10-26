@@ -40,21 +40,41 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     val db = FirebaseFirestore.getInstance()
     val requestsCollection = db.collection("Requests")
     val proposalsCollection = db.collection("Proposals")
-    lateinit var proposals: List<ProposalModel>
 
 
     private suspend fun getProposals(): List<ProposalModel> {
         return try {
             val querySnapshot = proposalsCollection.get().await()
 
-            val requestsList = mutableListOf<ProposalModel>() // Replace with your request model
+            val proposalsList = mutableListOf<ProposalModel>() // Replace with your request model
 
             for (document in querySnapshot) {
-                val request = document.toObject(ProposalModel::class.java)
-                requestsList.add(request)
+                val proposal = document.toObject(ProposalModel::class.java)
+                proposalsList.add(proposal)
             }
 
-            requestsList // Return the list of requests
+            proposalsList // Return the list of requests
+
+        } catch (e: Exception) {
+            // Handle errors
+            e.printStackTrace()
+            emptyList() // Return an empty list or handle the error as needed
+        }
+    }
+    private suspend fun getProposalsByRequestId(requestId: String): List<ProposalModel> {
+        return try {
+            val querySnapshot = proposalsCollection.get().await()
+
+            val proposalsList = mutableListOf<ProposalModel>() // Replace with your request model
+
+            for (document in querySnapshot) {
+                val proposal = document.toObject(ProposalModel::class.java)
+                if(proposal.requestId == requestId) {
+                    proposalsList.add(proposal)
+                }
+            }
+
+            proposalsList // Return the list of requests
 
         } catch (e: Exception) {
             // Handle errors
@@ -113,72 +133,23 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
             ""
         )  // Retrieve the 'clientId' attribute from SharedPreferences
         lifecycleScope.launch {
-            proposals = getProposals()
+
             val requests = getRequests()
-            for (x in proposals) {
-                Log.d("proposal", x.toString())
-            }
+
             for (x in requests) {
                 Log.d("request", x.toString())
             }
 
             for(r in requests){
+                val proposalsOfCurrentRequest = getProposalsByRequestId(r.id)
                 if (userType == "CLIENT" && userId == r.clientId && r.providerId=="") {
                             requestList.add(toRequest(r))
-                        } else if (userType == "PROVIDER") {
+                        } else if (userType == "PROVIDER" && !(proposalsOfCurrentRequest.any { it.providerId == userId })) {
                             //comparar si el userId no coincide con ninguna de las proposals asociadas a la request actual
                                 requestList.add(toRequest(r))
                         }
                 requestListAdapter.notifyDataSetChanged()
             }
-
-//            requestsCollection.get().addOnSuccessListener { documents ->
-//                for (document in documents) {
-//                    if (document.getString("providerId") == "") {
-//                        val title = document.getString("requestTitle") ?: ""
-//                        val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
-//                        val selectedOcupation = document.getString("categoryOcupation") ?: ""
-//                        val selectedServiceType = document.getString("categoryService") ?: ""
-//                        val description = document.getString("description") ?: ""
-//                        val state = document.getString("state") ?: ""
-//                        val date = document.getString("date") ?: ""
-//                        val maxCost = document.getLong("maxCost")?.toInt() ?: 0
-//                        val clientId = document.getString("clientId") ?: ""
-//                        val requestId = document.id
-//                        val imageUrl = document.getString("imageUrl") ?: ""
-//
-//                        val r = Request(
-//                            title,
-//                            requestBidAmount,
-//                            selectedOcupation,
-//                            selectedServiceType,
-//                            description,
-//                            state,
-//                            date,
-//                            maxCost,
-//                            clientId,
-//                            requestId,
-//                            imageUrl
-//                        )
-//                        if (userType == "CLIENT" && userId == clientId) {
-//                            requestList.add(r)
-//                        } else if (userType == "PROVIDER") {
-//                            //comparar si el userId no coincide con ninguna de las proposals asociadas a la request actual
-//
-//                                requestList.add(r)
-//
-//
-//                        }
-//
-//                    }
-//
-//                }
-//
-//                requestListAdapter.notifyDataSetChanged()
-//            }
-//                .addOnFailureListener { Exception ->
-//                    println("Error getting documents: $Exception")
-//                }
 
         }
         //TODO filtrar solicitudes por id de cliente
