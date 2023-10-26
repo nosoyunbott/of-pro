@@ -34,6 +34,8 @@ class SignupFragment : Fragment() {
     lateinit var emailEdt: EditText
     lateinit var phoneEdt: EditText
 
+    lateinit var btnPhotos: Button
+
 
     lateinit var spnUserType: Spinner
     var userTypeList: List<String> = UserType().getList()
@@ -63,6 +65,7 @@ class SignupFragment : Fragment() {
         passwordEdt = v.findViewById(R.id.passwordEdt)
         registerButton = v.findViewById(R.id.registerButton)
         logInTextView = v.findViewById(R.id.logInTextView)
+        btnPhotos = v.findViewById(R.id.btnPhotos)
         return v
     }
 
