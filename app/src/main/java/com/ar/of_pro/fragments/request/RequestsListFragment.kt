@@ -148,9 +148,9 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
                             //comparar si el userId no coincide con ninguna de las proposals asociadas a la request actual
                                 requestList.add(toRequest(r))
                         }
-                requestListAdapter.notifyDataSetChanged()
-            }
 
+            }
+            requestListAdapter.notifyDataSetChanged()
         }
         //TODO filtrar solicitudes por id de cliente
 
