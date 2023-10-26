@@ -17,26 +17,31 @@ import com.ar.of_pro.services.RequestsService
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 
-class ProposalFragment : Fragment() {
 
-    lateinit var v : View
-    lateinit var btnProposal : Button
-    lateinit var txtTitle : TextView
-    lateinit var txtOcupation : TextView
-    lateinit var txtServiceType : TextView
-    lateinit var txtTime : TextView
-    lateinit var txtPricing : TextView
-    lateinit var txtDescription : TextView
-    lateinit var edtBudget : EditText
-    lateinit var edtComment : EditText
+
+class ProposalFragment : Fragment(){
+
+    lateinit var v: View
+    lateinit var btnProposal: Button
+    lateinit var txtTitle: TextView
+    lateinit var txtOcupation: TextView
+    lateinit var txtServiceType: TextView
+    lateinit var txtTime: TextView
+    lateinit var txtPricing: TextView
+    lateinit var txtDescription: TextView
+    lateinit var edtBudget: EditText
+    lateinit var edtComment: EditText
     lateinit var imageUrl: String
     lateinit var imageView: ImageView
     private val db = FirebaseFirestore.getInstance()
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
         v = inflater.inflate(R.layout.fragment_proposal, container, false)
         btnProposal = v.findViewById(R.id.btnProposal)
         txtTitle = v.findViewById(R.id.txtTitle)
@@ -50,7 +55,7 @@ class ProposalFragment : Fragment() {
         imageView = v.findViewById(R.id.requestImageView)
 
 
-        //id request, coment, presupuesto, idproveedor
+
         return v
     }
 
@@ -69,8 +74,13 @@ class ProposalFragment : Fragment() {
             .load(imageUrl)
             .into(imageView);
 
+        imageView.setOnClickListener {
+            val enlargeImageOnTap = ProposalFragmentDirections.actionProposalFragmentToImageViewFragment(imageUrl)
+             v.findNavController().navigate(enlargeImageOnTap)
+        }
 
-        btnProposal.setOnClickListener{
+
+        btnProposal.setOnClickListener {
 
             val users = db.collection("Users")
             users.get().addOnSuccessListener { querySnapshot -> //ESTE LISTENER ES PARA LA DEMO
@@ -80,12 +90,16 @@ class ProposalFragment : Fragment() {
                     val userId = document.id
                     userIds.add(userId)
                 }
-                val sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+                val sharedPreferences =
+                    requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
 
 
                 val bid = edtBudget.text.toString().toFloat()
                 val commentary = edtComment.text.toString()
-                val idProvider = sharedPreferences.getString("clientId", "")  // Retrieve the 'userType' attribute from SharedPreferences
+                val idProvider = sharedPreferences.getString(
+                    "clientId",
+                    ""
+                )  // Retrieve the 'userType' attribute from SharedPreferences
                 val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
                 val p = Proposal(
                     idProvider,
@@ -97,7 +111,10 @@ class ProposalFragment : Fragment() {
                 val newDocProposal = db.collection("Proposals").document()
                 db.collection("Proposals").document(newDocProposal.id).set(p)
                 //update request in BD
-                RequestsService.updateProposalsQtyFromId(request.requestId, request.requestBidAmount)
+                RequestsService.updateProposalsQtyFromId(
+                    request.requestId,
+                    request.requestBidAmount
+                )
 
                 val action =
                     //agregar que edit text carguen el objeto a la db y crear entity Proposal

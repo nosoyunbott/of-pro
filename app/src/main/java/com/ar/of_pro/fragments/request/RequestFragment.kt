@@ -140,9 +140,7 @@ class RequestFragment<OutputStream> : Fragment() {
         btnRequest.setOnClickListener {
             val sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
             val clientId = sharedPreferences.getString("clientId", "")  // Retrieve the 'userType' attribute from SharedPreferences
-
             val title = edtTitle.text.toString()
-
             val r = RequestFB(
                 title,
                 0,
@@ -177,6 +175,7 @@ class RequestFragment<OutputStream> : Fragment() {
         serviceTypesAdapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, serviceTypesList)
     }
+
 
     private fun setupSpinner(spinner: Spinner, adapter: ArrayAdapter<String>) {
         spinner.adapter = adapter
@@ -252,14 +251,14 @@ class RequestFragment<OutputStream> : Fragment() {
             }
         }
     }
-    fun uriToBlob(uri: Uri): ByteArray {
+    private fun uriToBlob(uri: Uri): ByteArray {
         val inputStream = requireContext().contentResolver.openInputStream(uri)
         val byteArray = inputStream?.readBytes() ?: byteArrayOf()
         inputStream?.close()
         return byteArray
     }
 
-    fun loadImage(uri: Uri, blob: ByteArray) {
+    private fun loadImage(uri: Uri, blob: ByteArray) {
         val file = File(requireContext().filesDir, "foto")
         try {
 
