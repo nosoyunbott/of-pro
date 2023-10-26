@@ -69,8 +69,23 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
             val requestsList = mutableListOf<RequestModel>() // Replace with your request model
 
+
             for (document in querySnapshot) {
-                val request = document.toObject(RequestModel::class.java)
+                Log.d("requestId", document.id)
+                //val request = document.toObject(RequestModel::class.java)
+                val title = document.getString("requestTitle") ?: ""
+                val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
+                val selectedOcupation = document.getString("categoryOcupation") ?: ""
+                val selectedServiceType = document.getString("categoryService") ?: ""
+                val description = document.getString("description") ?: ""
+                val state = document.getString("state") ?: ""
+                val date = document.getString("date") ?: ""
+                val maxCost = document.getLong("maxCost")?.toInt() ?: 0
+                val clientId = document.getString("clientId") ?: ""
+                val requestId = document.id
+                val imageUrl = document.getString("imageUrl") ?: ""
+                val providerId = document.getString("providerId") ?: ""
+                val request = RequestModel(selectedOcupation, selectedServiceType, clientId, date, description, imageUrl, maxCost, providerId, requestBidAmount, title, state, requestId  )
                 requestsList.add(request)
             }
 
@@ -103,53 +118,67 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
             for (x in proposals) {
                 Log.d("proposal", x.toString())
             }
-            requestsCollection.get().addOnSuccessListener { documents ->
-                for (document in documents) {
-                    if (document.getString("providerId") == "") {
-                        val title = document.getString("requestTitle") ?: ""
-                        val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
-                        val selectedOcupation = document.getString("categoryOcupation") ?: ""
-                        val selectedServiceType = document.getString("categoryService") ?: ""
-                        val description = document.getString("description") ?: ""
-                        val state = document.getString("state") ?: ""
-                        val date = document.getString("date") ?: ""
-                        val maxCost = document.getLong("maxCost")?.toInt() ?: 0
-                        val clientId = document.getString("clientId") ?: ""
-                        val requestId = document.id
-                        val imageUrl = document.getString("imageUrl") ?: ""
+            for (x in requests) {
+                Log.d("request", x.toString())
+            }
 
-                        val r = Request(
-                            title,
-                            requestBidAmount,
-                            selectedOcupation,
-                            selectedServiceType,
-                            description,
-                            state,
-                            date,
-                            maxCost,
-                            clientId,
-                            requestId,
-                            imageUrl
-                        )
-                        if (userType == "CLIENT" && userId == clientId) {
-                            requestList.add(r)
+            for(r in requests){
+                if (userType == "CLIENT" && userId == r.clientId) {
+                            requestList.add(toRequest(r))
                         } else if (userType == "PROVIDER") {
                             //comparar si el userId no coincide con ninguna de las proposals asociadas a la request actual
-                            if((proposals.any{it.requestId ==requestId}) && (proposals.any{it.providerId==userId})){
-                                requestList.add(r)
-                            }
-
+                                requestList.add(toRequest(r))
                         }
-
-                    }
-
-                }
-
                 requestListAdapter.notifyDataSetChanged()
             }
-                .addOnFailureListener { Exception ->
-                    println("Error getting documents: $Exception")
-                }
+
+//            requestsCollection.get().addOnSuccessListener { documents ->
+//                for (document in documents) {
+//                    if (document.getString("providerId") == "") {
+//                        val title = document.getString("requestTitle") ?: ""
+//                        val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
+//                        val selectedOcupation = document.getString("categoryOcupation") ?: ""
+//                        val selectedServiceType = document.getString("categoryService") ?: ""
+//                        val description = document.getString("description") ?: ""
+//                        val state = document.getString("state") ?: ""
+//                        val date = document.getString("date") ?: ""
+//                        val maxCost = document.getLong("maxCost")?.toInt() ?: 0
+//                        val clientId = document.getString("clientId") ?: ""
+//                        val requestId = document.id
+//                        val imageUrl = document.getString("imageUrl") ?: ""
+//
+//                        val r = Request(
+//                            title,
+//                            requestBidAmount,
+//                            selectedOcupation,
+//                            selectedServiceType,
+//                            description,
+//                            state,
+//                            date,
+//                            maxCost,
+//                            clientId,
+//                            requestId,
+//                            imageUrl
+//                        )
+//                        if (userType == "CLIENT" && userId == clientId) {
+//                            requestList.add(r)
+//                        } else if (userType == "PROVIDER") {
+//                            //comparar si el userId no coincide con ninguna de las proposals asociadas a la request actual
+//
+//                                requestList.add(r)
+//
+//
+//                        }
+//
+//                    }
+//
+//                }
+//
+//                requestListAdapter.notifyDataSetChanged()
+//            }
+//                .addOnFailureListener { Exception ->
+//                    println("Error getting documents: $Exception")
+//                }
 
         }
         //TODO filtrar solicitudes por id de cliente
@@ -227,7 +256,9 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
             navController.navigate(actionForProvider)
         }
     }
-
+    fun toRequest(r: RequestModel) : Request{
+        return Request(r.requestTitle, r.requestBidAmount, r.categoryOcupation, r.categoryService, r.description, r.state, r.date, r.maxCost, r.clientId, r.id, r.imageUrl)
+    }
     data class ProposalModel(
         val bid: Int,
         val commentary: String,
@@ -251,11 +282,11 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         val providerId: String,
         val requestBidAmount: Int,
         val requestTitle: String,
-
-        val state: String
+        val state: String,
+        val id: String
     ) {
         constructor() : this(
-            "", "", "", "", "", "", 0, "", 0, "", ""
+            "", "", "", "", "", "", 0, "", 0, "", "", ""
         )
     }
 
