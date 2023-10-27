@@ -104,7 +104,8 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
                     user.getDouble("rating")!!,
                     user.getLong("ratingQuantity")!!.toInt()!!,
                     user.getString("userType")!!,
-                    user.getString("bio")!!
+                    user.getString("bio")!!,
+                    user.getString("imageUrl")
                 )
                 proposalInfo = ProposalInformation(
                     userObj.name,
