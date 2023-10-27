@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        sharedPreferences = this.getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+        sharedPreferences = this.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
         val userType = sharedPreferences.getString("userType", "");
 
 //        val userType: String? = intent?.let {
