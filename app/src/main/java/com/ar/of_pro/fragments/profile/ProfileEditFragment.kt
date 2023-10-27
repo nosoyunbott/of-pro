@@ -51,7 +51,7 @@ class ProfileEditFragment : Fragment() {
 
     private val PICK_MEDIA_REQUEST = 1
     lateinit var profilePictureEdit: ImageView
-    lateinit var imageUrl: String
+    private var imageUrl = ""
 
 
     override fun onCreateView(
@@ -88,7 +88,11 @@ class ProfileEditFragment : Fragment() {
         btnAccept.setOnClickListener{
 
             //TODO actualizar todos los datos en la db
-            updateDb(txtNombre.text.toString(), txtSurname.text.toString() ,txtTelefono.text.toString(), txtLocalidad.text.toString(), txtBio.text.toString(), imageUrl)
+            if (imageUrl.isNullOrEmpty()) {
+                updateDb(txtNombre.text.toString(), txtSurname.text.toString() ,txtTelefono.text.toString(), txtLocalidad.text.toString(), txtBio.text.toString())
+            } else {
+                updateDb(txtNombre.text.toString(), txtSurname.text.toString() ,txtTelefono.text.toString(), txtLocalidad.text.toString(), txtBio.text.toString(), imageUrl)
+            }
 
             val action = ProfileEditFragmentDirections.actionProfileEditFragmentToProfileFragment()
             v.findNavController().navigate(action)
@@ -100,6 +104,42 @@ class ProfileEditFragment : Fragment() {
             v.findNavController().navigate(action)
         }
 
+    }
+
+    fun updateDb(name: String?, apellido: String?, phone: String?, ubi: String?, description: String?) {
+
+        val userDoc = usersCollection.document(sharedPreferences.getString("clientId", "").toString())
+
+        //Name
+        if (name!!.isNotEmpty()) {
+            val name = hashMapOf<String, Any?>("name" to name) //TODO validar
+            userDoc.update(name)
+        }
+
+        //lastName
+        if (apellido!!.isNotEmpty()) {
+            val lastName = hashMapOf<String, Any?>("lastName" to apellido) //TODO validar
+            userDoc.update(lastName)
+        }
+
+        //Phone
+        if (phone!!.isNotEmpty()) {
+            val phone = hashMapOf<String, Any?>("phone" to phone.toString().toInt()) //TODO validar
+            userDoc.update(phone)
+        }
+
+        //Localidad
+
+        if (ubi!!.isNotEmpty()) {
+            val localidad = hashMapOf<String, Any?>("location" to ubi) //TODO validar
+            userDoc.update(localidad)
+        }
+
+        //Bio
+        if (description!!.isNotEmpty()) {
+            val bio = hashMapOf<String, Any>("bio" to description) //TODO validar
+            userDoc.update(bio)
+        }
     }
 
     fun updateDb(name: String?, apellido: String?, phone: String?, ubi: String?, description: String?, imgurImage: String?) {
@@ -138,7 +178,7 @@ class ProfileEditFragment : Fragment() {
         }
 
         //Image
-        if (imgurImage!!.isNotEmpty()) {
+        if (imgurImage!!.isNotEmpty() && imageUrl!!.isNotEmpty()) {
             val imageToDb = hashMapOf<String, Any>("imageUrl" to imgurImage) //TODO validar
             userDoc.update(imageToDb)
         }
