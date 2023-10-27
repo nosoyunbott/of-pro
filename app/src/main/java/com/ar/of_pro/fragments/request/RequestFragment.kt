@@ -120,6 +120,8 @@ class RequestFragment<OutputStream> : Fragment() {
         edtTime.setOnClickListener{
             showDatePickerDialog()
         }
+        setupSpinner(spnOcupation, ocupationAdapter)
+        setupSpinner(spnServiceTypes, serviceTypesAdapter)
         return v
     }
 
