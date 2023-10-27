@@ -33,6 +33,8 @@ class ProposalFragment : Fragment(){
     lateinit var edtComment: EditText
     lateinit var imageUrl: String
     lateinit var imageView: ImageView
+    lateinit var imageView2: ImageView
+    lateinit var imageView3: ImageView
     private val db = FirebaseFirestore.getInstance()
 
 
@@ -53,6 +55,8 @@ class ProposalFragment : Fragment(){
         edtBudget = v.findViewById(R.id.edtBudget)
         edtComment = v.findViewById(R.id.edtComment)
         imageView = v.findViewById(R.id.requestImageView)
+        imageView2 = v.findViewById(R.id.imageView2)
+        imageView3 = v.findViewById(R.id.imageView4)
 
 
 
@@ -73,6 +77,13 @@ class ProposalFragment : Fragment(){
         Glide.with(requireContext())
             .load(imageUrl)
             .into(imageView);
+        Glide.with(requireContext())
+            .load(imageUrl)
+            .into(imageView2)
+        Glide.with(requireContext())
+            .load(imageUrl)
+            .into(imageView3)
+
 
         imageView.setOnClickListener {
             val enlargeImageOnTap = ProposalFragmentDirections.actionProposalFragmentToImageViewFragment(imageUrl)
