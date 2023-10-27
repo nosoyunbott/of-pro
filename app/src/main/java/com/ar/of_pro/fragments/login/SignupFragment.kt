@@ -86,6 +86,7 @@ class SignupFragment : Fragment() {
         registerButton = v.findViewById(R.id.registerButton)
         logInTextView = v.findViewById(R.id.logInTextView)
         btnPhotos = v.findViewById(R.id.btnPhotos)
+        setupSpinner(spnUserType, userTypeAdapter)
         return v
     }
 
@@ -98,7 +99,7 @@ class SignupFragment : Fragment() {
             it.write(fileContents.toByteArray())
         }
 
-        setupSpinner(spnUserType, userTypeAdapter)
+
         signUp()
         goToLogInByTextView()
         setOnClickListener(btnPhotos)
