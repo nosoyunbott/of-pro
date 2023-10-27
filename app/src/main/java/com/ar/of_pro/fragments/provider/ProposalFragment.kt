@@ -85,6 +85,7 @@ class ProposalFragment : Fragment(){
             .into(imageView3)
 
 
+
         imageView.setOnClickListener {
             val enlargeImageOnTap = ProposalFragmentDirections.actionProposalFragmentToImageViewFragment(imageUrl)
              v.findNavController().navigate(enlargeImageOnTap)
