@@ -32,6 +32,7 @@ class UserLoginFragment : Fragment() {
 
     private val db = FirebaseFirestore.getInstance()
 
+    val user = FirebaseAuth.getInstance().currentUser
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -50,9 +51,8 @@ class UserLoginFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        validateUserSession()
 
-        goToApp()
-        goToSignUp()
     }
 
     private fun goToApp() {
@@ -62,6 +62,8 @@ class UserLoginFragment : Fragment() {
                 .signInWithEmailAndPassword(emailEdt.text.toString(), passwordEdt.text.toString())
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
+
+
                         val userEmail = emailEdt.text.toString()
                         db.collection("Users").whereEqualTo("mail", userEmail).get()
                             .addOnCompleteListener { userQueryTask ->
@@ -90,6 +92,20 @@ class UserLoginFragment : Fragment() {
 
         }
     }
+
+
+    private fun validateUserSession() {
+        if (user != null) {
+            val userType = sharedPreferences.getString("userType", "") ?: ""
+            val action = UserLoginFragmentDirections.actionUserLoginFragmentToMainActivity(userType)
+            v.findNavController().navigate(action)
+        } else {
+            goToApp()
+            goToSignUp()
+        }
+
+    }
+
 
     private fun goToSignUp() {
         val spannableString = SpannableString(registerTextView.text)
