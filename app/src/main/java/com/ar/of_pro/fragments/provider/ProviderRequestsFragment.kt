@@ -42,8 +42,11 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
     lateinit var proposalInfo: ProposalInformation
     var userName: String = ""
     var userRating: Float = 0f
+    override fun onPause() {
+        super.onPause()
 
 
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         request = ProposalFragmentArgs.fromBundle(requireArguments()).request

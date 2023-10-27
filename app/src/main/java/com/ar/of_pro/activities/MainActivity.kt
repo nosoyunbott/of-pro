@@ -3,6 +3,7 @@ package com.ar.of_pro.activities
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -39,7 +40,27 @@ class MainActivity : AppCompatActivity() {
 
 
         NavigationUI.setupWithNavController(bottomNavigation, navHostFragment.navController)
-
+        bottomNavigation.setOnItemSelectedListener {item ->
+            when(item.itemId){
+                R.id.requestsListFragment ->{
+                    navHostFragment.navController.navigate(R.id.requestsListFragment)
+                    true
+                }
+                R.id.requestsHistoryFragment -> {
+                    navHostFragment.navController.navigate(R.id.requestsHistoryFragment)
+                    true
+                }
+                R.id.profileFragment -> {
+                    navHostFragment.navController.navigate(R.id.profileFragment)
+                    true
+                }
+                R.id.requestFragment -> {
+                    navHostFragment.navController.navigate(R.id.requestFragment)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
 
