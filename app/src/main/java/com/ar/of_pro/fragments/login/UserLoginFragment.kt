@@ -51,7 +51,9 @@ class UserLoginFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        validateUserSession()
+        goToApp()
+goToSignUp()
+       validateUserSession()
 
     }
 
