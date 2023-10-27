@@ -4,18 +4,19 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.bumptech.glide.Glide
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class ProfileFragment : Fragment() {
@@ -29,7 +30,7 @@ class ProfileFragment : Fragment() {
     val userRequest = db.collection("Users")
     val currentUser = FirebaseAuth.getInstance().currentUser
     val mail = currentUser?.email
-    private lateinit var auth: FirebaseAuth
+
 
     //Vars
     lateinit var txtNombre: TextView
@@ -128,8 +129,9 @@ class ProfileFragment : Fragment() {
             Handler().postDelayed(
 
                 {
-                    auth.signOut()
-
+                    Log.d("BEFORE LOGOUT", FirebaseAuth.getInstance().currentUser.toString())
+                    FirebaseAuth.getInstance().signOut()
+                    Log.d("AFTER LOGOUT", FirebaseAuth.getInstance().currentUser.toString())
                     val action = ProfileFragmentDirections.actionProfileFragmentToAuthActivity()
                     v.findNavController().navigate(action)
                 }, 300

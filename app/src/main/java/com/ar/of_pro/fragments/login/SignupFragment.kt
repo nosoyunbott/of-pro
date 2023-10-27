@@ -67,11 +67,11 @@ class SignupFragment : Fragment() {
     lateinit var logInTextView: TextView
 
     private val db = FirebaseFirestore.getInstance()
+    private val timeout: Long = 2500
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_signup, container, false)
@@ -125,8 +125,7 @@ class SignupFragment : Fragment() {
     private fun signUp() {
         registerButton.setOnClickListener {
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(
-                emailEdt.text.toString(),
-                passwordEdt.text.toString()
+                emailEdt.text.toString(), passwordEdt.text.toString()
             ).addOnCompleteListener {
                 val user = User(
                     nameEdt.text.toString(),
@@ -147,9 +146,15 @@ class SignupFragment : Fragment() {
                 db.collection("Users").document(newDocUser.id).set(user)
 
                 if (it.isSuccessful) {
-                    val action =
-                        SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
+                    Toast.makeText(context, "SU REGISTRO FUE EXITOSO! puto", Toast.LENGTH_LONG)
+
+
+                    val action = SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
+                    Log.d("user", user.toString())
+                    FirebaseAuth.getInstance().signOut()
                     v.findNavController().navigate(action)
+
+
                 }
 
             }
@@ -175,16 +180,12 @@ class SignupFragment : Fragment() {
                 try {
                     loadImage(selectedMediaUri, blob)
                     Toast.makeText(
-                        context,
-                        "Imagen subida correctamente.",
-                        Toast.LENGTH_SHORT
+                        context, "Imagen subida correctamente.", Toast.LENGTH_SHORT
                     ).show()
 
                 } catch (e: FileNotFoundException) {
                     Toast.makeText(
-                        context,
-                        "Error con la imagen.",
-                        Toast.LENGTH_SHORT
+                        context, "Error con la imagen.", Toast.LENGTH_SHORT
                     ).show()
                     Log.d("Exc", e.toString())
                 }
@@ -205,15 +206,13 @@ class SignupFragment : Fragment() {
 
             val service = ActivityServiceApiBuilder.create()
             val requestBody = RequestBody.create(
-                MediaType.parse(requireContext().contentResolver.getType(uri)),
-                file
+                MediaType.parse(requireContext().contentResolver.getType(uri)), file
             )
             val imagePart = MultipartBody.Part.createFormData("image", file.name, requestBody)
 
             service.uploadImage(imagePart).enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
+                    call: Call<ResponseBody>, response: Response<ResponseBody>
                 ) {
                     if (response.isSuccessful) {
                         try {
@@ -250,10 +249,7 @@ class SignupFragment : Fragment() {
         spinner.adapter = adapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
                 when (spinner) {
                     spnUserType -> selectedUserType = userTypeList[position]
@@ -272,11 +268,8 @@ class SignupFragment : Fragment() {
     }
 
     private fun showDialog() {
-        val dialog = AlertDialog.Builder(context)
-            .setTitle("Error")
-            .setMessage("ROMPISTE TODO")
-            .setCancelable(true)
-            .create()
+        val dialog = AlertDialog.Builder(context).setTitle("Error").setMessage("ROMPISTE TODO")
+            .setCancelable(true).create()
         dialog.show()
     }
 
@@ -288,16 +281,12 @@ class SignupFragment : Fragment() {
 
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(v: View) {
-                val action =
-                    SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
+                val action = SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
                 v.findNavController().navigate(action)
             }
         }
         spannableString.setSpan(
-            clickableSpan,
-            startIndex,
-            endIndex,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         logInTextView.text = spannableString
         logInTextView.movementMethod = LinkMovementMethod.getInstance()
