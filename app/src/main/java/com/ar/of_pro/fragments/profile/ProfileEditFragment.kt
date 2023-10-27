@@ -77,8 +77,6 @@ class ProfileEditFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        //Test SSH
-
         val filename = "myfile"
         val fileContents = "Hello world!"
         requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
