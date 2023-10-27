@@ -1,5 +1,7 @@
 package com.ar.of_pro.activities
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -13,14 +15,17 @@ class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigationProvider: BottomNavigationView
     lateinit var navHostFragment: NavHostFragment
     lateinit var user: String
+    lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        sharedPreferences = this.getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+        val userType = sharedPreferences.getString("userType", "");
 
-        val userType: String? = intent?.let {
-            MainActivityArgs.fromBundle(it.extras!!).userType
-        }
+//        val userType: String? = intent?.let {
+//            MainActivityArgs.fromBundle(it.extras!!).userType
+//        }
         user = userType!!
 
         navHostFragment =
@@ -37,9 +42,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun getUserType(): String {
-        return this.user
-    }
 
 
 }
