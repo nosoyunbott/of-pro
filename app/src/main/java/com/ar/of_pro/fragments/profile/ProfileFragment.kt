@@ -4,16 +4,19 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
-import com.google.firebase.firestore.FirebaseFirestore
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class ProfileFragment : Fragment() {
@@ -22,10 +25,14 @@ class ProfileFragment : Fragment() {
     lateinit var btnEdit: Button
     lateinit var btnLogout: Button
 
+    //Db
     val db = FirebaseFirestore.getInstance()
     val userRequest = db.collection("Users")
     val currentUser = FirebaseAuth.getInstance().currentUser
     val mail = currentUser?.email
+
+
+    //Vars
     lateinit var txtNombre: TextView
     lateinit var txtLocalidad: TextView
     lateinit var txtCorreo: TextView
@@ -34,10 +41,14 @@ class ProfileFragment : Fragment() {
     lateinit var txtBioDescription: TextView
     lateinit var txtBio: TextView
     lateinit var txtRateQuantity2: TextView
-    lateinit var sharedPreferences: SharedPreferences
-    //lateinit var txtServiceType: TextView
 
-    private lateinit var auth: FirebaseAuth
+    //Img
+    lateinit var imageUrl: String
+    lateinit var profilePicture: ImageView
+
+    //Shared
+    lateinit var sharedPreferences: SharedPreferences
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -52,10 +63,10 @@ class ProfileFragment : Fragment() {
         txtTelefono = v.findViewById(R.id.txtTelefono)
         txtNumRating = v.findViewById(R.id.numRating)
         txtRateQuantity2 = v.findViewById(R.id.txtRateQuantity2)
+        profilePicture = v.findViewById(R.id.profilePicture)
         txtBioDescription =
-            v.findViewById(R.id.txtBioDescription) //TODO traer txt de descripcion y mostrar si el userType es provider
+            v.findViewById(R.id.txtBioDescription)
         txtBio = v.findViewById(R.id.txtBio)
-        //txtServiceType = v.findViewById(R.id.txtServiceType) //TODO traer txt de rubro y mostrar si el userType es provider ? dinamico
 
         sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
@@ -78,11 +89,19 @@ class ProfileFragment : Fragment() {
                     val mail = snapshot.getString("mail") ?: ""
                     val phoneNumber = snapshot.getLong("phone")?.toInt() ?: 0
                     val numRating = snapshot.getLong("rating")?.toInt() ?: 0
+                    val profileImage = snapshot.getString("imageUrl") ?: ""
+
                     txtNombre.text = name + " " + surname
                     txtLocalidad.text = location
                     txtCorreo.text = mail
                     txtTelefono.text = phoneNumber.toString()
                     txtNumRating.text = numRating.toString() + " "
+
+                    imageUrl = profileImage
+                    Glide.with(requireContext())
+                        .load(imageUrl)
+                        .into(profilePicture);
+
                     if (snapshot.getString("userType") == "PROVIDER") {
                         txtBioDescription.text = snapshot.getString("bio")
                     } else {
@@ -110,11 +129,13 @@ class ProfileFragment : Fragment() {
             Handler().postDelayed(
 
                 {
-                    auth.signOut()
-
+                    Log.d("BEFORE LOGOUT", FirebaseAuth.getInstance().currentUser.toString())
+                    FirebaseAuth.getInstance().signOut()
+                    Log.d("AFTER LOGOUT", FirebaseAuth.getInstance().currentUser.toString())
                     val action = ProfileFragmentDirections.actionProfileFragmentToAuthActivity()
                     v.findNavController().navigate(action)
-                }, 300)
+                }, 300
+            )
         }
 
         btnEdit.setOnClickListener {
