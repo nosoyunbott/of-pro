@@ -1,5 +1,6 @@
 package com.ar.of_pro.holders
 
+import android.graphics.drawable.shapes.Shape
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -34,5 +35,16 @@ class RequestHistoryHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun getCardLayout () : CardView {
         return view.findViewById(R.id.cardLayout)
+    }
+
+    fun setColorReference(state:String)
+    {
+        val circleView: View = view.findViewById(R.id.whiteCircleImageView)
+
+        when (state) {
+            "FINALIZADA" -> circleView.setBackgroundResource(R.drawable.red_circle_background)
+            // Add more cases for other states and corresponding drawable resources
+            else -> circleView.setBackgroundResource(R.drawable.green_circle_background)
+        }
     }
 }
