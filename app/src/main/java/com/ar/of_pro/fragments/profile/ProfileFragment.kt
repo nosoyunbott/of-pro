@@ -118,10 +118,16 @@ class ProfileFragment : Fragment() {
         super.onStart()
 
         btnLogout.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            val action = ProfileFragmentDirections.actionProfileFragmentToAuthActivity()
-            v.findNavController().navigate(action)
-            v.findNavController().popBackStack(R.id.profileFragment, true)
+
+            Handler().postDelayed(
+
+                {
+                    FirebaseAuth.getInstance().signOut()
+                    val action = ProfileFragmentDirections.actionProfileFragmentToAuthActivity()
+                    v.findNavController().navigate(action)
+                    v.findNavController().popBackStack(R.id.profileFragment, true)
+                }, 300)
+
         }
 
         btnEdit.setOnClickListener {
