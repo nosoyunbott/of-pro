@@ -60,8 +60,8 @@ class RequestDetailFragment : Fragment() {
         btnAccept.setOnClickListener{
             RequestsService.updateProviderIdFromRequest(proposalInfo.requestId, proposalInfo.providerId)
 
-            //v.findNavController().popBackStack(v.findNavController().graph.startDestinationId, false)
-            v.findNavController().navigate(action)
+            v.findNavController().popBackStack(v.findNavController().graph.startDestinationId, false)
+            //v.findNavController().navigate(action)
         }
     }
 }

@@ -120,6 +120,8 @@ class RequestFragment<OutputStream> : Fragment() {
         edtTime.setOnClickListener{
             showDatePickerDialog()
         }
+        setupSpinner(spnOcupation, ocupationAdapter)
+        setupSpinner(spnServiceTypes, serviceTypesAdapter)
         return v
     }
 
@@ -158,8 +160,9 @@ class RequestFragment<OutputStream> : Fragment() {
 
             val newDocRequest = db.collection("Requests").document()
             db.collection("Requests").document(newDocRequest.id).set(r)
-            val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
-            v.findNavController().navigate(action)
+            //val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
+            //v.findNavController().navigate(action)
+            v.findNavController().popBackStack()
 
 
         }

@@ -4,7 +4,20 @@ import android.os.Parcel
 import android.os.Parcelable
 import java.util.UUID
 
-class User(name: String?,lastName: String?, address: String?, location: String?, mail: String?, password: String?, phone: Int?, rating: Double?, ratingQuantity: Int?, userType: String?, bio: String?) : Parcelable {
+class User(
+    name: String?,
+    lastName: String?,
+    address: String?,
+    location: String?,
+    mail: String?,
+    password: String?,
+    phone: Int?,
+    rating: Double?,
+    ratingQuantity: Int?,
+    userType: String?,
+    bio: String?,
+    imageUrl: String?
+) : Parcelable {
 
     var name: String = ""
     var lastName: String = ""
@@ -17,6 +30,7 @@ class User(name: String?,lastName: String?, address: String?, location: String?,
     var ratingQuantity: Int = 0
     var userType: String = ""
     var bio: String = ""
+    var imageUrl: String = ""
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -28,6 +42,7 @@ class User(name: String?,lastName: String?, address: String?, location: String?,
         parcel.readInt(),
         parcel.readDouble(),
         parcel.readInt(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readString()
     )
@@ -44,6 +59,7 @@ class User(name: String?,lastName: String?, address: String?, location: String?,
         this.ratingQuantity = ratingQuantity!!
         this.userType = userType!!
         this.bio = bio!!
+        this.imageUrl = imageUrl!!
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -58,6 +74,7 @@ class User(name: String?,lastName: String?, address: String?, location: String?,
         parcel.writeInt(ratingQuantity)
         parcel.writeString(userType)
         parcel.writeString(bio)
+        parcel.writeString(imageUrl)
     }
 
     override fun describeContents(): Int {

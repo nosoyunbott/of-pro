@@ -86,9 +86,14 @@ class ProposalFragment : Fragment() {
                     val userId = document.id
                     userIds.add(userId)
                 }
+                val sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+
+
                 val bid = edtBudget.text.toString().toFloat()
                 val commentary = edtComment.text.toString()
-                val idProvider = clientId
+
+                val idProvider = sharedPreferences.getString("clientId", "")  // Retrieve the 'userType' attribute from SharedPreferences
+
                 val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
                 val p = Proposal(
                     idProvider,

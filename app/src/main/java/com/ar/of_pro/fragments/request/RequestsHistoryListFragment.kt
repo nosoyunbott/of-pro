@@ -93,6 +93,7 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                                     // Create a RequestHistory object and add it to the list
                                     val requestHistory = RequestHistory(r, clientName, providerName)
                                     requestList.add(requestHistory)
+                                    requestListAdapter.notifyDataSetChanged()
                                     //FIN 'En estado'
                                     requestsCollection.whereEqualTo("state", validStatesFinalizada)
                                         .get().addOnSuccessListener { documents ->
