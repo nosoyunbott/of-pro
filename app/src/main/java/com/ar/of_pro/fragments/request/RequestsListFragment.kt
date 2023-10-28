@@ -101,9 +101,13 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
                 val maxCost = document.getLong("maxCost")?.toInt() ?: 0
                 val clientId = document.getString("clientId") ?: ""
                 val requestId = document.id
-                val imageUrl = document.getString("imageUrl") ?: ""
+
+                val imageUrlArray = document.get("imageUrlArray") as? MutableList<String> ?: mutableListOf()
+
+
+//                val imageUrlArray = document.getString("imageUrlArray") ?: mutableListOf<String>()
                 val providerId = document.getString("providerId") ?: ""
-                val request = RequestModel(selectedOcupation, selectedServiceType, clientId, date, description, imageUrl, maxCost, providerId, requestBidAmount, title, state, requestId  )
+                val request = RequestModel(selectedOcupation, selectedServiceType, clientId, date, description, imageUrlArray, maxCost, providerId, requestBidAmount, title, state, requestId  )
                 requestsList.add(request)
             }
 
@@ -223,7 +227,9 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         }
     }
     fun toRequest(r: RequestModel) : Request{
-        return Request(r.requestTitle, r.requestBidAmount, r.categoryOcupation, r.categoryService, r.description, r.state, r.date, r.maxCost, r.clientId, r.id, r.imageUrl)
+        return Request(r.requestTitle, r.requestBidAmount, r.categoryOcupation, r.categoryService, r.description, r.state, r.date, r.maxCost, r.clientId, r.id,
+            r.imageUrlArray as MutableList<String>
+        )
     }
     data class ProposalModel(
         val bid: Int,
@@ -243,7 +249,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         val clientId: String,
         val date: String,
         val description: String,
-        val imageUrl: String,
+        val imageUrlArray: MutableList<String>,
         val maxCost: Int,
         val providerId: String,
         val requestBidAmount: Int,
@@ -252,7 +258,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         val id: String
     ) {
         constructor() : this(
-            "", "", "", "", "", "", 0, "", 0, "", "", ""
+            "", "", "", "", "", mutableListOf(), 0, "", 0, "", "", ""
         )
     }
 

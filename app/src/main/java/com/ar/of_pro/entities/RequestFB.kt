@@ -13,7 +13,7 @@ class RequestFB(
     date: String?,
     maxCost: Int?,
     clientId: String?,
-    imageUrl: String?,
+    imageUrlArray: MutableList<String>?,
 ) : Parcelable {
 
 
@@ -27,7 +27,7 @@ class RequestFB(
     var maxCost: Int = 0
     var clientId: String = ""
     var providerId: String = "" //no se pasa inicialmente
-    var imageUrl: String = ""
+    var imageUrlArray: MutableList<String> = mutableListOf()
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -39,7 +39,9 @@ class RequestFB(
         parcel.readString(),
         parcel.readInt(),
         parcel.readString(),
-        parcel.readString()
+        parcel.createStringArrayList() ?: mutableListOf()
+
+
     )
 
 
@@ -53,7 +55,7 @@ class RequestFB(
         this.date = date!!
         this.maxCost = maxCost!!
         this.clientId = clientId!!
-        this.imageUrl = imageUrl!!
+        this.imageUrlArray  = imageUrlArray!!
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

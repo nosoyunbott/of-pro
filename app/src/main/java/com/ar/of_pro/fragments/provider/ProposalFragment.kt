@@ -31,19 +31,16 @@ class ProposalFragment : Fragment() {
     lateinit var txtDescription: TextView
     lateinit var edtBudget: EditText
     lateinit var edtComment: EditText
-    lateinit var imageUrl: String
+    lateinit var listOfImages: MutableList<String>
     lateinit var imageView: ImageView
     lateinit var imageView2: ImageView
     lateinit var imageView3: ImageView
     private val db = FirebaseFirestore.getInstance()
 
+    //flag para recargar el fragment
     var isActive: Boolean = true
 
-    val listOfImages = listOf(
-        "https://images.unsplash.com/photo-1682686581030-7fa4ea2b96c3?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://images.unsplash.com/photo-1695849118500-c8034bc651b6?auto=format&fit=crop&q=80&w=1974&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://images.unsplash.com/photo-1698332329329-6968a8ebc2e9?auto=format&fit=crop&q=80&w=1935&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-    )
+
     var imageViewsList: MutableList<ImageView> = mutableListOf()
     lateinit var request: Request
 
@@ -116,7 +113,7 @@ class ProposalFragment : Fragment() {
         txtTime.text = request.date
         txtPricing.text = request.maxCost.toString()
         txtDescription.text = request.description
-        imageUrl = request.imageUrl
+        listOfImages = request.imageUrlArray
 
         btnProposal.setOnClickListener {
 
