@@ -64,8 +64,7 @@ class ProfileFragment : Fragment() {
         txtNumRating = v.findViewById(R.id.numRating)
         txtRateQuantity2 = v.findViewById(R.id.txtRateQuantity2)
         profilePicture = v.findViewById(R.id.profilePicture)
-        txtBioDescription =
-            v.findViewById(R.id.txtBioDescription)
+        txtBioDescription = v.findViewById(R.id.txtBioDescription)
         txtBio = v.findViewById(R.id.txtBio)
 
         sharedPreferences =
@@ -98,9 +97,7 @@ class ProfileFragment : Fragment() {
                     txtNumRating.text = numRating.toString() + " "
 
                     imageUrl = profileImage
-                    Glide.with(requireContext())
-                        .load(imageUrl)
-                        .into(profilePicture);
+                    Glide.with(requireContext()).load(imageUrl).into(profilePicture);
 
                     if (snapshot.getString("userType") == "PROVIDER") {
                         txtBioDescription.text = snapshot.getString("bio")
@@ -114,28 +111,16 @@ class ProfileFragment : Fragment() {
 
                 }
             }
-
-
         }
-
-
     }
 
     override fun onStart() {
         super.onStart()
 
         btnLogout.setOnClickListener {
-
-            Handler().postDelayed(
-
-                {
-                    Log.d("BEFORE LOGOUT", FirebaseAuth.getInstance().currentUser.toString())
-                    FirebaseAuth.getInstance().signOut()
-                    Log.d("AFTER LOGOUT", FirebaseAuth.getInstance().currentUser.toString())
-                    val action = ProfileFragmentDirections.actionProfileFragmentToAuthActivity()
-                    v.findNavController().navigate(action)
-                }, 300
-            )
+            FirebaseAuth.getInstance().signOut()
+            val action = ProfileFragmentDirections.actionProfileFragmentToAuthActivity()
+            v.findNavController().navigate(action)
         }
 
         btnEdit.setOnClickListener {
