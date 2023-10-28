@@ -126,7 +126,7 @@ class ProfileFragment : Fragment() {
                     val action = ProfileFragmentDirections.actionProfileFragmentToAuthActivity()
                     v.findNavController().navigate(action)
                     v.findNavController().popBackStack(R.id.profileFragment, true)
-                }, 300)
+                }, 300) //TODO revisar si esta ok
 
         }
 
