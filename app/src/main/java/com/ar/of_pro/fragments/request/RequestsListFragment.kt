@@ -17,6 +17,7 @@ import com.ar.of_pro.adapters.RequestCardAdapter
 import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.listeners.OnViewItemClickedListener
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -38,6 +39,26 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     val db = FirebaseFirestore.getInstance()
     val requestsCollection = db.collection("Requests")
     val proposalsCollection = db.collection("Proposals")
+
+
+
+    fun testDoc() {
+        val collectionReference = FirebaseFirestore.getInstance().collection("Users")
+
+        collectionReference
+            .whereEqualTo(FieldPath.documentId(), "yourDocumentId")
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    // Handle the document data here
+                    val data = document.data
+                }
+            }
+            .addOnFailureListener { exception ->
+                // Handle any errors here
+            }
+
+    }
 
 
     private suspend fun getProposals(): List<ProposalModel> {

@@ -36,7 +36,6 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -72,6 +71,7 @@ class RequestFragment<OutputStream> : Fragment() {
 
     private val db = FirebaseFirestore.getInstance()
     private var userId = FirebaseAuth.getInstance().currentUser?.uid
+
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
@@ -134,6 +134,8 @@ class RequestFragment<OutputStream> : Fragment() {
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
         setOnClickListener(btnAttach)
 
+        btnRequest.isEnabled = false
+        btnRequest.isClickable = false
 
         btnRequest.setOnClickListener {
             val sharedPreferences =
@@ -212,6 +214,9 @@ class RequestFragment<OutputStream> : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d("DATA FROM INTENT", data.toString())
+
+
+
         if (requestCode == PICK_MEDIA_REQUEST && resultCode == Activity.RESULT_OK) {
             if (data != null) {
 
@@ -220,6 +225,7 @@ class RequestFragment<OutputStream> : Fragment() {
                     for (i in 0 until count) {
                         val selectedMediaUri = data.clipData!!.getItemAt(i).uri
                         // Handle the selected image URI as needed
+                        Log.d("SELECTED_MEDIA_URI", selectedMediaUri.toString())
 
                         // Convert URI to blob
                         val blob = uriToBlob(selectedMediaUri)
@@ -239,8 +245,9 @@ class RequestFragment<OutputStream> : Fragment() {
                             Log.e("Exception", e.toString())
                         }
                     }
+                    btnRequest.isEnabled = true
+                    btnRequest.isClickable = true
                 } else if (data.data != null) {
-                    // Single item is selected
                     val selectedMediaUri = data.data!!
                     val blob = uriToBlob(selectedMediaUri!!)
                     Log.d("SELECTED MEDIA URI", selectedMediaUri.toString())
@@ -255,7 +262,8 @@ class RequestFragment<OutputStream> : Fragment() {
                             Toast.makeText(
                                 context, "la img subio ok", Toast.LENGTH_SHORT
                             ).show()
-
+                            btnRequest.isEnabled = true
+                            btnRequest.isClickable = true
                         } catch (e: FileNotFoundException) {
                             Toast.makeText(
                                 context, "la imagen no subio", Toast.LENGTH_SHORT
@@ -265,6 +273,7 @@ class RequestFragment<OutputStream> : Fragment() {
                     } else {
                         Log.d("asd", "mal")
                     }
+
                 }
 
             }
@@ -279,14 +288,21 @@ class RequestFragment<OutputStream> : Fragment() {
     }
 
     private fun loadImage(uri: Uri, blob: ByteArray) {
-        val file = File(requireContext().filesDir, "foto")
+//        val file = File(requireContext().filesDir, "foto")
         try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            val contentResolver = requireContext().contentResolver
+            val requestBody = RequestBody.create(
+                MediaType.parse(contentResolver.getType(uri)),
+                inputStream?.readBytes()
+            )
+
 
             val service = ActivityServiceApiBuilder.create()
-            val requestBody = RequestBody.create(
-                MediaType.parse(requireContext().contentResolver.getType(uri)), file
-            )
-            val imagePart = MultipartBody.Part.createFormData("image", file.name, requestBody)
+//            val requestBody = RequestBody.create(
+//                MediaType.parse(requireContext().contentResolver.getType(uri)), file
+//            )
+            val imagePart = MultipartBody.Part.createFormData("image", "imagetest1.jpg", requestBody)
 
             service.uploadImage(imagePart).enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
