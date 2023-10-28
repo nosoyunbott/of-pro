@@ -2,7 +2,6 @@ package com.ar.of_pro.fragments.request
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,6 @@ import com.ar.of_pro.adapters.RequestCardAdapter
 import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.listeners.OnViewItemClickedListener
-import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -91,7 +89,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
 
             for (document in querySnapshot) {
-                Log.d("requestId", document.id)
+
                 //val request = document.toObject(RequestModel::class.java)
                 val title = document.getString("requestTitle") ?: ""
                 val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
@@ -136,9 +134,6 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
             val requests = getRequests()
 
-            for (x in requests) {
-                Log.d("request", x.toString())
-            }
 
             for(r in requests){
                 val proposalsOfCurrentRequest = getProposalsByRequestId(r.id)

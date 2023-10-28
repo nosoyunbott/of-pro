@@ -13,13 +13,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.Proposal
+import com.ar.of_pro.entities.Request
 import com.ar.of_pro.services.RequestsService
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-
-class ProposalFragment : Fragment(){
+class ProposalFragment : Fragment() {
 
     lateinit var v: View
     lateinit var btnProposal: Button
@@ -37,6 +37,15 @@ class ProposalFragment : Fragment(){
     lateinit var imageView3: ImageView
     private val db = FirebaseFirestore.getInstance()
 
+    var isActive: Boolean = true
+
+    val listOfImages = listOf(
+        "https://images.unsplash.com/photo-1682686581030-7fa4ea2b96c3?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1695849118500-c8034bc651b6?auto=format&fit=crop&q=80&w=1974&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1698332329329-6968a8ebc2e9?auto=format&fit=crop&q=80&w=1935&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    )
+    var imageViewsList: MutableList<ImageView> = mutableListOf()
+    lateinit var request: Request
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,14 +68,48 @@ class ProposalFragment : Fragment(){
         imageView3 = v.findViewById(R.id.imageView4)
 
 
+        imageViewsList.add(imageView)
+        imageViewsList.add(imageView2)
+        imageViewsList.add(imageView3)
 
         return v
+    }
+
+    private fun setUpImageListener() {
+        for ((index, value) in listOfImages.withIndex()) {
+            Glide.with(requireContext())
+                .load(value)
+                .dontAnimate()
+                .into(imageViewsList[index]);
+            imageViewsList[index].setOnClickListener {
+                val enlargeImageOnTap =
+                    ProposalFragmentDirections.actionProposalFragmentToImageViewFragment(value)
+                v.findNavController().navigate(enlargeImageOnTap)
+
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        isActive = false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setUpImageListener()
+        if (!isActive) {
+            v.findNavController()
+                .navigate(ProposalFragmentDirections.actionProposalFragmentSelf(request))
+            isActive = false
+        }
+
     }
 
     override fun onStart() {
         super.onStart()
 
-        val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
+        request = ProposalFragmentArgs.fromBundle(requireArguments()).request
         txtTitle.text = request.requestTitle
         txtOcupation.text = request.categoryOcupation
         txtServiceType.text = request.categoryService
@@ -74,23 +117,6 @@ class ProposalFragment : Fragment(){
         txtPricing.text = request.maxCost.toString()
         txtDescription.text = request.description
         imageUrl = request.imageUrl
-        Glide.with(requireContext())
-            .load(imageUrl)
-            .into(imageView);
-        Glide.with(requireContext())
-            .load(imageUrl)
-            .into(imageView2)
-        Glide.with(requireContext())
-            .load(imageUrl)
-            .into(imageView3)
-
-
-
-        imageView.setOnClickListener {
-            val enlargeImageOnTap = ProposalFragmentDirections.actionProposalFragmentToImageViewFragment(imageUrl)
-             v.findNavController().navigate(enlargeImageOnTap)
-        }
-
 
         btnProposal.setOnClickListener {
 
@@ -136,6 +162,9 @@ class ProposalFragment : Fragment(){
 
 
         }
+
+
     }
+
 
 }
