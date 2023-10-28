@@ -1,5 +1,6 @@
 package com.ar.of_pro.fragments.request
 
+import android.content.Context
 import android.media.Rating
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +9,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.fragments.provider.ProposalFragmentArgs
 import com.ar.of_pro.services.RequestsService
@@ -34,14 +37,22 @@ class RequestProcessFinishFragment : Fragment() {
         // Find references to your button and component
         finishbutton = v.findViewById(R.id.finishButton)
         ratingBar = v.findViewById(R.id.ratingBar)
-
+        // Initialize SharedPreferences
+        val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        val userType=sharedPref!!.getString("userType","")
         finishButtonReview()
 
         fun handleRatingFinishRequest(rating: Float) {
 
             RequestsService.updateRequestState("FINALIZADA", request.requestId)
-            UserService.updateRatingOfUser(rating, request.clientId)
+            UserService.updateRatingOfUser(rating, request.providerId)
             //ir a historial . Ver de hacer el pop.
+            //Mostrar un toast de que salió bien
+            // Show a Toast message
+            Toast.makeText(requireContext(), "Puntuación correcta", Toast.LENGTH_SHORT).show()
+
+            // Navigate back to the previous screen (pop the current fragment)
+            findNavController().popBackStack()
         }
 
         ratingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
@@ -58,6 +69,10 @@ class RequestProcessFinishFragment : Fragment() {
         val paragraphTextView = v.findViewById<TextView>(R.id.paragraphTextView)
         val bigLegendTextView = v.findViewById<TextView>(R.id.bigLegendTextView)
 
+        val mediumLegendTextView=v.findViewById<TextView>(R.id.mediumLegendTextView)
+
+
+
         requestsCollection.document(request.requestId).get().addOnSuccessListener { document ->
             // Populate the views with data from the Request object
 
@@ -68,11 +83,32 @@ class RequestProcessFinishFragment : Fragment() {
             bigLegendTextView.text = document.getLong("maxCost")
                 .toString() + " " + document.getString("requestTitle") // Set the big legend
 
-            usersCollection.document(request.clientId).get().addOnSuccessListener { userDocument ->
+            var userId: String? =null;
+            //diferenciación de datos.
+            if(userType=="PROVIDER")
+            {
+                userId= document.getString("clientId") ?: ""
+            }
+            else if(userType=="CLIENT"){
+                userId= document.getString("providerId") ?: ""
+            }
+            usersCollection.document(userId!!).get().addOnSuccessListener { userDocument ->
                 fullNameTextView.text =
                     userDocument.getString("name") + " " + userDocument.getString("lastName") // Client
                 zoneTextView.text = userDocument.getString("location")//Client
-                rankingTextView.text = userDocument.getDouble("rating").toString() // Client
+                val ratingAmount=userDocument.getDouble("rating")
+                val ratingQuantity=userDocument.getDouble("ratingQuantity")
+                val rating= ratingAmount!! / ratingQuantity!!;
+
+                rankingTextView.text = rating.toString() // Client
+                if(userType=="PROVIDER" || request.state=="FINALIZADA")
+                {
+                    mediumLegendTextView.visibility=View.VISIBLE
+                    mediumLegendTextView.text="Estado de la solicitud: " + request.state
+                    finishbutton.visibility=View.GONE
+
+                    rankingTextView.visibility=View.GONE
+                }
 
             }
 
@@ -82,7 +118,10 @@ class RequestProcessFinishFragment : Fragment() {
 
     fun finishButtonReview() {
         val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
-        if (request.state != "FINALIZADA") {
+        // Initialize SharedPreferences
+        val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        val userType=sharedPref!!.getString("userType", "")
+        if (request.state != "FINALIZADA" && userType=="CLIENT") {
             // Set an OnClickListener for the finishButton
             finishbutton.setOnClickListener {
                 // Hide the button
@@ -93,8 +132,6 @@ class RequestProcessFinishFragment : Fragment() {
 
                 // Add any additional logic or actions you need here
             }
-        } else {
-            finishbutton.visibility = View.GONE
         }
     }
 

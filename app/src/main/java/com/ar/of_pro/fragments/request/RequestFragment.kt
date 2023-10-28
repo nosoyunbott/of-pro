@@ -162,9 +162,6 @@ class RequestFragment<OutputStream> : Fragment() {
             v.findNavController().navigate(action)
 
 
-
-
-
         }
     }
 
