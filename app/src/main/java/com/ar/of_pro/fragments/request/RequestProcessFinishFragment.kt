@@ -45,10 +45,14 @@ class RequestProcessFinishFragment : Fragment() {
         fun handleRatingFinishRequest(rating: Float) {
 
             RequestsService.updateRequestState("FINALIZADA", request.requestId)
-            UserService.updateRatingOfUser(rating, request.providerId)
-            //ir a historial . Ver de hacer el pop.
-            //Mostrar un toast de que salió bien
-            // Show a Toast message
+
+            requestsCollection.document(request.requestId).get().addOnSuccessListener { document ->
+
+                val providerId=document.getString("providerId")
+                UserService.updateRatingOfUser(rating, providerId!!)
+            }
+
+
             Toast.makeText(requireContext(), "Puntuación correcta", Toast.LENGTH_SHORT).show()
 
             // Navigate back to the previous screen (pop the current fragment)
@@ -98,16 +102,30 @@ class RequestProcessFinishFragment : Fragment() {
                 zoneTextView.text = userDocument.getString("location")//Client
                 val ratingAmount=userDocument.getDouble("rating")
                 val ratingQuantity=userDocument.getDouble("ratingQuantity")
-                val rating= ratingAmount!! / ratingQuantity!!;
+                if(ratingQuantity?.toInt() !=0)
+                {
+                    val rating= ratingAmount!! / ratingQuantity!!;
+                    rankingTextView.text = rating.toString() // Client
+                }
+                else
+                {
+                    rankingTextView.text="Sin pintuar aún"
+                }
 
-                rankingTextView.text = rating.toString() // Client
+
+
                 if(userType=="PROVIDER" || request.state=="FINALIZADA")
                 {
                     mediumLegendTextView.visibility=View.VISIBLE
                     mediumLegendTextView.text="Estado de la solicitud: " + request.state
                     finishbutton.visibility=View.GONE
 
-                    rankingTextView.visibility=View.GONE
+
+                    if(userType=="PROVIDER")
+                    {
+                        rankingTextView.visibility=View.GONE
+                    }
+
                 }
 
             }
