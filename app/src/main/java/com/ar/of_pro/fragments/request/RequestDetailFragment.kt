@@ -34,7 +34,7 @@ class RequestDetailFragment : Fragment() {
         btnDeny= v.findViewById(R.id.btnDeny)
         txtDesc = v.findViewById(R.id.txtDesc)
         txtBid = v.findViewById(R.id.txtBid)
-        profileHeader = v.findViewById(R.id.profile_header)
+        profileHeader = v.findViewById(R.id.proposalProfileHeader)
         txtName = profileHeader.findViewById(R.id.txtFullName)
         txtLocation = profileHeader.findViewById(R.id.txtLocation)
         txtCalification = profileHeader.findViewById(R.id.txtCalification)

@@ -2,6 +2,8 @@ package com.ar.of_pro.fragments.provider
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Layout
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,18 +21,22 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class ProposalFragment : Fragment() {
 
-    lateinit var v : View
-    lateinit var btnProposal : Button
-    lateinit var txtTitle : TextView
-    lateinit var txtOcupation : TextView
-    lateinit var txtServiceType : TextView
-    lateinit var txtTime : TextView
-    lateinit var txtPricing : TextView
-    lateinit var txtDescription : TextView
-    lateinit var edtBudget : EditText
-    lateinit var edtComment : EditText
+    lateinit var v: View
+    lateinit var btnProposal: Button
+    lateinit var txtTitle: TextView
+    lateinit var txtOcupation: TextView
+    lateinit var txtServiceType: TextView
+    lateinit var txtTime: TextView
+    lateinit var txtPricing: TextView
+    lateinit var txtDescription: TextView
+    lateinit var edtBudget: EditText
+    lateinit var edtComment: EditText
     lateinit var imageUrl: String
     lateinit var imageView: ImageView
+
+    //Header
+    lateinit var proposalProfileHeader: View
+    lateinit var txtFullName: TextView
 
     private val db = FirebaseFirestore.getInstance()
     override fun onCreateView(
@@ -49,11 +55,8 @@ class ProposalFragment : Fragment() {
         edtBudget = v.findViewById(R.id.edtBudget)
         edtComment = v.findViewById(R.id.edtComment)
         imageView = v.findViewById(R.id.requestImageView)
-
-
-
-
-        //id request, coment, presupuesto, idproveedor
+        proposalProfileHeader = v.findViewById(R.id.proposalProfileHeader)
+        txtFullName = proposalProfileHeader.findViewById(R.id.headerFullName)
         return v
     }
 
@@ -74,10 +77,22 @@ class ProposalFragment : Fragment() {
             .into(imageView);
 
 
-        btnProposal.setOnClickListener{
+        val users = db.collection("Users")
+        users.get().addOnSuccessListener { querySnapshot ->
+            for (snapshot in querySnapshot) {
+
+                val name = snapshot.getString("name") ?: ""
+                Log.d("NOMBRE", name)
+                val surname = snapshot.getString("lastname") ?: ""
+                txtFullName.setText(name + " " + surname)
+            }
+
+        }
+
+        btnProposal.setOnClickListener {
 
             val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-            val clientId=sharedPref!!.getString("clientId","")
+            val clientId = sharedPref!!.getString("clientId", "")
 
             val users = db.collection("Users")
             users.get().addOnSuccessListener { querySnapshot -> //ESTE LISTENER ES PARA LA DEMO
@@ -85,14 +100,19 @@ class ProposalFragment : Fragment() {
                 for (document in querySnapshot) {
                     val userId = document.id
                     userIds.add(userId)
+
                 }
-                val sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+                val sharedPreferences =
+                    requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
 
 
                 val bid = edtBudget.text.toString().toFloat()
                 val commentary = edtComment.text.toString()
 
-                val idProvider = sharedPreferences.getString("clientId", "")  // Retrieve the 'userType' attribute from SharedPreferences
+                val idProvider = sharedPreferences.getString(
+                    "clientId",
+                    ""
+                )  // Retrieve the 'userType' attribute from SharedPreferences
 
                 val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
                 val p = Proposal(
@@ -105,7 +125,10 @@ class ProposalFragment : Fragment() {
                 val newDocProposal = db.collection("Proposals").document()
                 db.collection("Proposals").document(newDocProposal.id).set(p)
                 //update request in BD
-                RequestsService.updateProposalsQtyFromId(request.requestId, request.requestBidAmount)
+                RequestsService.updateProposalsQtyFromId(
+                    request.requestId,
+                    request.requestBidAmount
+                )
 
                 val action =
                     //agregar que edit text carguen el objeto a la db y crear entity Proposal

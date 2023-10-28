@@ -18,7 +18,7 @@
         android:src="@drawable/ic_launcher_foreground" />
 
     <TextView
-        android:id="@+id/txtFullName"
+        android:id="@+id/headerFullName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Nombre"
