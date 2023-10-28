@@ -35,10 +35,10 @@ class RequestDetailFragment : Fragment() {
         txtDesc = v.findViewById(R.id.txtDesc)
         txtBid = v.findViewById(R.id.txtBid)
         profileHeader = v.findViewById(R.id.proposalProfileHeader)
-        txtName = profileHeader.findViewById(R.id.txtFullName)
-        txtLocation = profileHeader.findViewById(R.id.txtLocation)
-        txtCalification = profileHeader.findViewById(R.id.txtCalification)
-        txtCalificationQty = profileHeader.findViewById(R.id.txtCalificationQty)
+        txtName = profileHeader.findViewById(R.id.headerFullName)
+        txtLocation = profileHeader.findViewById(R.id.headerLocation)
+        txtCalification = profileHeader.findViewById(R.id.headerRating)
+        txtCalificationQty = profileHeader.findViewById(R.id.headerRatingQuantity)
         return v
     }
 

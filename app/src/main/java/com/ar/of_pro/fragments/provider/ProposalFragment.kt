@@ -37,6 +37,9 @@ class ProposalFragment : Fragment() {
     //Header
     lateinit var proposalProfileHeader: View
     lateinit var txtFullName: TextView
+    lateinit var txtLocation: TextView
+    lateinit var txtRating: TextView
+    lateinit var txtRatingQuantity: TextView
 
     private val db = FirebaseFirestore.getInstance()
     override fun onCreateView(
@@ -57,6 +60,9 @@ class ProposalFragment : Fragment() {
         imageView = v.findViewById(R.id.requestImageView)
         proposalProfileHeader = v.findViewById(R.id.proposalProfileHeader)
         txtFullName = proposalProfileHeader.findViewById(R.id.headerFullName)
+        txtLocation = proposalProfileHeader.findViewById(R.id.headerLocation)
+        txtRating = proposalProfileHeader.findViewById(R.id.headerRating)
+        txtRatingQuantity = proposalProfileHeader.findViewById(R.id.headerRatingQuantity)
         return v
     }
 
@@ -81,10 +87,17 @@ class ProposalFragment : Fragment() {
         users.get().addOnSuccessListener { querySnapshot ->
             for (snapshot in querySnapshot) {
 
+                //Establecidos datos del user actual, filtrar x clientId y cargar esos datos, no los locales
+
                 val name = snapshot.getString("name") ?: ""
-                Log.d("NOMBRE", name)
                 val surname = snapshot.getString("lastname") ?: ""
-                txtFullName.setText(name + " " + surname)
+                txtFullName.text = name + " " + surname
+                val location = snapshot.getString("location") ?: ""
+                txtLocation.text = location
+                val rating = snapshot.getLong("rating")?.toInt() ?: 0
+                txtRating.text = rating.toString() + " ⭐"
+                val ratingQuantity = snapshot.getLong("ratingQuantity")?.toInt() ?: 0
+                txtRatingQuantity.text = "(" + ratingQuantity.toString() + ")"
             }
 
         }

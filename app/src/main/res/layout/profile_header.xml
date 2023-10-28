@@ -21,15 +21,15 @@
         android:id="@+id/headerFullName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nombre"
+        android:text=""
         android:textColor="#000000"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/txtLocation"
+        android:id="@+id/headerLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Localidad"
+        android:text=""
         android:textColor="#000000" />
 
     <LinearLayout
@@ -38,17 +38,17 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/txtCalification"
+            android:id="@+id/headerRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4.7 🌟" />
+            android:text="" />
 
         <TextView
-            android:id="@+id/txtCalificationQty"
+            android:id="@+id/headerRatingQuantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:baselineAligned="false"
-            android:text=" (200)" />
+            android:text="" />
     </LinearLayout>
 
 </LinearLayout>
