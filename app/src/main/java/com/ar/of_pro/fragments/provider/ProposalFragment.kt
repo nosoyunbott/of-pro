@@ -17,6 +17,7 @@ import com.ar.of_pro.R
 import com.ar.of_pro.entities.Proposal
 import com.ar.of_pro.services.RequestsService
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ProposalFragment : Fragment() {
@@ -40,6 +41,8 @@ class ProposalFragment : Fragment() {
     lateinit var txtLocation: TextView
     lateinit var txtRating: TextView
     lateinit var txtRatingQuantity: TextView
+    lateinit var imgHeader: ImageView
+
 
     private val db = FirebaseFirestore.getInstance()
     override fun onCreateView(
@@ -63,6 +66,7 @@ class ProposalFragment : Fragment() {
         txtLocation = proposalProfileHeader.findViewById(R.id.headerLocation)
         txtRating = proposalProfileHeader.findViewById(R.id.headerRating)
         txtRatingQuantity = proposalProfileHeader.findViewById(R.id.headerRatingQuantity)
+        imgHeader = proposalProfileHeader.findViewById(R.id.headerImage)
         return v
     }
 
@@ -84,20 +88,19 @@ class ProposalFragment : Fragment() {
 
 
         val users = db.collection("Users")
-        users.get().addOnSuccessListener { querySnapshot ->
+        users.whereEqualTo(FieldPath.documentId(), request.clientId).get().addOnSuccessListener { querySnapshot ->
             for (snapshot in querySnapshot) {
-
-                //Establecidos datos del user actual, filtrar x clientId y cargar esos datos, no los locales
-
-                val name = snapshot.getString("name") ?: ""
-                val surname = snapshot.getString("lastname") ?: ""
-                txtFullName.text = name + " " + surname
-                val location = snapshot.getString("location") ?: ""
-                txtLocation.text = location
-                val rating = snapshot.getLong("rating")?.toInt() ?: 0
-                txtRating.text = rating.toString() + " ⭐"
-                val ratingQuantity = snapshot.getLong("ratingQuantity")?.toInt() ?: 0
-                txtRatingQuantity.text = "(" + ratingQuantity.toString() + ")"
+                    val profileImage = snapshot.getString("imageUrl") ?: ""
+                    Glide.with(requireContext()).load(profileImage).into(imgHeader)
+                    val name = snapshot.getString("name") ?: ""
+                    val surname = snapshot.getString("lastname") ?: ""
+                    txtFullName.text = "$name $surname"
+                    val location = snapshot.getString("location") ?: ""
+                    txtLocation.text = location
+                    val rating = snapshot.getLong("rating")?.toInt() ?: 0
+                    txtRating.text = "$rating ⭐"
+                    val ratingQuantity = snapshot.getLong("ratingQuantity")?.toInt() ?: 0
+                    txtRatingQuantity.text = "($ratingQuantity)"
             }
 
         }
