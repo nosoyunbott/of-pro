@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.RequestFragmentProccessFinish">
+    tools:context=".fragments.request.RequestProcessFinishFragment">
 
     <ImageView
         android:id="@+id/photoImageView"
@@ -127,6 +127,16 @@
         android:textColor="#000"
         android:layout_marginTop="445sp"
         android:textAlignment="center"/>
+    <TextView
+        android:id="@+id/mediumLegendTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="En proceso!"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:visibility="gone"
+        android:layout_marginTop="545sp"
+        android:textAlignment="center"/>
 
     <!-- Fourth Section: Button and Rating Component -->
     <LinearLayout
@@ -159,6 +169,8 @@
 
 
             />
+
+
 
 
         <!-- You can add a RatingBar or custom view here -->

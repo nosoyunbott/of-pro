@@ -31,6 +31,7 @@ class ProposalFragment : Fragment() {
     lateinit var edtComment : EditText
     lateinit var imageUrl: String
     lateinit var imageView: ImageView
+
     private val db = FirebaseFirestore.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +51,8 @@ class ProposalFragment : Fragment() {
         imageView = v.findViewById(R.id.requestImageView)
 
 
+
+
         //id request, coment, presupuesto, idproveedor
         return v
     }
@@ -58,6 +61,7 @@ class ProposalFragment : Fragment() {
         super.onStart()
 
         val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
+
         txtTitle.text = request.requestTitle
         txtOcupation.text = request.categoryOcupation
         txtServiceType.text = request.categoryService
@@ -72,10 +76,12 @@ class ProposalFragment : Fragment() {
 
         btnProposal.setOnClickListener{
 
+            val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+            val clientId=sharedPref!!.getString("clientId","")
+
             val users = db.collection("Users")
             users.get().addOnSuccessListener { querySnapshot -> //ESTE LISTENER ES PARA LA DEMO
                 val userIds = ArrayList<String>()
-
                 for (document in querySnapshot) {
                     val userId = document.id
                     userIds.add(userId)
@@ -85,7 +91,9 @@ class ProposalFragment : Fragment() {
 
                 val bid = edtBudget.text.toString().toFloat()
                 val commentary = edtComment.text.toString()
+
                 val idProvider = sharedPreferences.getString("clientId", "")  // Retrieve the 'userType' attribute from SharedPreferences
+
                 val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
                 val p = Proposal(
                     idProvider,

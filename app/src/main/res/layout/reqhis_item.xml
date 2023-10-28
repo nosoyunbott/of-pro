@@ -52,6 +52,15 @@
             app:layout_constraintStart_toEndOf="@+id/rec_dateTextView"
             app:layout_constraintTop_toTopOf="@+id/rec_dateTextView" />
 
+        <ImageView
+            android:id="@+id/whiteCircleImageView"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:background="@drawable/white_circle_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

@@ -27,6 +27,7 @@ class HistoryCardAdapter(private val requestList: MutableList<RequestHistory>, p
         holder.setTitle(request.request!!.requestTitle)
         holder.setDate(request.request!!.date)
         holder.setName(request!!.providerName)
+        holder.setColorReference(request.request!!.state)
         holder.getCardLayout().setOnClickListener {
             onItemClick.onViewItemDetail(request.request)
     }
