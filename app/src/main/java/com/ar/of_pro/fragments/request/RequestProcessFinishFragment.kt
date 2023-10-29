@@ -59,7 +59,10 @@ class RequestProcessFinishFragment : Fragment() {
             Toast.makeText(requireContext(), "PUNTUACIÓN: $rating", Toast.LENGTH_SHORT).show()
 
             // Navigate back to the previous screen (pop the current fragment)
-            findNavController().popBackStack()
+            val action=RequestProcessFinishFragmentDirections.actionRequestFragmentProccessFinishClientToRequestsHistoryFragment()
+            findNavController().navigate(action)
+
+
 
         }
 
