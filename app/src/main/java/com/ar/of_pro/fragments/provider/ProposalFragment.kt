@@ -2,6 +2,8 @@ package com.ar.of_pro.fragments.provider
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Layout
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +18,7 @@ import com.ar.of_pro.entities.Proposal
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.services.RequestsService
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -35,6 +38,15 @@ class ProposalFragment : Fragment() {
     lateinit var imageView: ImageView
     lateinit var imageView2: ImageView
     lateinit var imageView3: ImageView
+
+    //Header
+    lateinit var proposalProfileHeader: View
+    lateinit var txtFullName: TextView
+    lateinit var txtLocation: TextView
+    lateinit var txtRating: TextView
+    lateinit var txtRatingQuantity: TextView
+    lateinit var imgHeader: ImageView
+
     private val db = FirebaseFirestore.getInstance()
 
     //flag para recargar el fragment
@@ -63,12 +75,15 @@ class ProposalFragment : Fragment() {
         imageView = v.findViewById(R.id.requestImageView)
         imageView2 = v.findViewById(R.id.imageView2)
         imageView3 = v.findViewById(R.id.imageView4)
-
-
         imageViewsList.add(imageView)
         imageViewsList.add(imageView2)
         imageViewsList.add(imageView3)
-
+        proposalProfileHeader = v.findViewById(R.id.proposalProfileHeader)
+        txtFullName = proposalProfileHeader.findViewById(R.id.headerFullName)
+        txtLocation = proposalProfileHeader.findViewById(R.id.headerLocation)
+        txtRating = proposalProfileHeader.findViewById(R.id.headerRating)
+        txtRatingQuantity = proposalProfileHeader.findViewById(R.id.headerRatingQuantity)
+        imgHeader = proposalProfileHeader.findViewById(R.id.headerImage)
         return v
     }
 
@@ -105,7 +120,6 @@ class ProposalFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
         request = ProposalFragmentArgs.fromBundle(requireArguments()).request
         txtTitle.text = request.requestTitle
         txtOcupation.text = request.categoryOcupation
@@ -114,16 +128,39 @@ class ProposalFragment : Fragment() {
         txtPricing.text = request.maxCost.toString()
         txtDescription.text = request.description
         listOfImages = request.imageUrlArray
+        val context = context
+
+        val users = db.collection("Users")
+        users.whereEqualTo(FieldPath.documentId(), request.clientId).get()
+            .addOnSuccessListener { querySnapshot ->
+                for (snapshot in querySnapshot) {
+                    val profileImage = snapshot.getString("imageUrl") ?: ""
+                    Glide.with(context!!).load(profileImage).into(imgHeader)
+                    val name = snapshot.getString("name") ?: ""
+                    val surname = snapshot.getString("lastname") ?: ""
+                    txtFullName.text = "$name $surname"
+                    val location = snapshot.getString("location") ?: ""
+                    txtLocation.text = location
+                    val rating = snapshot.getLong("rating")?.toInt() ?: 0
+                    txtRating.text = "$rating ⭐"
+                    val ratingQuantity = snapshot.getLong("ratingQuantity")?.toInt() ?: 0
+                    txtRatingQuantity.text = "($ratingQuantity)"
+                }
+
+            }
 
         btnProposal.setOnClickListener {
 
-            val users = db.collection("Users")
-            users.get().addOnSuccessListener { querySnapshot -> //ESTE LISTENER ES PARA LA DEMO
-                val userIds = ArrayList<String>()
+            val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+            val clientId = sharedPref!!.getString("clientId", "")
 
+            val users = db.collection("Users")
+            users.get().addOnSuccessListener { querySnapshot ->
+                val userIds = ArrayList<String>()
                 for (document in querySnapshot) {
                     val userId = document.id
                     userIds.add(userId)
+
                 }
                 val sharedPreferences =
                     requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
@@ -134,7 +171,7 @@ class ProposalFragment : Fragment() {
                 val idProvider = sharedPreferences.getString(
                     "clientId",
                     ""
-                )  // Retrieve the 'userType' attribute from SharedPreferences
+                )
                 val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
                 val p = Proposal(
                     idProvider,

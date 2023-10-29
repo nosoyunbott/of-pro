@@ -9,11 +9,26 @@ class UserService {
 
         fun updateRatingOfUser(ratingPoint:Float,userId:String)
         {
-            val requestDoc = usersCollection.document(userId)
-            val updates = hashMapOf<String,Any>(
-                "rating" to ratingPoint
-            )
-            requestDoc.update(updates)
+            val userDocRef = usersCollection.document(userId)
+
+            userDocRef.get().addOnSuccessListener { userDocument ->
+                // Retrieve the current rating from the document
+                val currentRating = userDocument.getDouble("rating") ?: 0.0
+                val ratingQuantity= userDocument.getDouble("ratingQuantity") ?: 0.0
+                val ratingQuantityUpdated=ratingQuantity+1
+                // Calculate the new rating
+                val newRating = currentRating + ratingPoint
+
+                // Update the user's rating in the Firestore document
+                val updates = hashMapOf<String, Any>(
+                    "rating" to newRating,
+                    "ratingQuantity" to ratingQuantityUpdated
+                )
+
+                userDocRef.update(updates)
+
+            }
+
         }
     }
 }

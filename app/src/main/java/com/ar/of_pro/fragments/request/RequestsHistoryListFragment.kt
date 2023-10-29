@@ -1,5 +1,6 @@
 package com.ar.of_pro.fragments.request
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,9 +15,12 @@ import com.ar.of_pro.adapters.HistoryCardAdapter
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.RequestHistory
 import com.ar.of_pro.listeners.OnViewItemClickedListener
+import com.ar.of_pro.utils.DateUtils
 import com.google.firebase.firestore.FirebaseFirestore
 import org.json.JSONArray
 import org.json.JSONException
+
+
 
 class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
 
@@ -43,29 +47,44 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val validStatesEnCurso = "EN CURSO"
+        val validStatesFinalizada = "FINALIZADA"
 
-        requestsCollection.get().addOnSuccessListener { documents ->
+        val enCursoRequests = mutableListOf<Request>()
+        val finalizadaRequests = mutableListOf<Request>()
+
+        //usar un userId que
+        val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        val userType=sharedPref!!.getString("userType","")
+        val clientId=sharedPref!!.getString("clientId","")
+        var userValue=""
+        if(userType=="CLIENT")
+        {
+             userValue="clientId"
+        }else
+        {
+             userValue="providerId"
+        }
+
+
+        requestsCollection.whereEqualTo("state", validStatesEnCurso).whereEqualTo(userValue,clientId)
+            .get().addOnSuccessListener { documents ->
+
             for (document in documents) {
-                if (document.getString("state") == "EN CURSO" || document.getString("state") == "FINALIZADA") {
+
                     val title = document.getString("requestTitle") ?: ""
                     val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
                     val selectedOcupation = document.getString("categoryOcupation") ?: ""
                     val selectedServiceType = document.getString("categoryService") ?: ""
                     val description = document.getString("description") ?: ""
                     val state = document.getString("state") ?: ""
-                    val date = document.getString("date") ?: ""
+                    val dateTimestamp = document.getString("date") ?: ""
+                    val date=DateUtils.GetFormattedDate(dateTimestamp)
                     val maxCost = document.getLong("maxCost")?.toInt() ?: 0
                     val clientId = document.getString("clientId") ?: ""
                     val providerId = document.getString("providerId") ?: ""
                     val requestId = document.id
-                    val imageUrlArray: MutableList<String> = (document.getString("imageUrlArray") ?: "[]").let {
-                        try {
-                            val jsonArray = JSONArray(it)
-                            MutableList(jsonArray.length()) { index -> jsonArray.getString(index) }
-                        } catch (e: JSONException) {
-                            mutableListOf()
-                        }
-                    }
+                    val imageUrlArray = document.get("imageUrlArray") as? MutableList<String> ?: mutableListOf()
 
 
 
@@ -97,7 +116,9 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                                     val requestHistory = RequestHistory(r, clientName, providerName)
                                     requestList.add(requestHistory)
                                     requestListAdapter.notifyDataSetChanged()
-                                }.addOnFailureListener { providerException ->
+                                    //FIN 'En estado'
+
+
 
 
                                 }
@@ -107,7 +128,7 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                         }
 
 
-                }
+
 
             }
 
@@ -116,6 +137,58 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
             println("Error getting documents: $Exception")
             Log.e("ERROR DE DB", "$Exception")
         }
+
+        requestsCollection.whereEqualTo("state", validStatesFinalizada).whereEqualTo(userValue,clientId)
+            .get().addOnSuccessListener { documents ->
+                for (document in documents) {
+
+                    val title = document.getString("requestTitle") ?: ""
+                    val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
+                    val selectedOcupation = document.getString("categoryOcupation") ?: ""
+                    val selectedServiceType = document.getString("categoryService") ?: ""
+                    val description = document.getString("description") ?: ""
+                    val state = document.getString("state") ?: ""
+                    val dateTimestamp = document.getString("date") ?: ""
+                    val date=DateUtils.GetFormattedDate(dateTimestamp)
+                    val maxCost = document.getLong("maxCost")?.toInt() ?: 0
+                    val clientId = document.getString("clientId") ?: ""
+                    val providerId = document.getString("providerId") ?: ""
+                    val requestId = document.id
+                    val imageUrlArray = document.get("imageUrlArray") as? MutableList<String> ?: mutableListOf()
+
+
+                    val r = Request(
+                        title,
+                        requestBidAmount,
+                        selectedOcupation,
+                        selectedServiceType,
+                        description,
+                        state,
+                        date,
+                        maxCost,
+                        clientId,
+                        requestId,
+                        imageUrlArray
+                    )
+
+                    usersCollection.document(clientId).get()
+                        .addOnSuccessListener { clientDocument ->
+                            val clientName = clientDocument.getString("name") ?: ""
+
+                            // Query the user collection to get the provider's name
+                            usersCollection.document(providerId).get()
+                                .addOnSuccessListener { providerDocument ->
+                                    val providerName = providerDocument.getString("name")
+                                        ?: "" + providerDocument.getString("lastName") ?: ""
+
+                                    // Create a RequestHistory object and add it to the list
+                                    val requestHistory = RequestHistory(r, clientName, providerName)
+                                    requestList.add(requestHistory)
+                                    requestListAdapter.notifyDataSetChanged()
+                                }}}
+
+
+            }
     }
 
     override fun onStart() {
@@ -138,3 +211,10 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
 
 
 }
+
+
+/*
+*  //Esta va a ser la lista total ordenada
+                                    requestList.add(requestHistory)
+                                    requestListAdapter.notifyDataSetChanged()
+* */

@@ -3,16 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.RequestFragmentProccessFinish">
+    tools:context=".fragments.request.RequestProcessFinishFragment">
 
     <ImageView
         android:id="@+id/photoImageView"
         android:layout_width="140dp"
         android:layout_height="100dp"
         android:layout_weight="2"
-        android:src="@drawable/agus"
         android:scaleType="centerCrop"
-        android:background="@drawable/rounded_background"
         android:layout_marginTop="200px"
         />
 
@@ -44,7 +42,7 @@
                 android:id="@+id/fullNameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hector Medina"
+                android:text=""
                 android:textSize="18sp"
                 android:textColor="#000"
                 />
@@ -54,7 +52,7 @@
                 android:id="@+id/zoneTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Almagro"
+                android:text=""
                 android:textSize="18sp"
                 android:textColor="#000"/>
 
@@ -68,7 +66,7 @@
                     android:id="@+id/rankingTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="4.5 (5)"
+                    android:text=""
                     android:textSize="18sp"
                     android:textColor="#000"/>
 
@@ -91,7 +89,7 @@
                 android:id="@+id/legendTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Plomería,Pintura,Electricidad"
+                android:text=""
                 android:textSize="18sp"
                 android:textColor="#000"/>
 
@@ -114,7 +112,7 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textColor="#000"
-            android:text="Pintor de Buenos Aires, Caballito. Especializado en interiores. Calidad para tu espacio. Experiencia y resultados confiables."/>
+            android:text=""/>
     </LinearLayout>
 
     <!-- Third Section: Big Black Letters Legend -->
@@ -122,10 +120,20 @@
         android:id="@+id/bigLegendTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="$30.000 - TRABAJO X"
+        android:text=""
         android:textSize="30sp"
         android:textColor="#000"
         android:layout_marginTop="445sp"
+        android:textAlignment="center"/>
+    <TextView
+        android:id="@+id/mediumLegendTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="En proceso!"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:visibility="gone"
+        android:layout_marginTop="545sp"
         android:textAlignment="center"/>
 
     <!-- Fourth Section: Button and Rating Component -->
@@ -159,6 +167,8 @@
 
 
             />
+
+
 
 
         <!-- You can add a RatingBar or custom view here -->

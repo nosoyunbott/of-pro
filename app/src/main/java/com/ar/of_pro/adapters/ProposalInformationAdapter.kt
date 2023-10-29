@@ -21,7 +21,11 @@ class ProposalInformationAdapter(private val providerList: MutableList<ProposalI
     override fun onBindViewHolder(holder: ServiceProviderHolder, position: Int) {
         val serviceProvider = providerList[position]
         holder.setBidAmount(serviceProvider.bidAmount)
-        holder.setCalification(serviceProvider.calification)
+        if(serviceProvider.calificationQty>0) {
+            holder.setCalification(serviceProvider.calification / serviceProvider.calificationQty)
+        }else{
+            holder.setCalification(serviceProvider.calification)
+        }
         holder.setName(serviceProvider.name)
         holder.getCardLayout().setOnClickListener{
             onItemClick.onViewItemDetail(serviceProvider)

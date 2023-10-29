@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
@@ -21,6 +22,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 
 class UserLoginFragment : Fragment() {
+
+    override fun onResume() {
+        super.onResume()
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+
+        }
+    }
 
     lateinit var v: View
     lateinit var emailEdt: EditText
@@ -52,8 +60,8 @@ class UserLoginFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         goToApp()
-goToSignUp()
-       validateUserSession()
+        goToSignUp()
+        validateUserSession()
 
     }
 

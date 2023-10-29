@@ -6,11 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.services.RequestsService
+import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.math.round
+import kotlin.math.truncate
 
 class RequestDetailFragment : Fragment() {
     lateinit var v: View
@@ -24,6 +30,9 @@ class RequestDetailFragment : Fragment() {
     lateinit var txtLocation: TextView
     lateinit var txtCalification: TextView
     lateinit var txtCalificationQty: TextView
+    lateinit var imgHeader: ImageView
+
+    private val db = FirebaseFirestore.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,37 +40,59 @@ class RequestDetailFragment : Fragment() {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_request_detail, container, false)
         btnAccept = v.findViewById(R.id.btnAccept)
-        btnDeny= v.findViewById(R.id.btnDeny)
+        btnDeny = v.findViewById(R.id.btnDeny)
         txtDesc = v.findViewById(R.id.txtDesc)
         txtBid = v.findViewById(R.id.txtBid)
-        profileHeader = v.findViewById(R.id.profile_header)
-        txtName = profileHeader.findViewById(R.id.txtFullName)
-        txtLocation = profileHeader.findViewById(R.id.txtLocation)
-        txtCalification = profileHeader.findViewById(R.id.txtCalification)
-        txtCalificationQty = profileHeader.findViewById(R.id.txtCalificationQty)
+        profileHeader = v.findViewById(R.id.proposalProfileHeader)
+        txtName = profileHeader.findViewById(R.id.headerFullName)
+        txtLocation = profileHeader.findViewById(R.id.headerLocation)
+        txtCalification = profileHeader.findViewById(R.id.headerRating)
+        txtCalificationQty = profileHeader.findViewById(R.id.headerRatingQuantity)
+        imgHeader = profileHeader.findViewById(R.id.headerImage)
         return v
     }
 
     @SuppressLint("SetTextI18n")
     override fun onStart() {
         super.onStart()
-        val action =
-            RequestDetailFragmentDirections.actionRequestDetailFragmentToRequestsListFragment()
+
         val proposalInfo = RequestDetailFragmentArgs.fromBundle(
             requireArguments()
         ).proposalInformation
         txtDesc.text = proposalInfo.commentary
         txtBid.text = "$${proposalInfo.bidAmount}"
         txtName.text = proposalInfo.name
-        //proposalInfo.calification se esta truncando ¿como mostrar el dato bien?
-        txtCalification.text = "${proposalInfo.calification} ${resources.getString(R.string.star)}"
+        if(proposalInfo.calificationQty>0){
+            val calif = proposalInfo.calification / proposalInfo.calificationQty
+            val truncatedCalif = String.format("%.1f", calif)
+            txtCalification.text = "$truncatedCalif ${resources.getString(R.string.star)}"
+        }else{
+            txtCalification.text = "${proposalInfo.calification} ${resources.getString(R.string.star)}"
+        }
         txtCalificationQty.text = proposalInfo.calificationQty.toString()
 
-        btnAccept.setOnClickListener{
-            RequestsService.updateProviderIdFromRequest(proposalInfo.requestId, proposalInfo.providerId)
+        val users = db.collection("Users")
+        users.whereEqualTo(FieldPath.documentId(), proposalInfo.providerId).get()
+            .addOnSuccessListener { querySnapshot ->
+                for (snapshot in querySnapshot) {
 
-            //v.findNavController().popBackStack(v.findNavController().graph.startDestinationId, false)
-            v.findNavController().navigate(action)
+                    val profileImage = snapshot.getString("imageUrl") ?: ""
+                    Glide.with(requireContext()).load(profileImage).into(imgHeader)
+                    val location = snapshot.getString("location") ?: ""
+                    txtLocation.text = location
+                }
+
+            }
+
+        btnAccept.setOnClickListener {
+            RequestsService.updateProviderIdFromRequest(
+                proposalInfo.requestId,
+                proposalInfo.providerId
+            )
+
+            v.findNavController()
+                .popBackStack(v.findNavController().graph.startDestinationId, false)
+            //v.findNavController().navigate(action)
         }
     }
 }

@@ -63,7 +63,7 @@ class RequestFragment<OutputStream> : Fragment() {
     lateinit var ocupationAdapter: ArrayAdapter<String>
     lateinit var selectedOcupation: String
     lateinit var timestamp: String
-    lateinit var imageUrlArray : MutableList<String>
+    lateinit var imageUrlArray: MutableList<String>
 
     var serviceTypesList: List<String> = ServiceType().getList()
     lateinit var serviceTypesAdapter: ArrayAdapter<String>
@@ -159,11 +159,9 @@ class RequestFragment<OutputStream> : Fragment() {
 
             val newDocRequest = db.collection("Requests").document()
             db.collection("Requests").document(newDocRequest.id).set(r)
-            //val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
-            //v.findNavController().navigate(action)
-            v.findNavController().popBackStack()
 
-
+            val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
+            v.findNavController().navigate(action)
         }
     }
 
@@ -232,16 +230,22 @@ class RequestFragment<OutputStream> : Fragment() {
 
                         // Save blob data to a file with a unique name
                         val fileName = "photo_${System.currentTimeMillis()}.jpg"
-                        requireContext().openFileOutput(fileName, Context.MODE_PRIVATE).use { output ->
-                            output.write(blob)
-                        }
+                        requireContext().openFileOutput(fileName, Context.MODE_PRIVATE)
+                            .use { output ->
+                                output.write(blob)
+                            }
 
                         // Load image from URI or blob data
                         try {
                             loadImage(selectedMediaUri, blob)
-                            Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Image uploaded successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } catch (e: FileNotFoundException) {
-                            Toast.makeText(context, "Image upload failed", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Image upload failed", Toast.LENGTH_SHORT)
+                                .show()
                             Log.e("Exception", e.toString())
                         }
                     }
@@ -302,7 +306,8 @@ class RequestFragment<OutputStream> : Fragment() {
 //            val requestBody = RequestBody.create(
 //                MediaType.parse(requireContext().contentResolver.getType(uri)), file
 //            )
-            val imagePart = MultipartBody.Part.createFormData("image", "imagetest1.jpg", requestBody)
+            val imagePart =
+                MultipartBody.Part.createFormData("image", "imagetest1.jpg", requestBody)
 
             service.uploadImage(imagePart).enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(

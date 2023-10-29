@@ -93,13 +93,13 @@ class ProfileEditFragment : Fragment() {
             } else {
                 updateDb(txtNombre.text.toString(), txtSurname.text.toString() ,txtTelefono.text.toString(), txtLocalidad.text.toString(), txtBio.text.toString(), imageUrl)
             }
-
+            //    v.findNavController().popBackStack()
             val action = ProfileEditFragmentDirections.actionProfileEditFragmentToProfileFragment()
             v.findNavController().navigate(action)
         }
 
         btnCancel.setOnClickListener {
-
+         //   v.findNavController().popBackStack()
             val action = ProfileEditFragmentDirections.actionProfileEditFragmentToProfileFragment()
             v.findNavController().navigate(action)
         }
