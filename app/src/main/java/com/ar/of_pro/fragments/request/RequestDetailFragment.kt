@@ -54,7 +54,13 @@ class RequestDetailFragment : Fragment() {
         txtBid.text = "$${proposalInfo.bidAmount}"
         txtName.text = proposalInfo.name
         //proposalInfo.calification se esta truncando ¿como mostrar el dato bien?
-        txtCalification.text = "${proposalInfo.calification} ${resources.getString(R.string.star)}"
+        if(proposalInfo.calificationQty>0){
+            val calif = proposalInfo.calification / proposalInfo.calificationQty
+            txtCalification.text = "${calif} ${resources.getString(R.string.star)}"
+        }else{
+            txtCalification.text = "${proposalInfo.calification} ${resources.getString(R.string.star)}"
+        }
+
         txtCalificationQty.text = proposalInfo.calificationQty.toString()
 
         btnAccept.setOnClickListener{

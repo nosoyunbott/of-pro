@@ -96,7 +96,11 @@ class ProfileFragment : Fragment() {
                     txtCorreo.text = mail
                     txtTelefono.text = phoneNumber.toString()
                     if(sharedPreferences.getString("userType", "") == "PROVIDER") {
-                        txtNumRating.text = (numRating / ratingQty).toString() + " "
+                        if(ratingQty>0) {
+                            txtNumRating.text = (numRating / ratingQty).toString() + " "
+                        }else{
+                            txtNumRating.text = numRating.toString() + " "
+                        }
                     }
 
                     imageUrl = profileImage
