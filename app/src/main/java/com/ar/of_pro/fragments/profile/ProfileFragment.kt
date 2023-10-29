@@ -88,13 +88,16 @@ class ProfileFragment : Fragment() {
                     val mail = snapshot.getString("mail") ?: ""
                     val phoneNumber = snapshot.getLong("phone")?.toInt() ?: 0
                     val numRating = snapshot.getLong("rating")?.toInt() ?: 0
+                    val ratingQty = snapshot.getLong("ratingQuantity")?.toInt() ?: 0
                     val profileImage = snapshot.getString("imageUrl") ?: ""
 
                     txtNombre.text = name + " " + surname
                     txtLocalidad.text = location
                     txtCorreo.text = mail
                     txtTelefono.text = phoneNumber.toString()
-                    txtNumRating.text = numRating.toString() + " "
+                    if(sharedPreferences.getString("userType", "") == "PROVIDER") {
+                        txtNumRating.text = (numRating / ratingQty).toString() + " "
+                    }
 
                     imageUrl = profileImage
                     Glide.with(requireContext()).load(imageUrl).into(profilePicture);
