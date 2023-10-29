@@ -3,8 +3,6 @@ package com.ar.of_pro.fragments.profile
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -126,6 +124,10 @@ class ProfileFragment : Fragment() {
 
         btnLogout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
+            val editor = sharedPreferences.edit()
+            editor.remove("userType")
+            editor.remove("clientId")
+            editor.apply()
             val action = ProfileFragmentDirections.actionProfileFragmentToAuthActivity()
             v.findNavController().navigate(action)
             v.findNavController().popBackStack(R.id.profileFragment, true)

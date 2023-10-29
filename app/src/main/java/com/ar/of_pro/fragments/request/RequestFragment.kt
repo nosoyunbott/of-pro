@@ -36,7 +36,6 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -46,7 +45,6 @@ import java.util.Locale
 
 
 class RequestFragment<OutputStream> : Fragment() {
-
 
 
     lateinit var v: View
@@ -65,7 +63,7 @@ class RequestFragment<OutputStream> : Fragment() {
     lateinit var ocupationAdapter: ArrayAdapter<String>
     lateinit var selectedOcupation: String
     lateinit var timestamp: String
-    lateinit var imageUrl: String
+    lateinit var imageUrlArray: MutableList<String>
 
     var serviceTypesList: List<String> = ServiceType().getList()
     lateinit var serviceTypesAdapter: ArrayAdapter<String>
@@ -73,6 +71,7 @@ class RequestFragment<OutputStream> : Fragment() {
 
     private val db = FirebaseFirestore.getInstance()
     private var userId = FirebaseAuth.getInstance().currentUser?.uid
+
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
@@ -80,15 +79,11 @@ class RequestFragment<OutputStream> : Fragment() {
         val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            { _, year, month, dayOfMonth ->
+            requireContext(), { _, year, month, dayOfMonth ->
                 val selectedTimestamp = createTimestamp(year, month, dayOfMonth)
                 timestamp = selectedTimestamp.toString() //VALIDAR
                 edtTime.setText(formatTimestamp(selectedTimestamp))
-            },
-            currentYear,
-            currentMonth,
-            currentDay
+            }, currentYear, currentMonth, currentDay
         )
         datePickerDialog.show()
     }
@@ -103,9 +98,9 @@ class RequestFragment<OutputStream> : Fragment() {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         return dateFormat.format(Date(timestamp))
     }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_request, container, false)
@@ -117,9 +112,10 @@ class RequestFragment<OutputStream> : Fragment() {
         edtPriceMax = v.findViewById(R.id.edtPriceMax)
         edtDescripcion = v.findViewById(R.id.edtDescripcion)
         edtTime = v.findViewById(R.id.edtTime)
-        edtTime.setOnClickListener{
+        edtTime.setOnClickListener {
             showDatePickerDialog()
         }
+        imageUrlArray = mutableListOf()
         setupSpinner(spnOcupation, ocupationAdapter)
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
         return v
@@ -138,13 +134,16 @@ class RequestFragment<OutputStream> : Fragment() {
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
         setOnClickListener(btnAttach)
 
+        btnRequest.isEnabled = false
+        btnRequest.isClickable = false
 
         btnRequest.setOnClickListener {
-            val sharedPreferences = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-            val clientId = sharedPreferences.getString("clientId", "")  // Retrieve the 'userType' attribute from SharedPreferences
-
+            val sharedPreferences =
+                requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+            val clientId = sharedPreferences.getString(
+                "clientId", ""
+            )  // Retrieve the 'userType' attribute from SharedPreferences
             val title = edtTitle.text.toString()
-
             val r = RequestFB(
                 title,
                 0,
@@ -155,17 +154,14 @@ class RequestFragment<OutputStream> : Fragment() {
                 timestamp, //TODO cambiar el string a su tipo correspondiente
                 edtPriceMax.text.toString().toIntOrNull(),
                 clientId,
-                imageUrl
+                imageUrlArray
             )
 
             val newDocRequest = db.collection("Requests").document()
             db.collection("Requests").document(newDocRequest.id).set(r)
+
             val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
             v.findNavController().navigate(action)
-            //v.findNavController().popBackStack()
-
-
-
         }
     }
 
@@ -178,14 +174,12 @@ class RequestFragment<OutputStream> : Fragment() {
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, serviceTypesList)
     }
 
+
     private fun setupSpinner(spinner: Spinner, adapter: ArrayAdapter<String>) {
         spinner.adapter = adapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
                 when (spinner) {
                     spnOcupation -> selectedOcupation = ocupationList[position]
@@ -200,11 +194,8 @@ class RequestFragment<OutputStream> : Fragment() {
     }
 
     private fun showDialog() {
-        val dialog = AlertDialog.Builder(context)
-            .setTitle("Error")
-            .setMessage("ROMPISTE TODO")
-            .setCancelable(true)
-            .create()
+        val dialog = AlertDialog.Builder(context).setTitle("Error").setMessage("ROMPISTE TODO")
+            .setCancelable(true).create()
         dialog.show()
     }
 
@@ -212,70 +203,123 @@ class RequestFragment<OutputStream> : Fragment() {
         btn.setOnClickListener() {
 
             val intent = Intent(Intent.ACTION_PICK)
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             intent.type = "image/*, video/*"
             startActivityForResult(intent, PICK_MEDIA_REQUEST)
-
-
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        Log.d("DATA FROM INTENT", data.toString())
+
+
 
         if (requestCode == PICK_MEDIA_REQUEST && resultCode == Activity.RESULT_OK) {
             if (data != null) {
-                val selectedMediaUri = data.data
-                val blob = uriToBlob(selectedMediaUri!!)
 
-                if (selectedMediaUri != null) {
-                    requireContext().openFileOutput("foto", Context.MODE_PRIVATE).use {
-                        it.write(blob)
+                if (data != null && data.clipData != null) {
+                    val count = data.clipData!!.itemCount
+                    for (i in 0 until count) {
+                        val selectedMediaUri = data.clipData!!.getItemAt(i).uri
+                        // Handle the selected image URI as needed
+                        Log.d("SELECTED_MEDIA_URI", selectedMediaUri.toString())
+
+                        // Convert URI to blob
+                        val blob = uriToBlob(selectedMediaUri)
+
+                        // Save blob data to a file with a unique name
+                        val fileName = "photo_${System.currentTimeMillis()}.jpg"
+                        requireContext().openFileOutput(fileName, Context.MODE_PRIVATE)
+                            .use { output ->
+                                output.write(blob)
+                            }
+
+                        // Load image from URI or blob data
+                        try {
+                            loadImage(selectedMediaUri, blob)
+                            Toast.makeText(
+                                context,
+                                "Image uploaded successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } catch (e: FileNotFoundException) {
+                            Toast.makeText(context, "Image upload failed", Toast.LENGTH_SHORT)
+                                .show()
+                            Log.e("Exception", e.toString())
+                        }
                     }
-                } else {
-                    Log.d("asd", "mal")
-                }
-                try {
-                    loadImage(selectedMediaUri, blob)
-                    Toast.makeText(
-                        context,
-                        "la img subio ok",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    btnRequest.isEnabled = true
+                    btnRequest.isClickable = true
+                } else if (data.data != null) {
+                    val selectedMediaUri = data.data!!
+                    val blob = uriToBlob(selectedMediaUri!!)
+                    Log.d("SELECTED MEDIA URI", selectedMediaUri.toString())
 
-                }catch (e: FileNotFoundException){
-                    Toast.makeText(
-                        context,
-                        "la imagen no subio",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.d("Exc", e.toString())
+                    if (selectedMediaUri != null) {
+                        requireContext().openFileOutput("foto", Context.MODE_PRIVATE).use {
+                            it.write(blob)
+                        }
+
+                        try {
+                            loadImage(selectedMediaUri, blob)
+                            Toast.makeText(
+                                context, "la img subio ok", Toast.LENGTH_SHORT
+                            ).show()
+                            btnRequest.isEnabled = true
+                            btnRequest.isClickable = true
+                        } catch (e: FileNotFoundException) {
+                            Toast.makeText(
+                                context, "la imagen no subio", Toast.LENGTH_SHORT
+                            ).show()
+                            Log.d("Exc", e.toString())
+                        }
+                    } else {
+                        Log.d("asd", "mal")
+                    }
+
                 }
+
             }
         }
     }
-    fun uriToBlob(uri: Uri): ByteArray {
+
+    private fun uriToBlob(uri: Uri): ByteArray {
         val inputStream = requireContext().contentResolver.openInputStream(uri)
         val byteArray = inputStream?.readBytes() ?: byteArrayOf()
         inputStream?.close()
         return byteArray
     }
 
-    fun loadImage(uri: Uri, blob: ByteArray) {
-        val file = File(requireContext().filesDir, "foto")
+    private fun loadImage(uri: Uri, blob: ByteArray) {
+//        val file = File(requireContext().filesDir, "foto")
         try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            val contentResolver = requireContext().contentResolver
+            val requestBody = RequestBody.create(
+                MediaType.parse(contentResolver.getType(uri)),
+                inputStream?.readBytes()
+            )
+
 
             val service = ActivityServiceApiBuilder.create()
-            val requestBody = RequestBody.create(MediaType.parse(requireContext().contentResolver.getType(uri)), file)
-            val imagePart = MultipartBody.Part.createFormData("image", file.name, requestBody)
+//            val requestBody = RequestBody.create(
+//                MediaType.parse(requireContext().contentResolver.getType(uri)), file
+//            )
+            val imagePart =
+                MultipartBody.Part.createFormData("image", "imagetest1.jpg", requestBody)
 
             service.uploadImage(imagePart).enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                override fun onResponse(
+                    call: Call<ResponseBody>, response: Response<ResponseBody>
+                ) {
                     if (response.isSuccessful) {
                         try {
                             val responseData = response.body()?.string()
                             val jsonResponse = JSONObject(responseData)
                             val dataObject = jsonResponse.getJSONObject("data")
                             val imageUrll = dataObject.getString("link")
-                            imageUrl = dataObject.getString("link")
+                            imageUrlArray.add(dataObject.getString("link"))
                             Log.d("image", "Image URL: $imageUrll")
                             // Handle imageUrl as needed (e.g., display it in your app)
                         } catch (e: JSONException) {
@@ -299,7 +343,6 @@ class RequestFragment<OutputStream> : Fragment() {
             // Handle file IO exception
         }
     }
-
 
 
 }

@@ -1,7 +1,6 @@
 package com.ar.of_pro.fragments.request
 
 import android.content.Context
-import android.media.Rating
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.fragments.provider.ProposalFragmentArgs
@@ -118,7 +116,7 @@ class RequestProcessFinishFragment : Fragment() {
                 }
                 else
                 {
-                    rankingTextView.text="Sin pintuar aún"
+                    rankingTextView.text="Sin calificaciones "
                 }
 
 

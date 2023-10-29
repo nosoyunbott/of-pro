@@ -16,9 +16,11 @@ import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.RequestHistory
 import com.ar.of_pro.listeners.OnViewItemClickedListener
 import com.ar.of_pro.utils.DateUtils
-import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
+import org.json.JSONArray
+import org.json.JSONException
+
+
 
 class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
 
@@ -82,7 +84,8 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                     val clientId = document.getString("clientId") ?: ""
                     val providerId = document.getString("providerId") ?: ""
                     val requestId = document.id
-                    val imageUrl = document.getString("imageUrl") ?: ""
+                    val imageUrlArray = document.get("imageUrlArray") as? MutableList<String> ?: mutableListOf()
+
 
 
                     val r = Request(
@@ -96,7 +99,7 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                         maxCost,
                         clientId,
                         requestId,
-                        imageUrl
+                        imageUrlArray
                     )
 
                     usersCollection.document(clientId).get()
@@ -151,7 +154,7 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                     val clientId = document.getString("clientId") ?: ""
                     val providerId = document.getString("providerId") ?: ""
                     val requestId = document.id
-                    val imageUrl = document.getString("imageUrl") ?: ""
+                    val imageUrlArray = document.get("imageUrlArray") as? MutableList<String> ?: mutableListOf()
 
 
                     val r = Request(
@@ -165,7 +168,7 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                         maxCost,
                         clientId,
                         requestId,
-                        imageUrl
+                        imageUrlArray
                     )
 
                     usersCollection.document(clientId).get()

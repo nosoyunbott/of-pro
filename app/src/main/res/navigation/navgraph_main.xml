@@ -63,8 +63,16 @@
             app:argType="com.ar.of_pro.entities.Request" />
         <action
             android:id="@+id/action_proposalFragment_to_requestsListFragment"
-            app:destination="@id/requestsListFragment"
-            app:popUpTo="@id/requestsListFragment"
+            app:destination="@id/requestsListFragment" />
+        <action
+            android:id="@+id/action_proposalFragment_to_imageViewFragment"
+            app:destination="@id/imageViewFragment"
+            app:popUpTo="@id/proposalFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_proposalFragment_self"
+            app:destination="@id/proposalFragment"
+            app:popUpTo="@id/proposalFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -137,4 +145,13 @@
         android:name="com.ar.of_pro.activities.AuthActivity"
         android:label="activity_auth"
         tools:layout="@layout/activity_auth" />
+    <fragment
+        android:id="@+id/imageViewFragment"
+        android:name="com.ar.of_pro.fragments.ImageViewFragment"
+        android:label="fragment_image_view"
+        tools:layout="@layout/fragment_image_view" >
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
+    </fragment>
 </navigation>

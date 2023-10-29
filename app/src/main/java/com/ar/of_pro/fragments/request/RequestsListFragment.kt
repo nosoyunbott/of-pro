@@ -2,7 +2,6 @@ package com.ar.of_pro.fragments.request
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,10 +17,11 @@ import com.ar.of_pro.adapters.RequestCardAdapter
 import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.listeners.OnViewItemClickedListener
-import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+
 class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
 
@@ -38,6 +38,8 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     val requestsCollection = db.collection("Requests")
     val proposalsCollection = db.collection("Proposals")
 
+
+    //NOTE Solo para validaciones de requests
     private suspend fun getProposalsByRequestId(requestId: String): List<ProposalModel> {
         return try {
             val querySnapshot = proposalsCollection.get().await()
@@ -46,15 +48,14 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
             for (document in querySnapshot) {
                 val proposal = document.toObject(ProposalModel::class.java)
-                if(proposal.requestId == requestId) {
+                if (proposal.requestId == requestId) {
                     proposalsList.add(proposal)
                 }
             }
 
-            proposalsList
+            return proposalsList
 
         } catch (e: Exception) {
-
             e.printStackTrace()
             emptyList()
         }
@@ -68,7 +69,6 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
 
             for (document in querySnapshot) {
-                Log.d("requestId", document.id)
                 val title = document.getString("requestTitle") ?: ""
                 val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
                 val selectedOcupation = document.getString("categoryOcupation") ?: ""
@@ -79,9 +79,23 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
                 val maxCost = document.getLong("maxCost")?.toInt() ?: 0
                 val clientId = document.getString("clientId") ?: ""
                 val requestId = document.id
-                val imageUrl = document.getString("imageUrl") ?: ""
+                val imageUrlArray =
+                    document.get("imageUrlArray") as? MutableList<String> ?: mutableListOf()
                 val providerId = document.getString("providerId") ?: ""
-                val request = RequestModel(selectedOcupation, selectedServiceType, clientId, date, description, imageUrl, maxCost, providerId, requestBidAmount, title, state, requestId  )
+                val request = RequestModel(
+                    selectedOcupation,
+                    selectedServiceType,
+                    clientId,
+                    date,
+                    description,
+                    imageUrlArray,
+                    maxCost,
+                    providerId,
+                    requestBidAmount,
+                    title,
+                    state,
+                    requestId
+                )
                 requestsList.add(request)
             }
 
@@ -110,17 +124,20 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
             val requests = getRequests()
 
-            for (x in requests) {
-                Log.d("request", x.toString())
-            }
 
-            for(r in requests){
+            for (r in requests) {
                 val proposalsOfCurrentRequest = getProposalsByRequestId(r.id)
-                if (userType == "CLIENT" && userId == r.clientId && r.providerId=="") {
-                            requestList.add(toRequest(r))
-                        } else if (userType == "PROVIDER" && !(proposalsOfCurrentRequest.any { it.providerId == userId }) && r.state != "FINALIZADA") {
-                                requestList.add(toRequest(r))
-                        }
+
+                val PROVIDER_HAS_NOT_APPLIED =
+                    userType == "PROVIDER" && !(proposalsOfCurrentRequest.any { it.providerId == userId }) && r.state == "PENDIENTE"
+                val REQUEST_MISSING_PROIVDER =
+                    userType == "CLIENT" && userId == r.clientId && r.providerId == ""
+
+                if (REQUEST_MISSING_PROIVDER) {
+                    requestList.add(toRequest(r))
+                } else if (PROVIDER_HAS_NOT_APPLIED) {
+                    requestList.add(toRequest(r))
+                }
 
             }
             requestListAdapter.notifyDataSetChanged()
@@ -194,9 +211,23 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
             navController.navigate(actionForProvider)
         }
     }
-    fun toRequest(r: RequestModel) : Request{
-        return Request(r.requestTitle, r.requestBidAmount, r.categoryOcupation, r.categoryService, r.description, r.state, r.date, r.maxCost, r.clientId, r.id, r.imageUrl)
+
+    fun toRequest(r: RequestModel): Request {
+        return Request(
+            r.requestTitle,
+            r.requestBidAmount,
+            r.categoryOcupation,
+            r.categoryService,
+            r.description,
+            r.state,
+            r.date,
+            r.maxCost,
+            r.clientId,
+            r.id,
+            r.imageUrlArray as MutableList<String>
+        )
     }
+
     data class ProposalModel(
         val bid: Int,
         val commentary: String,
@@ -214,7 +245,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         val clientId: String,
         val date: String,
         val description: String,
-        val imageUrl: String,
+        val imageUrlArray: MutableList<String>,
         val maxCost: Int,
         val providerId: String,
         val requestBidAmount: Int,
@@ -223,7 +254,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         val id: String
     ) {
         constructor() : this(
-            "", "", "", "", "", "", 0, "", 0, "", "", ""
+            "", "", "", "", "", mutableListOf(), 0, "", 0, "", "", ""
         )
     }
 

@@ -14,7 +14,7 @@ class Request(
     maxCost: Int?,
     clientId: String?,
     requestId: String?,
-    imageUrl: String?,
+    imageUrlArray: MutableList<String>,
 ) : Parcelable {
 
 
@@ -29,7 +29,7 @@ class Request(
     var clientId: String = ""
     var providerId: String = "" //no se pasa inicialmente
     var requestId: String = ""
-    var imageUrl: String = ""
+    var imageUrlArray: MutableList<String> = mutableListOf()
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -42,7 +42,7 @@ class Request(
         parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()
+        parcel.createStringArrayList() ?: mutableListOf()
     )
 
 
@@ -57,7 +57,7 @@ class Request(
         this.maxCost = maxCost!!
         this.clientId = clientId!!
         this.requestId = requestId!!
-        this.imageUrl = imageUrl!!
+        this.imageUrlArray  = imageUrlArray!!
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

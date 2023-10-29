@@ -4,9 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ar.of_pro.R
-import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.RequestHistory
-import com.ar.of_pro.holders.RequestCardHolder
 import com.ar.of_pro.holders.RequestHistoryHolder
 import com.ar.of_pro.listeners.OnViewItemClickedListener
 

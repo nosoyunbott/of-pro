@@ -15,10 +15,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.Proposal
+import com.ar.of_pro.entities.Request
 import com.ar.of_pro.services.RequestsService
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+
 
 class ProposalFragment : Fragment() {
 
@@ -32,8 +34,10 @@ class ProposalFragment : Fragment() {
     lateinit var txtDescription: TextView
     lateinit var edtBudget: EditText
     lateinit var edtComment: EditText
-    lateinit var imageUrl: String
+    lateinit var listOfImages: MutableList<String>
     lateinit var imageView: ImageView
+    lateinit var imageView2: ImageView
+    lateinit var imageView3: ImageView
 
     //Header
     lateinit var proposalProfileHeader: View
@@ -43,13 +47,21 @@ class ProposalFragment : Fragment() {
     lateinit var txtRatingQuantity: TextView
     lateinit var imgHeader: ImageView
 
-
     private val db = FirebaseFirestore.getInstance()
+
+    //flag para recargar el fragment
+    var isActive: Boolean = true
+
+
+    var imageViewsList: MutableList<ImageView> = mutableListOf()
+    lateinit var request: Request
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
         v = inflater.inflate(R.layout.fragment_proposal, container, false)
         btnProposal = v.findViewById(R.id.btnProposal)
         txtTitle = v.findViewById(R.id.txtTitle)
@@ -61,6 +73,11 @@ class ProposalFragment : Fragment() {
         edtBudget = v.findViewById(R.id.edtBudget)
         edtComment = v.findViewById(R.id.edtComment)
         imageView = v.findViewById(R.id.requestImageView)
+        imageView2 = v.findViewById(R.id.imageView2)
+        imageView3 = v.findViewById(R.id.imageView4)
+        imageViewsList.add(imageView)
+        imageViewsList.add(imageView2)
+        imageViewsList.add(imageView3)
         proposalProfileHeader = v.findViewById(R.id.proposalProfileHeader)
         txtFullName = proposalProfileHeader.findViewById(R.id.headerFullName)
         txtLocation = proposalProfileHeader.findViewById(R.id.headerLocation)
@@ -70,28 +87,55 @@ class ProposalFragment : Fragment() {
         return v
     }
 
+    private fun setUpImageListener() {
+        for ((index, value) in listOfImages.withIndex()) {
+            Glide.with(requireContext())
+                .load(value)
+                .dontAnimate()
+                .into(imageViewsList[index]);
+            imageViewsList[index].setOnClickListener {
+                val enlargeImageOnTap =
+                    ProposalFragmentDirections.actionProposalFragmentToImageViewFragment(value)
+                v.findNavController().navigate(enlargeImageOnTap)
+
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        isActive = false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setUpImageListener()
+        if (!isActive) {
+            v.findNavController()
+                .navigate(ProposalFragmentDirections.actionProposalFragmentSelf(request))
+            isActive = false
+        }
+
+    }
+
     override fun onStart() {
         super.onStart()
-
-        val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
-
+        request = ProposalFragmentArgs.fromBundle(requireArguments()).request
         txtTitle.text = request.requestTitle
         txtOcupation.text = request.categoryOcupation
         txtServiceType.text = request.categoryService
         txtTime.text = request.date
         txtPricing.text = request.maxCost.toString()
         txtDescription.text = request.description
-        imageUrl = request.imageUrl
-        Glide.with(requireContext())
-            .load(imageUrl)
-            .into(imageView);
-
+        listOfImages = request.imageUrlArray
+        val context = context
 
         val users = db.collection("Users")
-        users.whereEqualTo(FieldPath.documentId(), request.clientId).get().addOnSuccessListener { querySnapshot ->
-            for (snapshot in querySnapshot) {
+        users.whereEqualTo(FieldPath.documentId(), request.clientId).get()
+            .addOnSuccessListener { querySnapshot ->
+                for (snapshot in querySnapshot) {
                     val profileImage = snapshot.getString("imageUrl") ?: ""
-                    Glide.with(requireContext()).load(profileImage).into(imgHeader)
+                    Glide.with(context!!).load(profileImage).into(imgHeader)
                     val name = snapshot.getString("name") ?: ""
                     val surname = snapshot.getString("lastname") ?: ""
                     txtFullName.text = "$name $surname"
@@ -101,9 +145,9 @@ class ProposalFragment : Fragment() {
                     txtRating.text = "$rating ⭐"
                     val ratingQuantity = snapshot.getLong("ratingQuantity")?.toInt() ?: 0
                     txtRatingQuantity.text = "($ratingQuantity)"
-            }
+                }
 
-        }
+            }
 
         btnProposal.setOnClickListener {
 
@@ -111,7 +155,7 @@ class ProposalFragment : Fragment() {
             val clientId = sharedPref!!.getString("clientId", "")
 
             val users = db.collection("Users")
-            users.get().addOnSuccessListener { querySnapshot -> //ESTE LISTENER ES PARA LA DEMO
+            users.get().addOnSuccessListener { querySnapshot ->
                 val userIds = ArrayList<String>()
                 for (document in querySnapshot) {
                     val userId = document.id
@@ -124,12 +168,10 @@ class ProposalFragment : Fragment() {
 
                 val bid = edtBudget.text.toString().toFloat()
                 val commentary = edtComment.text.toString()
-
                 val idProvider = sharedPreferences.getString(
                     "clientId",
                     ""
-                )  // Retrieve the 'userType' attribute from SharedPreferences
-
+                )
                 val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
                 val p = Proposal(
                     idProvider,
@@ -154,6 +196,9 @@ class ProposalFragment : Fragment() {
 
 
         }
+
+
     }
+
 
 }
