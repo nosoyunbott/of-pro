@@ -118,9 +118,6 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
 
 
 
-                                }.addOnFailureListener { providerException ->
-
-
                                 }
                         }.addOnFailureListener { clientException ->
                             val requestHistory = RequestHistory(r, "clientName", "providerName")

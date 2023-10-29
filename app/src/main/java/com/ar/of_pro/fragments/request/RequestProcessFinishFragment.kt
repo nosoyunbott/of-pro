@@ -62,8 +62,6 @@ class RequestProcessFinishFragment : Fragment() {
             val action=RequestProcessFinishFragmentDirections.actionRequestFragmentProccessFinishClientToRequestsHistoryFragment()
             findNavController().navigate(action)
 
-
-
         }
 
         ratingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
@@ -81,6 +79,7 @@ class RequestProcessFinishFragment : Fragment() {
         val bigLegendTextView = v.findViewById<TextView>(R.id.bigLegendTextView)
         var profilePicture=v.findViewById<ImageView>(R.id.photoImageView);
         val mediumLegendTextView=v.findViewById<TextView>(R.id.mediumLegendTextView)
+
 
 
 
