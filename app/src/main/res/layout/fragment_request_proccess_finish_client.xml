@@ -10,9 +10,7 @@
         android:layout_width="140dp"
         android:layout_height="100dp"
         android:layout_weight="2"
-        android:src="@drawable/agus"
         android:scaleType="centerCrop"
-        android:background="@drawable/rounded_background"
         android:layout_marginTop="200px"
         />
 
