@@ -144,7 +144,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
                 val proposalsOfCurrentRequest = getProposalsByRequestId(r.id)
                 if (userType == "CLIENT" && userId == r.clientId && r.providerId=="") {
                             requestList.add(toRequest(r))
-                        } else if (userType == "PROVIDER" && !(proposalsOfCurrentRequest.any { it.providerId == userId })) {
+                        } else if (userType == "PROVIDER" && !(proposalsOfCurrentRequest.any { it.providerId == userId }) && r.state != "FINALIZADA") {
                             //comparar si el userId no coincide con ninguna de las proposals asociadas a la request actual
                                 requestList.add(toRequest(r))
                         }
