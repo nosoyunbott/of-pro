@@ -100,6 +100,7 @@
         <argument
             android:name="request"
             app:argType="com.ar.of_pro.entities.Request" />
+
     </fragment>
     <fragment
         android:id="@+id/profileFragment"

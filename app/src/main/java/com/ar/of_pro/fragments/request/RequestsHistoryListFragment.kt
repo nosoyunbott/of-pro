@@ -1,5 +1,6 @@
 package com.ar.of_pro.fragments.request
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,7 +15,10 @@ import com.ar.of_pro.adapters.HistoryCardAdapter
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.RequestHistory
 import com.ar.of_pro.listeners.OnViewItemClickedListener
+import com.ar.of_pro.utils.DateUtils
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
 
@@ -47,7 +51,21 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
         val enCursoRequests = mutableListOf<Request>()
         val finalizadaRequests = mutableListOf<Request>()
 
-        requestsCollection.whereEqualTo("state", validStatesEnCurso)
+        //usar un userId que
+        val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        val userType=sharedPref!!.getString("userType","")
+        val clientId=sharedPref!!.getString("clientId","")
+        var userValue=""
+        if(userType=="CLIENT")
+        {
+             userValue="clientId"
+        }else
+        {
+             userValue="providerId"
+        }
+
+
+        requestsCollection.whereEqualTo("state", validStatesEnCurso).whereEqualTo(userValue,clientId)
             .get().addOnSuccessListener { documents ->
 
             for (document in documents) {
@@ -58,7 +76,8 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                     val selectedServiceType = document.getString("categoryService") ?: ""
                     val description = document.getString("description") ?: ""
                     val state = document.getString("state") ?: ""
-                    val date = document.getString("date") ?: ""
+                    val dateTimestamp = document.getString("date") ?: ""
+                    val date=DateUtils.GetFormattedDate(dateTimestamp)
                     val maxCost = document.getLong("maxCost")?.toInt() ?: 0
                     val clientId = document.getString("clientId") ?: ""
                     val providerId = document.getString("providerId") ?: ""
@@ -95,7 +114,7 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                                     requestList.add(requestHistory)
                                     requestListAdapter.notifyDataSetChanged()
                                     //FIN 'En estado'
-                                    requestsCollection.whereEqualTo("state", validStatesFinalizada)
+                                    requestsCollection.whereEqualTo("state", validStatesFinalizada).whereEqualTo(userValue,clientId)
                                         .get().addOnSuccessListener { documents ->
                                             for (document in documents) {
 
@@ -105,7 +124,8 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                                                 val selectedServiceType = document.getString("categoryService") ?: ""
                                                 val description = document.getString("description") ?: ""
                                                 val state = document.getString("state") ?: ""
-                                                val date = document.getString("date") ?: ""
+                                                val dateTimestamp = document.getString("date") ?: ""
+                                                val date=DateUtils.GetFormattedDate(dateTimestamp)
                                                 val maxCost = document.getLong("maxCost")?.toInt() ?: 0
                                                 val clientId = document.getString("clientId") ?: ""
                                                 val providerId = document.getString("providerId") ?: ""

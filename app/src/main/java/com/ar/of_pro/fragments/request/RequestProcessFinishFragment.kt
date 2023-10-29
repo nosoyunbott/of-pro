@@ -7,15 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.fragments.provider.ProposalFragmentArgs
 import com.ar.of_pro.services.RequestsService
 import com.ar.of_pro.services.UserService
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 
 class RequestProcessFinishFragment : Fragment() {
@@ -57,6 +60,7 @@ class RequestProcessFinishFragment : Fragment() {
 
             // Navigate back to the previous screen (pop the current fragment)
             findNavController().popBackStack()
+
         }
 
         ratingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
@@ -72,7 +76,7 @@ class RequestProcessFinishFragment : Fragment() {
         val legendTextView = v.findViewById<TextView>(R.id.legendTextView)
         val paragraphTextView = v.findViewById<TextView>(R.id.paragraphTextView)
         val bigLegendTextView = v.findViewById<TextView>(R.id.bigLegendTextView)
-
+        var profilePicture=v.findViewById<ImageView>(R.id.photoImageView);
         val mediumLegendTextView=v.findViewById<TextView>(R.id.mediumLegendTextView)
 
 
@@ -97,6 +101,9 @@ class RequestProcessFinishFragment : Fragment() {
                 userId= document.getString("providerId") ?: ""
             }
             usersCollection.document(userId!!).get().addOnSuccessListener { userDocument ->
+                val imageUrl = userDocument.getString("imageUrl") ?: ""
+               profilePicture = profilePicture
+                Glide.with(requireContext()).load(imageUrl).into(profilePicture);
                 fullNameTextView.text =
                     userDocument.getString("name") + " " + userDocument.getString("lastName") // Client
                 zoneTextView.text = userDocument.getString("location")//Client
