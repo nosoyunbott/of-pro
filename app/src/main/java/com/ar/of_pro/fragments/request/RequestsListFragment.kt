@@ -22,9 +22,6 @@ import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-
-//TODO Actualizar cantidad de proposals para que figuren en el recycler view
-//TODO  dejar la demo linda para el miercoles
 class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
 
@@ -41,31 +38,11 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     val requestsCollection = db.collection("Requests")
     val proposalsCollection = db.collection("Proposals")
 
-
-    private suspend fun getProposals(): List<ProposalModel> {
-        return try {
-            val querySnapshot = proposalsCollection.get().await()
-
-            val proposalsList = mutableListOf<ProposalModel>() // Replace with your request model
-
-            for (document in querySnapshot) {
-                val proposal = document.toObject(ProposalModel::class.java)
-                proposalsList.add(proposal)
-            }
-
-            proposalsList // Return the list of requests
-
-        } catch (e: Exception) {
-            // Handle errors
-            e.printStackTrace()
-            emptyList() // Return an empty list or handle the error as needed
-        }
-    }
     private suspend fun getProposalsByRequestId(requestId: String): List<ProposalModel> {
         return try {
             val querySnapshot = proposalsCollection.get().await()
 
-            val proposalsList = mutableListOf<ProposalModel>() // Replace with your request model
+            val proposalsList = mutableListOf<ProposalModel>()
 
             for (document in querySnapshot) {
                 val proposal = document.toObject(ProposalModel::class.java)
@@ -74,12 +51,12 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
                 }
             }
 
-            proposalsList // Return the list of requests
+            proposalsList
 
         } catch (e: Exception) {
-            // Handle errors
+
             e.printStackTrace()
-            emptyList() // Return an empty list or handle the error as needed
+            emptyList()
         }
     }
 
@@ -87,12 +64,11 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         return try {
             val querySnapshot = requestsCollection.get().await()
 
-            val requestsList = mutableListOf<RequestModel>() // Replace with your request model
+            val requestsList = mutableListOf<RequestModel>()
 
 
             for (document in querySnapshot) {
                 Log.d("requestId", document.id)
-                //val request = document.toObject(RequestModel::class.java)
                 val title = document.getString("requestTitle") ?: ""
                 val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
                 val selectedOcupation = document.getString("categoryOcupation") ?: ""
@@ -109,29 +85,27 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
                 requestsList.add(request)
             }
 
-            requestsList // Return the list of requests
+            requestsList
 
         } catch (e: Exception) {
-            // Handle errors
             e.printStackTrace()
-            emptyList() // Return an empty list or handle the error as needed
+            emptyList()
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         val sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
         val userType = sharedPreferences.getString(
             "userType",
             ""
-        )  // Retrieve the 'userType' attribute from SharedPreferences
+        )
         val userId = sharedPreferences.getString(
             "clientId",
             ""
-        )  // Retrieve the 'clientId' attribute from SharedPreferences
+        )
         lifecycleScope.launch {
 
             val requests = getRequests()
@@ -144,19 +118,13 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
                 val proposalsOfCurrentRequest = getProposalsByRequestId(r.id)
                 if (userType == "CLIENT" && userId == r.clientId && r.providerId=="") {
                             requestList.add(toRequest(r))
-                        } else if (userType == "PROVIDER" && !(proposalsOfCurrentRequest.any { it.providerId == userId })) {
-                            //comparar si el userId no coincide con ninguna de las proposals asociadas a la request actual
+                        } else if (userType == "PROVIDER" && !(proposalsOfCurrentRequest.any { it.providerId == userId }) && r.state != "FINALIZADA") {
                                 requestList.add(toRequest(r))
                         }
 
             }
             requestListAdapter.notifyDataSetChanged()
         }
-        //TODO filtrar solicitudes por id de cliente
-
-
-
-
     }
 
     override fun onCreateView(
@@ -211,7 +179,6 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     override fun onViewItemDetail(request: Request) {
         val sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-        // Retrieve the 'userType' attribute from SharedPreferences
         val userType = sharedPreferences.getString("userType", "")
         val actionForClient =
             RequestsListFragmentDirections.actionRequestsListFragmentToProviderRequestsFragment(
@@ -238,7 +205,6 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         val requestId: String,
         val stability: Int
     ) {
-        // Add a no-argument constructor
         constructor() : this(0, "", false, "", "", 0)
     }
 

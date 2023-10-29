@@ -15,6 +15,8 @@ import com.ar.of_pro.services.RequestsService
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.math.round
+import kotlin.math.truncate
 
 class RequestDetailFragment : Fragment() {
     lateinit var v: View
@@ -60,9 +62,14 @@ class RequestDetailFragment : Fragment() {
         txtDesc.text = proposalInfo.commentary
         txtBid.text = "$${proposalInfo.bidAmount}"
         txtName.text = proposalInfo.name
-        //proposalInfo.calification se esta truncando ¿como mostrar el dato bien?
-        txtCalification.text = "${proposalInfo.calification} ${resources.getString(R.string.star)}"
-        txtCalificationQty.text = " (${proposalInfo.calificationQty})"
+        if(proposalInfo.calificationQty>0){
+            val calif = proposalInfo.calification / proposalInfo.calificationQty
+            val truncatedCalif = String.format("%.1f", calif)
+            txtCalification.text = "$truncatedCalif ${resources.getString(R.string.star)}"
+        }else{
+            txtCalification.text = "${proposalInfo.calification} ${resources.getString(R.string.star)}"
+        }
+        txtCalificationQty.text = proposalInfo.calificationQty.toString()
 
         val users = db.collection("Users")
         users.whereEqualTo(FieldPath.documentId(), proposalInfo.providerId).get()

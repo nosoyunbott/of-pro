@@ -24,7 +24,7 @@ class ServiceProviderHolder(v: View) : RecyclerView.ViewHolder(v){
     }
     fun setCalification(calification: Double) {
         val txt: TextView = view.findViewById(R.id.txtCalification)
-        txt.text = calification.toString()
+        txt.text = String.format("%.1f", calification)
     }
 
     fun getCardLayout (): CardView {

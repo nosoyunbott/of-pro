@@ -160,9 +160,10 @@ class RequestFragment<OutputStream> : Fragment() {
 
             val newDocRequest = db.collection("Requests").document()
             db.collection("Requests").document(newDocRequest.id).set(r)
-            //val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
-            //v.findNavController().navigate(action)
-            v.findNavController().popBackStack()
+            val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
+            v.findNavController().navigate(action)
+            //v.findNavController().popBackStack()
+
 
 
         }
