@@ -2,6 +2,7 @@ package com.ar.of_pro.fragments.request
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,12 +63,13 @@ class RequestDetailFragment : Fragment() {
         txtDesc.text = proposalInfo.commentary
         txtBid.text = "$${proposalInfo.bidAmount}"
         txtName.text = proposalInfo.name
-        if(proposalInfo.calificationQty>0){
+        if (proposalInfo.calificationQty > 0) {
             val calif = proposalInfo.calification / proposalInfo.calificationQty
             val truncatedCalif = String.format("%.1f", calif)
             txtCalification.text = "$truncatedCalif ${resources.getString(R.string.star)}"
-        }else{
-            txtCalification.text = "${proposalInfo.calification} ${resources.getString(R.string.star)}"
+        } else {
+            txtCalification.text =
+                "${proposalInfo.calification} ${resources.getString(R.string.star)}"
         }
         txtCalificationQty.text = proposalInfo.calificationQty.toString()
 
@@ -93,6 +95,56 @@ class RequestDetailFragment : Fragment() {
             v.findNavController()
                 .popBackStack(v.findNavController().graph.startDestinationId, false)
             //v.findNavController().navigate(action)
+        }
+
+        btnDeny.setOnClickListener {
+
+            val proposalsCollection = db.collection("Proposals")
+
+            // Busca el documento con el campo providerId igual a la variable providerId
+            proposalsCollection.whereEqualTo("requestId", proposalInfo.requestId)
+                .whereEqualTo("providerId", proposalInfo.providerId)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    for (document in querySnapshot) {
+
+                        Log.d("document.id", document.id)
+                        document.reference.delete()
+                            .addOnSuccessListener {
+                                Log.d("Firestore", "Documento eliminado correctamente")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("Firestore", "Error al eliminar el documento", e)
+                            }
+
+                        val requestsCollection = db.collection("Requests")
+                        requestsCollection.whereEqualTo(
+                            FieldPath.documentId(),
+                            proposalInfo.requestId
+                        ).get().addOnSuccessListener { querySnapshot ->
+                            for (document in querySnapshot) {
+                                var reqBidAmount =
+                                    document.getLong("requestBidAmount")?.toInt() ?: 0
+                                RequestsService.updateRequestBidAmount(
+                                    proposalInfo.requestId,
+                                    reqBidAmount
+                                )
+
+                                v.findNavController()
+                                    .popBackStack(
+                                        v.findNavController().graph.startDestinationId,
+                                        false
+                                    )
+
+                            }
+
+                        }
+
+                    }
+                }
+
+
+            //TODO borrar proposal por UID
         }
     }
 }

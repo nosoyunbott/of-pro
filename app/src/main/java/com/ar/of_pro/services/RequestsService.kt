@@ -36,6 +36,15 @@ import com.google.firebase.firestore.FirebaseFirestore
              )
              requestDoc.update(updates)
          }
+
+         fun updateRequestBidAmount(requestId: String, bidAmount: Int) {
+             val requestDoc = requestsCollection.document(requestId)
+
+             val updates = hashMapOf<String, Any>(
+                 "requestBidAmount" to bidAmount - 1
+             )
+             requestDoc.update(updates)
+         }
      }
 
     }
