@@ -67,37 +67,49 @@ class UserLoginFragment : Fragment() {
 
     private fun goToApp() {
         logInButton.setOnClickListener {
+            errorMessageTextView.visibility = View.GONE
 
-            FirebaseAuth.getInstance()
-                .signInWithEmailAndPassword(emailEdt.text.toString(), passwordEdt.text.toString())
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
+            if (emailEdt.text.toString().isNotEmpty() && passwordEdt.text.toString().isNotEmpty()) {
+                FirebaseAuth.getInstance()
+                    .signInWithEmailAndPassword(
+                        emailEdt.text.toString(),
+                        passwordEdt.text.toString()
+                    )
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
 
 
-                        val userEmail = emailEdt.text.toString()
-                        db.collection("Users").whereEqualTo("mail", userEmail).get()
-                            .addOnCompleteListener { userQueryTask ->
-                                if (userQueryTask.isSuccessful) {
-                                    val userType =
-                                        userQueryTask.result.documents[0].get("userType").toString()
-                                    val userId = userQueryTask.result.documents[0].id
-                                    val editor = sharedPreferences.edit()
-                                    editor.putString("userType", userType)
-                                    editor.putString("clientId", userId)
-                                    editor.apply()
-                                    val action =
-                                        UserLoginFragmentDirections.actionUserLoginFragmentToMainActivity(
-                                            userType
-                                        )
-                                    v.findNavController().navigate(action)
+                            val userEmail = emailEdt.text.toString()
+                            db.collection("Users").whereEqualTo("mail", userEmail).get()
+                                .addOnCompleteListener { userQueryTask ->
+                                    if (userQueryTask.isSuccessful) {
+                                        val userType =
+                                            userQueryTask.result.documents[0].get("userType")
+                                                .toString()
+                                        val userId = userQueryTask.result.documents[0].id
+                                        val editor = sharedPreferences.edit()
+                                        editor.putString("userType", userType)
+                                        editor.putString("clientId", userId)
+                                        editor.apply()
+                                        val action =
+                                            UserLoginFragmentDirections.actionUserLoginFragmentToMainActivity(
+                                                userType
+                                            )
+                                        v.findNavController().navigate(action)
+                                    }
+
+
                                 }
-
-                            }
+                        } else {
+                            errorMessageTextView.visibility = View.VISIBLE
+                        }
 
 
                     }
 
-                }
+            } else {
+                errorMessageTextView.visibility = View.VISIBLE
+            }
 
 
         }

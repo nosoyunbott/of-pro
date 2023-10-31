@@ -45,6 +45,16 @@
             android:inputType="text"
             android:text="" />
 
+        <TextView
+            android:id="@+id/errorTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="El titulo es obligatorio"
+            android:layout_below="@+id/edtTitle"
+            android:textColor="#FF0000"
+            android:visibility="gone" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -62,6 +72,16 @@
                 android:hint="Precio Max"
                 android:inputType="number"
                 android:text="" />
+
+            <TextView
+                android:id="@+id/errorPriceTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="El precio es invalido"
+                android:layout_below="@+id/edtPriceMax"
+                android:textColor="#FF0000"
+                android:visibility="gone" />
         </LinearLayout>
 
         <Spinner
@@ -89,12 +109,22 @@
             android:focusable="false"
 
             />
+        <TextView
+            android:id="@+id/errorDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="La fecha es invalida"
+            android:layout_below="@+id/edtTime"
+            android:textColor="#FF0000"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnAttach"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="Adjuntar foto/video" />
+
 
         <Button
             android:id="@+id/btnRequest"

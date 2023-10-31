@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,183 +9,232 @@
         android:id="@+id/registerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="15dp"
-        android:text="Registrarse"
-        android:textSize="45sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayoutOne"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="35sp"
+        android:text="Registrarse" />
 
+    <EditText
+        android:id="@+id/nameEdt"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/registerTextView"
+        android:layout_marginTop="7dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingStart="12dp"
+        android:hint="Nombre"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/edittext_border" />
 
-    <LinearLayout
-        android:id="@+id/linearLayoutOne"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_marginTop="80dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <TextView
+        android:id="@+id/errorNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Nombre invalido"
+        android:layout_below="@+id/nameEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
 
-        <EditText
-            android:id="@+id/nameEdt"
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="55dp"
-            android:layout_marginBottom="9dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/edittext_border"
-            android:hint="Nombre"
-            android:paddingStart="12dp" />
+    <EditText
+        android:id="@+id/lastNameEdt"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/nameEdt"
+        android:layout_marginTop="17dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingStart="12dp"
+        android:layout_centerHorizontal="true"
+        android:hint="Apellido"
+        android:background="@drawable/edittext_border" />
 
-        <EditText
-            android:id="@+id/lastNameEdt"
-            android:layout_width="147dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/edittext_border"
-            android:hint="Apellido"
-            android:paddingStart="12dp" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/errorLastNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Apellido invalido"
+        android:layout_below="@+id/lastNameEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
 
-    <!-- Define un recurso para el borde con color negro -->
+    <EditText
+        android:id="@+id/addressEdt"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/lastNameEdt"
+        android:layout_marginTop="17dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingStart="12dp"
+        android:layout_centerHorizontal="true"
+        android:hint="Direccion"
+        android:background="@drawable/edittext_border" />
 
-    <LinearLayout
-        android:id="@+id/linearLayoutTwo"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/linearLayoutOne"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+    <TextView
+        android:id="@+id/errorAddressTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Direccion invalida"
+        android:layout_below="@+id/addressEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
 
-        <EditText
-            android:id="@+id/addressEdt"
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="55dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/edittext_border"
-            android:hint="Direccion"
-            android:paddingStart="12dp" />
+    <EditText
+        android:id="@+id/locationEdt"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/addressEdt"
+        android:layout_marginTop="17dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingStart="12dp"
+        android:layout_centerHorizontal="true"
+        android:hint="Localidad"
+        android:background="@drawable/edittext_border" />
 
-        <EditText
-            android:id="@+id/locationEdt"
-            android:layout_width="147dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/edittext_border"
-            android:hint="Localidad"
-            android:paddingStart="12dp" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/errorLocationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Localidad invalida"
+        android:layout_below="@+id/locationEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/emailEdt"
-        android:layout_width="0dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginEnd="55dp"
-        android:layout_marginBottom="9dp"
-        android:background="@drawable/edittext_border"
-        android:hint="Mail"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/locationEdt"
+        android:layout_marginTop="17dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/phoneEdt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutTwo" />
+        android:layout_centerHorizontal="true"
+        android:hint="Mail"
+        android:background="@drawable/edittext_border" />
+
+    <TextView
+        android:id="@+id/errorEmailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Mail invalido"
+        android:layout_below="@+id/emailEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/phoneEdt"
-        android:layout_width="0dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginLeft="55dp"
-        android:layout_marginEnd="55dp"
-        android:layout_marginRight="55dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/edittext_border"
-        android:hint="Celular"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/emailEdt"
+        android:layout_marginTop="17dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/spnUserType"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailEdt" />
+        android:layout_centerHorizontal="true"
+        android:hint="Celular"
+        android:background="@drawable/edittext_border" />
+
+    <TextView
+        android:id="@+id/errorPhoneTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Celular invalido"
+        android:layout_below="@+id/phoneEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
 
 
     <Spinner
         android:id="@+id/spnUserType"
-        android:layout_width="0dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginEnd="55dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="300dp"
+        android:layout_below="@+id/phoneEdt"
+        android:layout_height="45dp"
+        android:layout_centerHorizontal="true"
         android:autofillHints="Tipo de Usuario"
-        android:background="@drawable/edittext_border"
         android:paddingStart="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/passwordEdt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phoneEdt" />
+        android:layout_marginTop="17dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/edittext_border" />
 
 
     <EditText
         android:id="@+id/passwordEdt"
-        android:layout_width="0dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginEnd="55dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/edittext_border"
-        android:hint="Contraseña"
-        android:inputType="textPassword"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@+id/spnUserType"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnPhotos"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spnUserType" />
+        android:layout_centerHorizontal="true"
+        android:hint="Contraseña"
+        android:background="@drawable/edittext_border"
+        android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/errorPasswordTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Contraseña invalida"
+        android:layout_below="@+id/passwordEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnPhotos"
-        android:layout_width="0dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginEnd="55dp"
-        android:layout_marginBottom="34dp"
-        app:backgroundTint="@null"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/passwordEdt"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingStart="12dp"
+        android:layout_centerHorizontal="true"
+        android:text="Adjuntar foto de perfil"
         android:background="@drawable/button_add_image"
-        android:text="Adjuntar foto"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/registerButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEdt" />
+        />
+
+    <TextView
+        android:id="@+id/errorPhotoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Debe cargar una foto de perfil"
+        android:layout_below="@+id/btnPhotos"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="0dp"
+        android:layout_width="275dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginEnd="68dp"
-        android:layout_marginBottom="75dp"
-        android:background="@drawable/rounded_button"
+        android:layout_below="@+id/btnPhotos"
+        android:layout_marginTop="17dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_centerHorizontal="true"
         android:text="REGISTRATE"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:background="@drawable/rounded_button" />
 
     <TextView
         android:id="@+id/logInTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="35dp"
+        android:layout_below="@+id/registerButton"
+        android:layout_centerHorizontal="true"
         android:text="Ya tenes una cuenta? Inicia Sesión"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginTop="10dp"
+        android:textSize="20sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
