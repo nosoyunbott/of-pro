@@ -224,7 +224,7 @@ class RequestFragment<OutputStream> : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d("DATA FROM INTENT", data.toString())
 
-
+        imageUrlArray = mutableListOf()
 
         if (requestCode == PICK_MEDIA_REQUEST && resultCode == Activity.RESULT_OK) {
             if (data != null) {
@@ -333,6 +333,7 @@ class RequestFragment<OutputStream> : Fragment() {
                 override fun onResponse(
                     call: Call<ResponseBody>, response: Response<ResponseBody>
                 ) {
+                    Log.d("call", call.toString())
                     if (response.isSuccessful) {
                         try {
                             val responseData = response.body()?.string()
@@ -348,7 +349,7 @@ class RequestFragment<OutputStream> : Fragment() {
                         }
                     } else {
                         // Handle unsuccessful response here
-                        Log.e("image", "Upload failed")
+                        Log.e("image", response.toString())
                     }
                 }
 
