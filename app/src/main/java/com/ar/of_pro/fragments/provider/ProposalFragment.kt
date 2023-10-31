@@ -38,6 +38,8 @@ class ProposalFragment : Fragment() {
     lateinit var imageView: ImageView
     lateinit var imageView2: ImageView
     lateinit var imageView3: ImageView
+    lateinit var errorMessageTextView: TextView
+
 
     //Header
     lateinit var proposalProfileHeader: View
@@ -72,6 +74,7 @@ class ProposalFragment : Fragment() {
         txtDescription = v.findViewById(R.id.txtBioDescription)
         edtBudget = v.findViewById(R.id.edtBudget)
         edtComment = v.findViewById(R.id.edtComment)
+        errorMessageTextView = v.findViewById(R.id.errorMessageTextView)
         imageView = v.findViewById(R.id.requestImageView)
         imageView2 = v.findViewById(R.id.imageView2)
         imageView3 = v.findViewById(R.id.imageView4)
@@ -153,47 +156,50 @@ class ProposalFragment : Fragment() {
 
             val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
             val clientId = sharedPref!!.getString("clientId", "")
+            errorMessageTextView.visibility = View.GONE
+            if(request.maxCost > edtBudget.text.toString().toFloat()) {
+                val users = db.collection("Users")
+                users.get().addOnSuccessListener { querySnapshot ->
+                    val userIds = ArrayList<String>()
+                    for (document in querySnapshot) {
+                        val userId = document.id
+                        userIds.add(userId)
 
-            val users = db.collection("Users")
-            users.get().addOnSuccessListener { querySnapshot ->
-                val userIds = ArrayList<String>()
-                for (document in querySnapshot) {
-                    val userId = document.id
-                    userIds.add(userId)
+                    }
+                    val sharedPreferences =
+                        requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
 
+
+                    val bid = edtBudget.text.toString().toFloat()
+                    val commentary = edtComment.text.toString()
+                    val idProvider = sharedPreferences.getString(
+                        "clientId",
+                        ""
+                    )
+                    val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
+                    val p = Proposal(
+                        idProvider,
+                        idRequest,
+                        bid,
+                        commentary
+                    )
+
+                    val newDocProposal = db.collection("Proposals").document()
+                    db.collection("Proposals").document(newDocProposal.id).set(p)
+                    //update request in BD
+                    RequestsService.updateProposalsQtyFromId(
+                        request.requestId,
+                        request.requestBidAmount
+                    )
+
+                    val action =
+                        //agregar que edit text carguen el objeto a la db y crear entity Proposal
+                        ProposalFragmentDirections.actionProposalFragmentToRequestsListFragment()
+                    v.findNavController().navigate(action)
                 }
-                val sharedPreferences =
-                    requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-
-
-                val bid = edtBudget.text.toString().toFloat()
-                val commentary = edtComment.text.toString()
-                val idProvider = sharedPreferences.getString(
-                    "clientId",
-                    ""
-                )
-                val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
-                val p = Proposal(
-                    idProvider,
-                    idRequest,
-                    bid,
-                    commentary
-                )
-
-                val newDocProposal = db.collection("Proposals").document()
-                db.collection("Proposals").document(newDocProposal.id).set(p)
-                //update request in BD
-                RequestsService.updateProposalsQtyFromId(
-                    request.requestId,
-                    request.requestBidAmount
-                )
-
-                val action =
-                    //agregar que edit text carguen el objeto a la db y crear entity Proposal
-                    ProposalFragmentDirections.actionProposalFragmentToRequestsListFragment()
-                v.findNavController().navigate(action)
-            }
-
+            }else {
+            errorMessageTextView.visibility = View.VISIBLE
+        }
 
         }
 

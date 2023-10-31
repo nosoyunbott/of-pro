@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -62,12 +63,16 @@ class RequestFragment<OutputStream> : Fragment() {
     var ocupationList: List<String> = Ocupation().getList()
     lateinit var ocupationAdapter: ArrayAdapter<String>
     lateinit var selectedOcupation: String
-    lateinit var timestamp: String
+    var timestamp: String = ""
     lateinit var imageUrlArray: MutableList<String>
 
     var serviceTypesList: List<String> = ServiceType().getList()
     lateinit var serviceTypesAdapter: ArrayAdapter<String>
     lateinit var selectedServiceType: String
+
+    lateinit var errorPriceTextView: TextView
+    lateinit var errorDateTextView: TextView
+    lateinit var errorTitleTextView: TextView
 
     private val db = FirebaseFirestore.getInstance()
     private var userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -111,6 +116,9 @@ class RequestFragment<OutputStream> : Fragment() {
         edtTitle = v.findViewById(R.id.edtTitle)
         edtPriceMax = v.findViewById(R.id.edtPriceMax)
         edtDescripcion = v.findViewById(R.id.edtDescripcion)
+        errorPriceTextView = v.findViewById(R.id.errorPriceTextView)
+        errorDateTextView = v.findViewById(R.id.errorDateTextView)
+        errorTitleTextView = v.findViewById(R.id.errorTitleTextView)
         edtTime = v.findViewById(R.id.edtTime)
         edtTime.setOnClickListener {
             showDatePickerDialog()
@@ -138,30 +146,33 @@ class RequestFragment<OutputStream> : Fragment() {
         btnRequest.isClickable = false
 
         btnRequest.setOnClickListener {
-            val sharedPreferences =
-                requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-            val clientId = sharedPreferences.getString(
-                "clientId", ""
-            )  // Retrieve the 'userType' attribute from SharedPreferences
-            val title = edtTitle.text.toString()
-            val r = RequestFB(
-                title,
-                0,
-                selectedOcupation,
-                selectedServiceType,
-                edtDescripcion.text.toString(),
-                Request.PENDING,
-                timestamp, //TODO cambiar el string a su tipo correspondiente
-                edtPriceMax.text.toString().toIntOrNull(),
-                clientId,
-                imageUrlArray
-            )
+            errorPriceTextView.visibility = View.GONE
+            if (validateForm()) {
+                val sharedPreferences =
+                    requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+                val clientId = sharedPreferences.getString(
+                    "clientId", ""
+                )  // Retrieve the 'userType' attribute from SharedPreferences
+                val title = edtTitle.text.toString()
+                val r = RequestFB(
+                    title,
+                    0,
+                    selectedOcupation,
+                    selectedServiceType,
+                    edtDescripcion.text.toString(),
+                    Request.PENDING,
+                    timestamp, //TODO cambiar el string a su tipo correspondiente
+                    edtPriceMax.text.toString().toIntOrNull(),
+                    clientId,
+                    imageUrlArray
+                )
 
-            val newDocRequest = db.collection("Requests").document()
-            db.collection("Requests").document(newDocRequest.id).set(r)
+                val newDocRequest = db.collection("Requests").document()
+                db.collection("Requests").document(newDocRequest.id).set(r)
 
-            val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
-            v.findNavController().navigate(action)
+                val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
+                v.findNavController().navigate(action)
+            }
         }
     }
 
@@ -220,6 +231,15 @@ class RequestFragment<OutputStream> : Fragment() {
 
                 if (data != null && data.clipData != null) {
                     val count = data.clipData!!.itemCount
+
+                    if (count > 3) {
+                        Toast.makeText(
+                            context,
+                            "Has excedido el límite de selección de imágenes",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return
+                    }
                     for (i in 0 until count) {
                         val selectedMediaUri = data.clipData!!.getItemAt(i).uri
                         // Handle the selected image URI as needed
@@ -342,6 +362,36 @@ class RequestFragment<OutputStream> : Fragment() {
             e.printStackTrace()
             // Handle file IO exception
         }
+    }
+
+    private fun validateForm(): Boolean {
+        var priceValidate = false
+        var titleValidate = false
+        var dateValidate = false
+        if (edtPriceMax.text.isNotEmpty()) {
+            if (edtPriceMax.text.toString().toFloat() < Int.MAX_VALUE) {
+                errorPriceTextView.visibility = View.GONE
+                priceValidate = true
+            } else {
+                errorPriceTextView.visibility = View.VISIBLE
+            }
+        } else {
+            errorPriceTextView.visibility = View.VISIBLE
+        }
+        if (!timestamp.isNullOrBlank() && timestamp > System.currentTimeMillis().toString()) {
+            errorDateTextView.visibility = View.GONE
+            dateValidate = true
+        } else {
+            errorDateTextView.visibility = View.VISIBLE
+        }
+        if (edtTitle.text.isNotEmpty()){
+            titleValidate = true
+            errorTitleTextView.visibility = View.GONE
+        }else{
+            errorTitleTextView.visibility = View.VISIBLE
+        }
+
+        return priceValidate && dateValidate && titleValidate
     }
 
 
