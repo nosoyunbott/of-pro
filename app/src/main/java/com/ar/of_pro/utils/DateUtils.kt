@@ -16,7 +16,7 @@ companion object {
             val date = Date(timestampLong)
 
             // You can format and display the date as needed
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
             val formattedDate = dateFormat.format(date)
             return formattedDate;
         } catch (e: NumberFormatException) {
