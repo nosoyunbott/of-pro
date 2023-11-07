@@ -17,6 +17,7 @@ import com.ar.of_pro.R
 import com.ar.of_pro.entities.Proposal
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.services.RequestsService
+import com.ar.of_pro.utils.DateUtils
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
@@ -127,8 +128,9 @@ class ProposalFragment : Fragment() {
         txtTitle.text = request.requestTitle
         txtOcupation.text = request.categoryOcupation
         txtServiceType.text = request.categoryService
-        txtTime.text = request.date
-        txtPricing.text = request.maxCost.toString()
+        txtTime.text = DateUtils.GetFormattedDate(request.date)
+
+        txtPricing.text = "$" + request.maxCost.toString()
         txtDescription.text = request.description
         listOfImages = request.imageUrlArray
         val context = context

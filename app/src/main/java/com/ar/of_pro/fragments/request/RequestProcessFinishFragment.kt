@@ -49,8 +49,12 @@ class RequestProcessFinishFragment : Fragment() {
 
                 val providerId = document.getString("providerId")
                 UserService.updateRatingOfUser(rating, providerId!!)
-            }
+                Toast.makeText(requireContext(), "PUNTUACIÓN: $rating", Toast.LENGTH_SHORT).show()
 
+                // Navigate back to the previous screen (pop the current fragment)
+                val action=RequestProcessFinishFragmentDirections.actionRequestFragmentProccessFinishClientToRequestsHistoryFragment()
+                findNavController().navigate(action)
+            }
 
             Toast.makeText(requireContext(), "PUNTUACIÓN: $rating", Toast.LENGTH_SHORT).show()
             val action =
@@ -81,7 +85,7 @@ class RequestProcessFinishFragment : Fragment() {
                 document.getString("categoryOcupation") + " " + document.getString("categoryService")
             paragraphTextView.text = document.getString("description") ?: "" // Set the description
 
-            bigLegendTextView.text = document.getLong("maxCost")
+            bigLegendTextView.text = "$" + document.getLong("maxCost")
                 .toString() + " " + document.getString("requestTitle") // Set the big legend
 
             var userId: String? = null;
@@ -97,13 +101,17 @@ class RequestProcessFinishFragment : Fragment() {
                 fullNameTextView.text =
                     userDocument.getString("name") + " " + userDocument.getString("lastName") // Client
                 zoneTextView.text = userDocument.getString("location")//Client
-                val ratingAmount = userDocument.getDouble("rating")
-                val ratingQuantity = userDocument.getDouble("ratingQuantity")
-                if (ratingQuantity?.toInt() != 0) {
-                    val rating = ratingAmount!! / ratingQuantity!!;
-                    rankingTextView.text = rating.toString() // Client
-                } else {
-                    rankingTextView.text = "Sin calificaciones "
+
+                val ratingAmount=userDocument.getDouble("rating")
+                val ratingQuantity=userDocument.getDouble("ratingQuantity")
+                if(ratingQuantity?.toInt() !=0)
+                {
+                    val rating= ratingAmount!! / ratingQuantity!!;
+                    rankingTextView.text = String.format("%.1f", rating) // Client
+                }
+                else
+                {
+                    rankingTextView.text="Sin calificaciones "
                 }
 
 
