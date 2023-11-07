@@ -53,7 +53,7 @@
                     android:id="@+id/profilePicture"
                     android:layout_width="100sp"
                     android:layout_height="100sp"
-                    android:src="@drawable/ic_launcher_foreground" />
+                    android:src="@null" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -182,7 +182,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:baselineAligned="false"
-                android:text="🌟"
+                android:text=""
                 android:textSize="34sp" />
 
         </LinearLayout>

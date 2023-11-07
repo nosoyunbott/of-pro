@@ -1,5 +1,6 @@
 package com.ar.of_pro.fragments.profile
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -71,6 +72,7 @@ class ProfileFragment : Fragment() {
         return v
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -89,15 +91,15 @@ class ProfileFragment : Fragment() {
                     val ratingQty = snapshot.getLong("ratingQuantity")?.toInt() ?: 0
                     val profileImage = snapshot.getString("imageUrl") ?: ""
 
-                    txtNombre.text = name + " " + surname
+                    txtNombre.text = "$name $surname"
                     txtLocalidad.text = location
                     txtCorreo.text = mail
                     txtTelefono.text = phoneNumber.toString()
                     if(sharedPreferences.getString("userType", "") == "PROVIDER") {
                         if(ratingQty>0) {
-                            txtNumRating.text = (numRating / ratingQty).toString() + " "
+                            txtNumRating.text = (numRating / ratingQty).toString() + " 🌟"
                         }else{
-                            txtNumRating.text = numRating.toString() + " "
+                            txtNumRating.text = "$numRating 🌟"
                         }
                     }
 
