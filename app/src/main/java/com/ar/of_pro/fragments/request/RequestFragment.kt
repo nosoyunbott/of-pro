@@ -147,33 +147,46 @@ class RequestFragment<OutputStream> : Fragment() {
 
         btnRequest.setOnClickListener {
             errorPriceTextView.visibility = View.GONE
-            if (validateForm()) {
-                val sharedPreferences =
-                    requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-                val clientId = sharedPreferences.getString(
-                    "clientId", ""
-                )  // Retrieve the 'userType' attribute from SharedPreferences
-                val title = edtTitle.text.toString()
-                val r = RequestFB(
-                    title,
-                    0,
-                    selectedOcupation,
-                    selectedServiceType,
-                    edtDescripcion.text.toString(),
-                    Request.PENDING,
-                    timestamp, //TODO cambiar el string a su tipo correspondiente
-                    edtPriceMax.text.toString().toIntOrNull(),
-                    clientId,
-                    imageUrlArray
-                )
+            try {
+                if (validateForm()) {
+                    val sharedPreferences =
+                        requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+                    val clientId = sharedPreferences.getString(
+                        "clientId", ""
+                    )  // Retrieve the 'userType' attribute from SharedPreferences
+                    val title = edtTitle.text.toString()
+                    val r = RequestFB(
+                        title,
+                        0,
+                        selectedOcupation,
+                        selectedServiceType,
+                        edtDescripcion.text.toString(),
+                        Request.PENDING,
+                        timestamp, // TODO: Change the string to its corresponding type
+                        edtPriceMax.text.toString().toIntOrNull(),
+                        clientId,
+                        imageUrlArray
+                    )
 
-                val newDocRequest = db.collection("Requests").document()
-                db.collection("Requests").document(newDocRequest.id).set(r)
+                    val newDocRequest = db.collection("Requests").document()
+                    db.collection("Requests").document(newDocRequest.id).set(r)
 
-                val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
-                v.findNavController().navigate(action)
+
+                    showToast("Solicitud creada correctamente")
+                    val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
+                    v.findNavController().navigate(action)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                showToast("Ha ocurrido un error. Contactar soporte.")
             }
         }
+
+    }
+
+    private fun showToast(s: String) {
+        Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show()
+
     }
 
     override fun onAttach(context: Context) {
