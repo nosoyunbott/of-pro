@@ -27,7 +27,15 @@ class RequestProcessFinishFragment : Fragment() {
 
     lateinit var finishbutton: Button
     lateinit var ratingBar: RatingBar
-
+    lateinit var fullNameTextView: TextView
+    lateinit var zoneTextView: TextView
+    lateinit var rankingTextView: TextView
+    lateinit var legendTextView: TextView
+    lateinit var paragraphTextView: TextView
+    lateinit var bigLegendTextView: TextView
+    lateinit var profilePicture: ImageView
+    lateinit var mediumLegendTextView: TextView
+    lateinit var favIcon: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -69,19 +77,19 @@ class RequestProcessFinishFragment : Fragment() {
             }
         }
 
-        val fullNameTextView = v.findViewById<TextView>(R.id.fullNameTextView)
-        val zoneTextView = v.findViewById<TextView>(R.id.zoneTextView)
-        val rankingTextView = v.findViewById<TextView>(R.id.rankingTextView)
-        val legendTextView = v.findViewById<TextView>(R.id.legendTextView)
-        val paragraphTextView = v.findViewById<TextView>(R.id.paragraphTextView)
-        val bigLegendTextView = v.findViewById<TextView>(R.id.bigLegendTextView)
-        var profilePicture = v.findViewById<ImageView>(R.id.photoImageView);
-        val mediumLegendTextView = v.findViewById<TextView>(R.id.mediumLegendTextView)
-        val favIcon = v.findViewById<ImageView>(R.id.fav_star_icon)
+        fullNameTextView = v.findViewById<TextView>(R.id.fullNameTextView)
+        zoneTextView = v.findViewById<TextView>(R.id.zoneTextView)
+        rankingTextView = v.findViewById<TextView>(R.id.rankingTextView)
+        legendTextView = v.findViewById<TextView>(R.id.legendTextView)
+        paragraphTextView = v.findViewById<TextView>(R.id.paragraphTextView)
+        bigLegendTextView = v.findViewById<TextView>(R.id.bigLegendTextView)
+        profilePicture = v.findViewById<ImageView>(R.id.photoImageView);
+        mediumLegendTextView = v.findViewById<TextView>(R.id.mediumLegendTextView)
+        favIcon = v.findViewById<ImageView>(R.id.fav_star_icon)
 
 
         requestsCollection.document(request.requestId).get().addOnSuccessListener { document ->
-            legendTextView.text =
+            legendTextView.text = "Disciplina: " +
                 document.getString("categoryOcupation") + " " + document.getString("categoryService")
             paragraphTextView.text = document.getString("description") ?: "" // Set the description
 
