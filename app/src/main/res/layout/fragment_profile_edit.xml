@@ -52,9 +52,11 @@
 
                 <ImageView
                     android:id="@+id/profilePictureEdit"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginRight="24dp"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_launcher_foreground" />
+                    android:src="@drawable/plusicon" />
 
                 <Space
                     android:layout_width="wrap_content"

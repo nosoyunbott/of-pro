@@ -35,12 +35,10 @@ class RequestProcessFinishFragment : Fragment() {
         val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
 
         val v = inflater.inflate(R.layout.fragment_request_proccess_finish_client, container, false)
-        // Find references to your button and component
         finishbutton = v.findViewById(R.id.finishButton)
         ratingBar = v.findViewById(R.id.ratingBar)
-        // Initialize SharedPreferences
         val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-        val userType=sharedPref!!.getString("userType","")
+        val userType = sharedPref!!.getString("userType", "")
         finishButtonReview()
 
         fun handleRatingFinishRequest(rating: Float) {
@@ -49,22 +47,20 @@ class RequestProcessFinishFragment : Fragment() {
 
             requestsCollection.document(request.requestId).get().addOnSuccessListener { document ->
 
-                val providerId=document.getString("providerId")
+                val providerId = document.getString("providerId")
                 UserService.updateRatingOfUser(rating, providerId!!)
             }
 
 
             Toast.makeText(requireContext(), "PUNTUACIÓN: $rating", Toast.LENGTH_SHORT).show()
-
-            // Navigate back to the previous screen (pop the current fragment)
-            val action=RequestProcessFinishFragmentDirections.actionRequestFragmentProccessFinishClientToRequestsHistoryFragment()
+            val action =
+                RequestProcessFinishFragmentDirections.actionRequestFragmentProccessFinishClientToRequestsHistoryFragment()
             findNavController().navigate(action)
 
         }
 
         ratingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
             if (fromUser) {
-                // Call the custom function to handle the rating change
                 handleRatingFinishRequest(rating)
             }
         }
@@ -75,15 +71,12 @@ class RequestProcessFinishFragment : Fragment() {
         val legendTextView = v.findViewById<TextView>(R.id.legendTextView)
         val paragraphTextView = v.findViewById<TextView>(R.id.paragraphTextView)
         val bigLegendTextView = v.findViewById<TextView>(R.id.bigLegendTextView)
-        var profilePicture=v.findViewById<ImageView>(R.id.photoImageView);
-        val mediumLegendTextView=v.findViewById<TextView>(R.id.mediumLegendTextView)
-
-
+        var profilePicture = v.findViewById<ImageView>(R.id.photoImageView);
+        val mediumLegendTextView = v.findViewById<TextView>(R.id.mediumLegendTextView)
+        val favIcon = v.findViewById<ImageView>(R.id.fav_star_icon)
 
 
         requestsCollection.document(request.requestId).get().addOnSuccessListener { document ->
-            // Populate the views with data from the Request object
-
             legendTextView.text =
                 document.getString("categoryOcupation") + " " + document.getString("categoryService")
             paragraphTextView.text = document.getString("description") ?: "" // Set the description
@@ -91,48 +84,40 @@ class RequestProcessFinishFragment : Fragment() {
             bigLegendTextView.text = document.getLong("maxCost")
                 .toString() + " " + document.getString("requestTitle") // Set the big legend
 
-            var userId: String? =null;
-            //diferenciación de datos.
-            if(userType=="PROVIDER")
-            {
-                userId= document.getString("clientId") ?: ""
-            }
-            else if(userType=="CLIENT"){
-                userId= document.getString("providerId") ?: ""
+            var userId: String? = null;
+            if (userType == "PROVIDER") {
+                userId = document.getString("clientId") ?: ""
+            } else if (userType == "CLIENT") {
+                userId = document.getString("providerId") ?: ""
             }
             usersCollection.document(userId!!).get().addOnSuccessListener { userDocument ->
                 val imageUrl = userDocument.getString("imageUrl") ?: ""
-               profilePicture = profilePicture
+                profilePicture = profilePicture
                 Glide.with(requireContext()).load(imageUrl).into(profilePicture);
                 fullNameTextView.text =
                     userDocument.getString("name") + " " + userDocument.getString("lastName") // Client
                 zoneTextView.text = userDocument.getString("location")//Client
-                val ratingAmount=userDocument.getDouble("rating")
-                val ratingQuantity=userDocument.getDouble("ratingQuantity")
-                if(ratingQuantity?.toInt() !=0)
-                {
-                    val rating= ratingAmount!! / ratingQuantity!!;
+                val ratingAmount = userDocument.getDouble("rating")
+                val ratingQuantity = userDocument.getDouble("ratingQuantity")
+                if (ratingQuantity?.toInt() != 0) {
+                    val rating = ratingAmount!! / ratingQuantity!!;
                     rankingTextView.text = rating.toString() // Client
-                }
-                else
-                {
-                    rankingTextView.text="Sin calificaciones "
+                } else {
+                    rankingTextView.text = "Sin calificaciones "
                 }
 
 
 
-                if(userType=="PROVIDER" || request.state=="FINALIZADA")
-                {
-                    mediumLegendTextView.visibility=View.VISIBLE
-                    mediumLegendTextView.text="Estado de la solicitud: " + request.state
-                    finishbutton.visibility=View.GONE
-
-
-                    if(userType=="PROVIDER")
-                    {
-                        rankingTextView.visibility=View.GONE
-                    }
-
+                if (userType == "PROVIDER") {
+                    mediumLegendTextView.visibility = View.VISIBLE
+                    mediumLegendTextView.text = "Estado de la solicitud: " + request.state
+                    finishbutton.visibility = View.GONE
+                    rankingTextView.visibility = View.GONE
+                    favIcon.visibility = View.GONE
+                } else if (request.state == "FINALIZADA" && userType == "CLIENTE") {
+                    finishbutton.visibility = View.VISIBLE
+                    rankingTextView.visibility = View.VISIBLE
+                    favIcon.visibility = View.VISIBLE
                 }
 
             }
@@ -143,19 +128,14 @@ class RequestProcessFinishFragment : Fragment() {
 
     fun finishButtonReview() {
         val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
-        // Initialize SharedPreferences
         val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-        val userType=sharedPref!!.getString("userType", "")
-        if (request.state != "FINALIZADA" && userType=="CLIENT") {
-            // Set an OnClickListener for the finishButton
+        val userType = sharedPref!!.getString("userType", "")
+        if (request.state != "FINALIZADA" && userType == "CLIENT") {
             finishbutton.setOnClickListener {
-                // Hide the button
                 finishbutton.visibility = View.GONE
 
-                // Show the component
                 ratingBar.visibility = View.VISIBLE
 
-                // Add any additional logic or actions you need here
             }
         }
     }
