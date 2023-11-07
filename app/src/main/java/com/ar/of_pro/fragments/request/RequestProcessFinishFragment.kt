@@ -32,11 +32,12 @@ class RequestProcessFinishFragment : Fragment() {
     lateinit var rankingTextView: TextView
     lateinit var legendTextView: TextView
     lateinit var paragraphTextView: TextView
-    lateinit var bigLegendTextView: TextView
+    lateinit var requestTitle: TextView
     lateinit var profilePicture: ImageView
     lateinit var mediumLegendTextView: TextView
     lateinit var favIcon: ImageView
-
+    lateinit var userTypeTitle: TextView
+    lateinit var txtPrice: TextView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -82,20 +83,26 @@ class RequestProcessFinishFragment : Fragment() {
         rankingTextView = v.findViewById<TextView>(R.id.rankingTextView)
         legendTextView = v.findViewById<TextView>(R.id.legendTextView)
         paragraphTextView = v.findViewById<TextView>(R.id.paragraphTextView)
-        bigLegendTextView = v.findViewById<TextView>(R.id.bigLegendTextView)
+        requestTitle = v.findViewById<TextView>(R.id.bigLegendTextView)
         profilePicture = v.findViewById<ImageView>(R.id.photoImageView);
         mediumLegendTextView = v.findViewById<TextView>(R.id.mediumLegendTextView)
         favIcon = v.findViewById<ImageView>(R.id.fav_star_icon)
-
+        userTypeTitle = v.findViewById(R.id.userTypeTitle)
+        txtPrice = v.findViewById(R.id.txtPrice)
 
         requestsCollection.document(request.requestId).get().addOnSuccessListener { document ->
+            if(userType == "CLIENT"){
+                userTypeTitle.text = "Datos del proovedor"
+            }else{
+                userTypeTitle.text = "Datos del cliente"
+            }
             legendTextView.text = "Disciplina: " +
                 document.getString("categoryOcupation") + " " + document.getString("categoryService")
-            paragraphTextView.text = document.getString("description") ?: "" // Set the description
+            paragraphTextView.text = "Descripción: " + document.getString("description") ?: "" // Set the description
 
-            bigLegendTextView.text = "$" + document.getLong("maxCost")
-                .toString() + " " + document.getString("requestTitle") // Set the big legend
-
+            requestTitle.text = document.getString("requestTitle") // Set the big legend
+            txtPrice.text = "$" + document.getLong("maxCost")
+                .toString()
             var userId: String? = null;
             if (userType == "PROVIDER") {
                 userId = document.getString("clientId") ?: ""

@@ -32,12 +32,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/photoImageView"
         app:layout_constraintVertical_bias="0.26">
-
+        <TextView
+            android:id="@+id/bigLegendTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:paddingVertical="30sp"
+            />
         <TextView
             android:id="@+id/userTypeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Datos del proovedor"
+            android:text=""
             android:textColor="#000000"
             android:textSize="28sp" />
         <TextView
@@ -115,19 +126,18 @@
             android:textSize="18sp"
             android:gravity="center"
         />
-
-        <!-- Third Section: Big Black Letters Legend -->
         <TextView
-            android:id="@+id/bigLegendTextView"
+            android:id="@+id/txtPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:text=""
-            android:textAlignment="center"
             android:textColor="#000"
-            android:textSize="30sp"
+            android:textSize="18sp"
             android:gravity="center"
-        />
+            />
+
+        <!-- Third Section: Big Black Letters Legend -->
+
 
         <TextView
             android:id="@+id/mediumLegendTextView"
@@ -141,7 +151,25 @@
             android:visibility="gone"
             android:gravity="center"
         />
+        <Button
+            android:id="@+id/finishButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:text="Finalizar"
+            android:textColor="#fff"
+            android:visibility="visible" />
 
+        <!-- Rating Component -->
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:progressTint="#FFEB3B"
+            android:rating="3.5"
+            android:stepSize="0.5"
+            android:visibility="visible" />
         <!-- Fourth Section: Button and Rating Component -->
         <LinearLayout
             android:layout_width="0dp"
@@ -153,25 +181,7 @@
             app:layout_constraintTop_toBottomOf="@+id/bigLegendTextView">
 
             <!-- Finish Button -->
-            <Button
-                android:id="@+id/finishButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/black"
-                android:text="Finalizar"
-                android:textColor="#fff"
-                android:visibility="gone" />
 
-            <!-- Rating Component -->
-            <RatingBar
-                android:id="@+id/ratingBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="5"
-                android:progressTint="#FFEB3B"
-                android:rating="3.5"
-                android:stepSize="0.5"
-                android:visibility="gone" />
 
             <!-- You can add a RatingBar or custom view here -->
         </LinearLayout>
