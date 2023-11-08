@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -37,6 +38,9 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     val db = FirebaseFirestore.getInstance()
     val requestsCollection = db.collection("Requests")
     val proposalsCollection = db.collection("Proposals")
+    private var selectedButton: Button? = null
+    private lateinit var clearFiltersTextView: TextView
+
 
 
     //NOTE Solo para validaciones de requests
@@ -151,6 +155,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         v = inflater.inflate(R.layout.fragment_requests_list, container, false)
         recRequestList = v.findViewById(R.id.rec_requestsList)
         filterContainer = v.findViewById(R.id.filterContainer)
+        clearFiltersTextView = v.findViewById(R.id.clearFiltersTextView)
         return v
     }
 
@@ -166,6 +171,12 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
 
         refreshRecyclerView()
+
+        clearFiltersTextView.setOnClickListener {
+            selectedButton?.setBackgroundResource(R.drawable.button_transparent)
+            requestListAdapter = RequestCardAdapter(requestList, this@RequestsListFragment)
+            recRequestList.adapter = requestListAdapter
+        }
     }
 
     fun refreshRecyclerView() {
@@ -179,7 +190,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
             layoutParams.setMargins(10, 5, 10, 0)
             btnFilter.layoutParams = layoutParams
             btnFilter.textSize = 16F
-            btnFilter.background = resources.getDrawable(R.drawable.rounded_button)
+            btnFilter.background = resources.getDrawable(R.drawable.button_transparent)
 
             btnFilter.setOnClickListener {
                 val filter = btnFilter.text.toString()
@@ -187,6 +198,10 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
                     requestList.filter { it.categoryOcupation == filter } as MutableList
                 requestListAdapter = RequestCardAdapter(filteredList, this@RequestsListFragment)
                 recRequestList.adapter = requestListAdapter
+
+                selectedButton?.setBackgroundResource(R.drawable.button_transparent)
+                btnFilter.setBackgroundResource(R.drawable.rounded_violet_background)
+                selectedButton = btnFilter
             }
 
             filterContainer.addView(btnFilter)
