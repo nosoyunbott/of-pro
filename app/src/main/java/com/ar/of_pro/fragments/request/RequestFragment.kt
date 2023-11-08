@@ -5,8 +5,10 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputFilter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -73,9 +75,14 @@ class RequestFragment<OutputStream> : Fragment() {
     lateinit var errorPriceTextView: TextView
     lateinit var errorDateTextView: TextView
     lateinit var errorTitleTextView: TextView
+    lateinit var sharedPreferences: SharedPreferences
 
     private val db = FirebaseFirestore.getInstance()
     private var userId = FirebaseAuth.getInstance().currentUser?.uid
+
+    var selectedServicePosition: Int = 0
+    var selectedOcupationPosition: Int = 0
+
 
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
@@ -123,9 +130,29 @@ class RequestFragment<OutputStream> : Fragment() {
         edtTime.setOnClickListener {
             showDatePickerDialog()
         }
+        val maxLength = 120
+
+        val inputFilter = InputFilter { source, start, end, dest, dstart, dend ->
+            if (dest.length + end - start - (dend - dstart) <= maxLength) {
+                null
+            } else {
+                ""
+            }
+        }
+
+
+        edtDescripcion.filters = arrayOf(inputFilter)
+        sharedPreferences =
+            requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.remove("selectedService")
+        editor.remove("selectedOcupation")
+        editor.apply()
         imageUrlArray = mutableListOf()
         setupSpinner(spnOcupation, ocupationAdapter)
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
+
+
         return v
     }
 
@@ -138,8 +165,18 @@ class RequestFragment<OutputStream> : Fragment() {
             it.write(fileContents.toByteArray())
         }
 
-        setupSpinner(spnOcupation, ocupationAdapter)
-        setupSpinner(spnServiceTypes, serviceTypesAdapter)
+//        setupSpinner(spnOcupation, ocupationAdapter)
+//        setupSpinner(spnServiceTypes, serviceTypesAdapter)
+        val posSpnService = sharedPreferences.getInt("selectedService", 0)
+        val posSpnOcupation = sharedPreferences.getInt("selectedOcupation", 0)
+        if (posSpnOcupation != 0) {
+            spnOcupation.setSelection(posSpnOcupation)
+            selectedOcupation = ocupationList[posSpnOcupation]
+        }
+        if (posSpnService != 0) {
+            spnServiceTypes.setSelection(posSpnService)
+            selectedServiceType = serviceTypesList[posSpnOcupation]
+        }
         setOnClickListener(btnAttach)
 
         btnRequest.isEnabled = false
@@ -148,8 +185,6 @@ class RequestFragment<OutputStream> : Fragment() {
         btnRequest.setOnClickListener {
             errorPriceTextView.visibility = View.GONE
             if (validateForm()) {
-                val sharedPreferences =
-                    requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
                 val clientId = sharedPreferences.getString(
                     "clientId", ""
                 )  // Retrieve the 'userType' attribute from SharedPreferences
@@ -169,7 +204,10 @@ class RequestFragment<OutputStream> : Fragment() {
 
                 val newDocRequest = db.collection("Requests").document()
                 db.collection("Requests").document(newDocRequest.id).set(r)
-
+                val editor = sharedPreferences.edit()
+                editor.remove("selectedService")
+                editor.remove("selectedOcupation")
+                editor.apply()
                 val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
                 v.findNavController().navigate(action)
             }
@@ -193,8 +231,14 @@ class RequestFragment<OutputStream> : Fragment() {
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
                 when (spinner) {
-                    spnOcupation -> selectedOcupation = ocupationList[position]
-                    spnServiceTypes -> selectedServiceType = serviceTypesList[position]
+                    spnOcupation -> {
+                        selectedOcupation = ocupationList[position]
+                        selectedOcupationPosition = position
+                    }
+                    spnServiceTypes -> {
+                        selectedServiceType = serviceTypesList[position]
+                        selectedServicePosition = position
+                    }
                 }
             }
 
@@ -212,7 +256,10 @@ class RequestFragment<OutputStream> : Fragment() {
 
     private fun setOnClickListener(btn: Button) {
         btn.setOnClickListener() {
-
+            val editor = sharedPreferences.edit()
+            editor.putInt("selectedService", selectedServicePosition)
+            editor.putInt("selectedOcupation", selectedOcupationPosition)
+            editor.apply()
             val intent = Intent(Intent.ACTION_PICK)
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             intent.type = "image/*, video/*"

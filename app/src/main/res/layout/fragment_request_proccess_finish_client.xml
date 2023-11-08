@@ -101,69 +101,70 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.73">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutPersonalData"
+        app:layout_constraintVertical_bias="0.01999998">
+
         <TextView
             android:id="@+id/txtTitleRequest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="5dp"
             android:gravity="center"
-            android:paddingVertical="10sp"
+            android:paddingVertical="5sp"
             android:text="Sobre la solicitud"
             android:textAlignment="center"
             android:textColor="#000"
             android:textSize="30sp" />
+
         <TextView
             android:id="@+id/bigLegendTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:gravity="center"
             android:paddingVertical="10sp"
             android:text=""
             android:textAlignment="center"
             android:textColor="#000"
             android:textSize="30sp" />
+
         <TextView
             android:id="@+id/txtCategorySercvice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingVertical="5sp"
             android:text=""
             android:textColor="#000"
-            android:textSize="18sp"
-            android:paddingVertical="5sp"
-            />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/legendTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingVertical="5sp"
             android:text=""
             android:textColor="#000"
-            android:textSize="18sp"
-            android:paddingVertical="5sp"
-            />
+            android:textSize="18sp" />
         <!-- Second Section: Paragraph -->
         <TextView
             android:id="@+id/paragraphTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:paddingVertical="5sp"
             android:text=""
             android:textColor="#000"
-            android:textSize="18sp"
-            android:paddingVertical="5sp"/>
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/txtPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:paddingVertical="5sp"
             android:text=""
             android:textColor="#000"
-            android:textSize="18sp"
-            android:paddingVertical="5sp"/>
+            android:textSize="18sp" />
 
         <!-- Third Section: Big Black Letters Legend -->
 
