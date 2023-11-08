@@ -20,7 +20,8 @@ class ServiceProviderHolder(v: View) : RecyclerView.ViewHolder(v){
 
     fun setBidAmount(bidAmount: Float ) {
         val txt : TextView = view.findViewById(R.id.txtBidAmount)
-        txt.text = bidAmount.toString()
+        val bidFormatted = "$" + bidAmount.toString()
+        txt.text = bidFormatted
     }
     fun setCalification(calification: Double) {
         val txt: TextView = view.findViewById(R.id.txtCalification)
