@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputFilter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -129,6 +130,17 @@ class RequestFragment<OutputStream> : Fragment() {
         edtTime.setOnClickListener {
             showDatePickerDialog()
         }
+        val maxLength = 120
+
+        val inputFilter = InputFilter { source, start, end, dest, dstart, dend ->
+            if (dest.length + end - start - (dend - dstart) <= maxLength) {
+                null
+            } else {
+                ""
+            }
+        }
+
+        edtDescripcion.filters = arrayOf(inputFilter)
         sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
 
