@@ -134,7 +134,7 @@ class RequestProcessFinishFragment : Fragment() {
 
 
 
-                if (userType == "PROVIDER") {
+                if (userType == "PROVIDER" || request.state=="FINALIZADA") {
                     mediumLegendTextView.visibility = View.VISIBLE
                     mediumLegendTextView.text = "Estado de la solicitud: " + request.state
                     finishbutton.visibility = View.GONE
