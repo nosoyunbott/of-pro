@@ -140,10 +140,14 @@ class RequestFragment<OutputStream> : Fragment() {
             }
         }
 
+
         edtDescripcion.filters = arrayOf(inputFilter)
         sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-
+        val editor = sharedPreferences.edit()
+        editor.remove("selectedService")
+        editor.remove("selectedOcupation")
+        editor.apply()
         imageUrlArray = mutableListOf()
         setupSpinner(spnOcupation, ocupationAdapter)
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
