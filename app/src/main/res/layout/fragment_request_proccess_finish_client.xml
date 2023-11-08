@@ -1,158 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.request.RequestProcessFinishFragment">
 
+    <TextView
+        android:id="@+id/userTypeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#000000"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/photoImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <!-- Image Centered -->
     <ImageView
         android:id="@+id/photoImageView"
         android:layout_width="140dp"
         android:layout_height="100dp"
-        android:layout_weight="2"
         android:scaleType="centerCrop"
-        android:layout_marginTop="200px"
-        />
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutPersonalData"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.65" />
 
-    <!-- First Section: Person Information -->
+    <!-- Personal Data Below Image -->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/linearLayoutPersonalData"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="60dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.31">
 
-        >
 
-        <!-- Left Half: Photo Image (Rounded) -->
-
-
-
-        <!-- Right Half: Information about the Person -->
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/fullNameTextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginLeft="400px">
+            android:text=""
+            android:textColor="#000"
+            android:textSize="18sp" />
 
-            <!-- Full Name -->
+        <!-- Zone -->
+        <TextView
+            android:id="@+id/zoneTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#000"
+            android:textSize="18sp" />
+
+        <!-- Ranking -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <TextView
-                android:id="@+id/fullNameTextView"
+                android:id="@+id/rankingTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="18sp"
+                android:text="dsadsa"
                 android:textColor="#000"
-                />
+                android:textSize="25sp" />
 
-            <!-- Zone -->
-            <TextView
-                android:id="@+id/zoneTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="18sp"
-                android:textColor="#000"/>
-
-            <!-- Ranking -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/rankingTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="18sp"
-                    android:textColor="#000"/>
-
-
-
-                <ImageView
-                    android:id="@+id/fav_star_icon"
-                    android:layout_width="10dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/toecu"
-                    android:layout_centerHorizontal="true"
-                    android:background="#00ffffff" />
-
-
-
-            </LinearLayout>
-
-            <!-- Legend -->
-            <TextView
-                android:id="@+id/legendTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="18sp"
-                android:textColor="#000"/>
+            <ImageView
+                android:id="@+id/fav_star_icon"
+                android:layout_width="20dp"
+                android:layout_height="36dp"
+                android:background="#00ffffff"
+                android:src="@drawable/toecu" />
 
         </LinearLayout>
+
+        <!-- Legend -->
+
+
     </LinearLayout>
 
-    <!-- Second Section: Paragraph -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="260dp"
-        android:background="@android:color/darker_gray"
-        android:padding="16dp"
-        >
 
+    <!-- Rest of the Content Below -->
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.73">
+        <TextView
+            android:id="@+id/txtTitleRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="10sp"
+            android:text="Sobre la solicitud"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="30sp" />
+        <TextView
+            android:id="@+id/bigLegendTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="10sp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="30sp" />
+        <TextView
+            android:id="@+id/txtCategorySercvice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:paddingVertical="5sp"
+            />
+
+        <TextView
+            android:id="@+id/legendTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:paddingVertical="5sp"
+            />
+        <!-- Second Section: Paragraph -->
         <TextView
             android:id="@+id/paragraphTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:gravity="center"
+            android:text=""
             android:textColor="#000"
-            android:text=""/>
-    </LinearLayout>
+            android:textSize="18sp"
+            android:paddingVertical="5sp"/>
 
-    <!-- Third Section: Big Black Letters Legend -->
-    <TextView
-        android:id="@+id/bigLegendTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="30sp"
-        android:textColor="#000"
-        android:layout_marginTop="445sp"
-        android:textAlignment="center"/>
-    <TextView
-        android:id="@+id/mediumLegendTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="En proceso!"
-        android:textSize="18sp"
-        android:textColor="#000"
-        android:visibility="gone"
-        android:layout_marginTop="545sp"
-        android:textAlignment="center"/>
+        <TextView
+            android:id="@+id/txtPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:paddingVertical="5sp"/>
 
-    <!-- Fourth Section: Button and Rating Component -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="560dp">
+        <!-- Third Section: Big Black Letters Legend -->
 
-        <!-- Finish Button -->
+
+        <TextView
+            android:id="@+id/mediumLegendTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="En proceso!"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+
         <Button
             android:id="@+id/finishButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Finalizar"
             android:background="@color/black"
+            android:text="Finalizar"
             android:textColor="#fff"
-            android:visibility="gone"
-            android:layout_marginLeft="430px"/>
+            android:visibility="gone" />
 
         <!-- Rating Component -->
         <RatingBar
@@ -160,25 +196,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:numStars="5"
+            android:progressTint="#FFEB3B"
             android:rating="3.5"
             android:stepSize="0.5"
-            android:progressTint="#FFEB3B"
-            android:visibility="gone"
-            android:layout_marginLeft="200px"
-
-
-            />
-
-
-
-
-        <!-- You can add a RatingBar or custom view here -->
-
+            android:visibility="gone" />
+        <!-- Fourth Section: Button and Rating Component -->
     </LinearLayout>
 
-
-
-
-
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,8 +27,18 @@ class RequestProcessFinishFragment : Fragment() {
 
     lateinit var finishbutton: Button
     lateinit var ratingBar: RatingBar
-
-
+    lateinit var fullNameTextView: TextView
+    lateinit var zoneTextView: TextView
+    lateinit var rankingTextView: TextView
+    lateinit var legendTextView: TextView
+    lateinit var paragraphTextView: TextView
+    lateinit var requestTitle: TextView
+    lateinit var profilePicture: ImageView
+    lateinit var mediumLegendTextView: TextView
+    lateinit var favIcon: ImageView
+    lateinit var userTypeTitle: TextView
+    lateinit var txtPrice: TextView
+    lateinit var txtCategoryService : TextView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -49,7 +59,7 @@ class RequestProcessFinishFragment : Fragment() {
 
                 val providerId = document.getString("providerId")
                 UserService.updateRatingOfUser(rating, providerId!!)
-                Toast.makeText(requireContext(), "PUNTUACIÓN: $rating", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(requireContext(), "PUNTUACIÓN: $rating", Toast.LENGTH_SHORT).show()
 
                 // Navigate back to the previous screen (pop the current fragment)
                 val action=RequestProcessFinishFragmentDirections.actionRequestFragmentProccessFinishClientToRequestsHistoryFragment()
@@ -57,9 +67,9 @@ class RequestProcessFinishFragment : Fragment() {
             }
 
             Toast.makeText(requireContext(), "PUNTUACIÓN: $rating", Toast.LENGTH_SHORT).show()
-            val action =
-                RequestProcessFinishFragmentDirections.actionRequestFragmentProccessFinishClientToRequestsHistoryFragment()
-            findNavController().navigate(action)
+//            val action =
+//                RequestProcessFinishFragmentDirections.actionRequestFragmentProccessFinishClientToRequestsHistoryFragment()
+//            findNavController().navigate(action)
 
         }
 
@@ -69,25 +79,33 @@ class RequestProcessFinishFragment : Fragment() {
             }
         }
 
-        val fullNameTextView = v.findViewById<TextView>(R.id.fullNameTextView)
-        val zoneTextView = v.findViewById<TextView>(R.id.zoneTextView)
-        val rankingTextView = v.findViewById<TextView>(R.id.rankingTextView)
-        val legendTextView = v.findViewById<TextView>(R.id.legendTextView)
-        val paragraphTextView = v.findViewById<TextView>(R.id.paragraphTextView)
-        val bigLegendTextView = v.findViewById<TextView>(R.id.bigLegendTextView)
-        var profilePicture = v.findViewById<ImageView>(R.id.photoImageView);
-        val mediumLegendTextView = v.findViewById<TextView>(R.id.mediumLegendTextView)
-        val favIcon = v.findViewById<ImageView>(R.id.fav_star_icon)
-
+        fullNameTextView = v.findViewById<TextView>(R.id.fullNameTextView)
+        zoneTextView = v.findViewById<TextView>(R.id.zoneTextView)
+        rankingTextView = v.findViewById<TextView>(R.id.rankingTextView)
+        legendTextView = v.findViewById<TextView>(R.id.legendTextView)
+        paragraphTextView = v.findViewById<TextView>(R.id.paragraphTextView)
+        requestTitle = v.findViewById<TextView>(R.id.bigLegendTextView)
+        profilePicture = v.findViewById<ImageView>(R.id.photoImageView);
+        mediumLegendTextView = v.findViewById<TextView>(R.id.mediumLegendTextView)
+        favIcon = v.findViewById<ImageView>(R.id.fav_star_icon)
+        userTypeTitle = v.findViewById(R.id.userTypeTitle)
+        txtPrice = v.findViewById(R.id.txtPrice)
+        txtCategoryService = v.findViewById(R.id.txtCategorySercvice)
 
         requestsCollection.document(request.requestId).get().addOnSuccessListener { document ->
-            legendTextView.text =
-                document.getString("categoryOcupation") + " " + document.getString("categoryService")
-            paragraphTextView.text = document.getString("description") ?: "" // Set the description
+            if(userType == "CLIENT"){
+                userTypeTitle.text = "Datos del proovedor"
+            }else{
+                userTypeTitle.text = "Datos del cliente"
+            }
+            legendTextView.text = "Disciplina: " +
+                document.getString("categoryOcupation")
+            txtCategoryService.text = "Categoria: " + document.getString("categoryService")
+            paragraphTextView.text = "Descripción: " + document.getString("description") ?: "" // Set the description
 
-            bigLegendTextView.text = "$" + document.getLong("maxCost")
-                .toString() + " " + document.getString("requestTitle") // Set the big legend
-
+            requestTitle.text = document.getString("requestTitle") // Set the big legend
+            txtPrice.text = "$" + document.getLong("maxCost")
+                .toString()
             var userId: String? = null;
             if (userType == "PROVIDER") {
                 userId = document.getString("clientId") ?: ""
@@ -114,15 +132,14 @@ class RequestProcessFinishFragment : Fragment() {
                     rankingTextView.text="Sin calificaciones "
                 }
 
-
+                mediumLegendTextView.visibility = View.VISIBLE
+                mediumLegendTextView.text = "Estado de la solicitud: " + request.state
+                finishbutton.visibility = View.GONE
 
                 if (userType == "PROVIDER") {
-                    mediumLegendTextView.visibility = View.VISIBLE
-                    mediumLegendTextView.text = "Estado de la solicitud: " + request.state
-                    finishbutton.visibility = View.GONE
                     rankingTextView.visibility = View.GONE
                     favIcon.visibility = View.GONE
-                } else if (request.state == "FINALIZADA" && userType == "CLIENTE") {
+                } else if (request.state != "FINALIZADA" && userType == "CLIENT") {
                     finishbutton.visibility = View.VISIBLE
                     rankingTextView.visibility = View.VISIBLE
                     favIcon.visibility = View.VISIBLE
