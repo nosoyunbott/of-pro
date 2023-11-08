@@ -12,28 +12,29 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="60dp"
-            android:orientation="horizontal">
-
-            <TableRow
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+            android:orientation="horizontal"
+            android:layout_gravity="end"
+            >
 
             <Button
                 android:id="@+id/btnEdit"
                 android:layout_width="1dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Editar" />
+                android:text="Editar"
+                android:layout_marginRight="10sp"
+                />
 
             <Button
                 android:id="@+id/btnLogout"
                 android:layout_width="1dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Logout" />
+                android:text="Logout"
+                android:backgroundTint="@color/logout_btn"
+                />
 
         </LinearLayout>
 
@@ -53,7 +54,10 @@
                     android:id="@+id/profilePicture"
                     android:layout_width="100sp"
                     android:layout_height="100sp"
-                    android:src="@null" />
+                    android:scaleType="centerCrop"
+                    android:src="@null"
+                    android:layout_marginRight="10sp"
+                    />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -65,14 +69,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="" />
+                        android:text=""
+                        android:textSize="25sp"
+                        />
 
                     <TextView
                         android:id="@+id/txtLocalidad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="" />
+                        android:text=""
+                        android:textSize="25sp"
+                        />
 
                 </LinearLayout>
 
@@ -80,14 +88,6 @@
 
 
 
-<!--            <TextView-->
-<!--                android:id="@+id/txtServiceType"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Rubro1,Rubro2,Rubro3"-->
-<!--                android:textSize="20sp"-->
-<!--                android:layout_marginBottom="20dp"-->
-<!--                />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,6 +100,7 @@
                     android:layout_width="124dp"
                     android:layout_height="45dp"
                     android:text="Mail: "
+                    android:textStyle="bold"
                     android:textSize="20sp" />
 
                 <TextView
@@ -124,6 +125,7 @@
                     android:layout_width="123dp"
                     android:layout_height="54dp"
                     android:text="Telefono:"
+                    android:textStyle="bold"
                     android:textSize="20sp" />
 
                 <TextView
@@ -148,7 +150,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:text="Bio"
             android:textSize="20sp" />
 
         <TextView
