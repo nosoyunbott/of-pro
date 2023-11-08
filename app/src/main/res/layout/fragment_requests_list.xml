@@ -37,6 +37,24 @@
             </LinearLayout>
         </HorizontalScrollView>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp">
+
+
+            <TextView
+                android:id="@+id/clearFiltersTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:text="Limpiar Filtro"
+                android:textColor="@color/violet"
+                android:textSize="13sp" />
+        </RelativeLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rec_requestsList"
             android:layout_width="match_parent"
