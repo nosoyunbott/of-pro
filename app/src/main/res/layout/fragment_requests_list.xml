@@ -37,13 +37,16 @@
             </LinearLayout>
         </HorizontalScrollView>
 
-        <!-- Add the TextView with initial visibility set to 'gone' -->
+
         <TextView
             android:id="@+id/txtNoRequests"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="No Hay solicitudes cargadas aún!"
+            android:layout_marginTop="200dp"
+            android:textStyle="italic"
+            android:textSize="20dp"
             android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView

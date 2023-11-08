@@ -61,7 +61,7 @@ class RequestDetailFragment : Fragment() {
             requireArguments()
         ).proposalInformation
         txtDesc.text = proposalInfo.commentary
-        txtBid.text = "$${proposalInfo.bidAmount}"
+        txtBid.text = "Honorarios ofrecidos: $${proposalInfo.bidAmount}"
         txtName.text = proposalInfo.name
         if (proposalInfo.calificationQty > 0) {
             val calif = proposalInfo.calification / proposalInfo.calificationQty

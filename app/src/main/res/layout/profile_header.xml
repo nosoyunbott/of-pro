@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,45 +10,98 @@
     android:paddingLeft="15dp"
     android:paddingBottom="15dp">
 
-    <ImageView
-        android:id="@+id/headerImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="15dp"
-        android:src="@null" />
-
+    <!-- Title -->
     <TextView
-        android:id="@+id/headerFullName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="#000000"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/headerLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="#000000" />
+        android:text="¡Nuevo candidato para el trabajo!"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#9C27B0"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="26dp" />
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="13dp"
+        android:backgroundTint="#03045E"
+        android:orientation="horizontal"
+        android:paddingLeft="83dp"
+        android:paddingBottom="7dp">
 
-        <TextView
-            android:id="@+id/headerRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="" />
 
-        <TextView
-            android:id="@+id/headerRatingQuantity"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/headerImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+
+            android:src="@drawable/star_icon" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:text="" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/headerFullName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp" />
+
+            <TextView
+                android:id="@+id/headerLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="#000000" />
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#03045E"
+            android:orientation="horizontal"
+            android:paddingLeft="-24dp"
+            android:paddingBottom="5dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:paddingRight="0dp"
+                    android:src="@drawable/star_icon" />
+
+                <TextView
+                    android:id="@+id/headerRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/headerRatingQuantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:visibility="gone"
+                    android:text="" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
+
+
+

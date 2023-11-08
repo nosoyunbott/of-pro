@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -30,6 +31,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
     lateinit var v: View
     lateinit var recRequestList: RecyclerView
+    lateinit var noRequestUploaded:TextView
     var requestList: MutableList<Request> = ArrayList()
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var requestListAdapter: RequestCardAdapter
@@ -140,6 +142,9 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
                 }
 
             }
+            if(requestList.count()==0){
+                noRequestUploaded.visibility=View.VISIBLE;
+            }
             requestListAdapter.notifyDataSetChanged()
         }
     }
@@ -151,6 +156,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         v = inflater.inflate(R.layout.fragment_requests_list, container, false)
         recRequestList = v.findViewById(R.id.rec_requestsList)
         filterContainer = v.findViewById(R.id.filterContainer)
+        noRequestUploaded=v.findViewById(R.id.txtNoRequests)
         return v
     }
 
