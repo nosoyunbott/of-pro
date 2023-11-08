@@ -132,12 +132,11 @@ class RequestProcessFinishFragment : Fragment() {
                     rankingTextView.text="Sin calificaciones "
                 }
 
+                mediumLegendTextView.visibility = View.VISIBLE
+                mediumLegendTextView.text = "Estado de la solicitud: " + request.state
+                finishbutton.visibility = View.GONE
 
-
-                if (userType == "PROVIDER" || request.state=="FINALIZADA") {
-                    mediumLegendTextView.visibility = View.VISIBLE
-                    mediumLegendTextView.text = "Estado de la solicitud: " + request.state
-                    finishbutton.visibility = View.GONE
+                if (userType == "PROVIDER") {
                     rankingTextView.visibility = View.GONE
                     favIcon.visibility = View.GONE
                 } else if (request.state != "FINALIZADA" && userType == "CLIENT") {
