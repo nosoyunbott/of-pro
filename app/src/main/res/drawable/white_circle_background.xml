@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <solid android:color="#FFFFFF" /> <!-- Fill color (white) -->
-    <size android:width="16dp" android:height="16dp" /> <!-- Dimensions of the circle -->
-    <corners android:radius="8dp" /> <!-- Radius should be half of the width/height for a perfect circle -->
+    <solid android:color="#FFFFFF" />
+    <size android:width="16dp" android:height="16dp" />
+    <corners android:radius="8dp" />
 </shape>
