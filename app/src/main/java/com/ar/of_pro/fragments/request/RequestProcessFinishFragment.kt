@@ -78,9 +78,9 @@ class RequestProcessFinishFragment : Fragment() {
                     document.getString("categoryOcupation")
             txtCategoryService.text = "Categoria: " + document.getString("categoryService")
             paragraphTextView.text =
-                "Descripción: " + document.getString("description") ?: "" // Set the description
+                "Descripción: " + document.getString("description") ?: ""
 
-            requestTitle.text = document.getString("requestTitle") // Set the big legend
+            requestTitle.text = document.getString("requestTitle")
             txtPrice.text = "$" + document.getLong("maxCost")
                 .toString()
 
@@ -96,14 +96,14 @@ class RequestProcessFinishFragment : Fragment() {
                 profilePicture = profilePicture
                 Glide.with(requireContext()).load(imageUrl).into(profilePicture);
                 fullNameTextView.text =
-                    userDocument.getString("name") + " " + userDocument.getString("lastName") // Client
-                zoneTextView.text = userDocument.getString("location")//Client
+                    userDocument.getString("name") + " " + userDocument.getString("lastName")
+                zoneTextView.text = userDocument.getString("location")
 
                 val ratingAmount = userDocument.getDouble("rating")
                 val ratingQuantity = userDocument.getDouble("ratingQuantity")
                 if (ratingQuantity?.toInt() != 0) {
                     val rating = ratingAmount!! / ratingQuantity!!;
-                    rankingTextView.text = String.format("%.1f", rating) // Client
+                    rankingTextView.text = String.format("%.1f", rating)
                 } else {
                     rankingTextView.text = "Sin calificaciones "
                 }
