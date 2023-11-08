@@ -65,12 +65,11 @@ class ProfileEditFragment : Fragment() {
         txtNombre = v.findViewById(R.id.txtNombre)
         txtTelefono = v.findViewById(R.id.txtTelefono)
         txtLocalidad = v.findViewById(R.id.txtLocalidad)
-        txtBio = v.findViewById(R.id.txtDescripcion)
+        txtBio = v.findViewById<EditText?>(R.id.txtDescripcion)
         txtSurname = v.findViewById(R.id.txtApellido)
         profilePictureEdit = v.findViewById(R.id.profilePictureEdit)
         sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-
         return v
     }
 
@@ -84,6 +83,10 @@ class ProfileEditFragment : Fragment() {
         }
 
         setOnClickListener(profilePictureEdit)
+
+        if(sharedPreferences.getString("userType", "") == "CLIENT") {
+            txtBio.visibility = View.GONE
+        }
 
         btnAccept.setOnClickListener{
 
