@@ -6,17 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".fragments.request.RequestProcessFinishFragment">
 
+    <TextView
+        android:id="@+id/userTypeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#000000"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/photoImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <!-- Image Centered -->
     <ImageView
         android:id="@+id/photoImageView"
         android:layout_width="140dp"
         android:layout_height="100dp"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutPersonalData"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.65" />
 
     <!-- Personal Data Below Image -->
     <LinearLayout
@@ -30,27 +41,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/photoImageView"
-        app:layout_constraintVertical_bias="0.26">
-        <TextView
-            android:id="@+id/bigLegendTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="#000"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:paddingVertical="30sp"
-            />
-        <TextView
-            android:id="@+id/userTypeTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="#000000"
-            android:textSize="28sp" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.31">
+
+
         <TextView
             android:id="@+id/fullNameTextView"
             android:layout_width="wrap_content"
@@ -93,13 +87,7 @@
         </LinearLayout>
 
         <!-- Legend -->
-        <TextView
-            android:id="@+id/legendTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="#000"
-            android:textSize="18sp" />
+
 
     </LinearLayout>
 
@@ -109,32 +97,74 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutPersonalData"
-        android:gravity="center_horizontal">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.73">
+        <TextView
+            android:id="@+id/txtTitleRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="10sp"
+            android:text="Sobre la solicitud"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="30sp" />
+        <TextView
+            android:id="@+id/bigLegendTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="10sp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="30sp" />
+        <TextView
+            android:id="@+id/txtCategorySercvice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:paddingVertical="5sp"
+            />
 
+        <TextView
+            android:id="@+id/legendTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:paddingVertical="5sp"
+            />
         <!-- Second Section: Paragraph -->
         <TextView
             android:id="@+id/paragraphTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text=""
             android:textColor="#000"
             android:textSize="18sp"
-            android:gravity="center"
-        />
+            android:paddingVertical="5sp"/>
+
         <TextView
             android:id="@+id/txtPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text=""
             android:textColor="#000"
             android:textSize="18sp"
-            android:gravity="center"
-            />
+            android:paddingVertical="5sp"/>
 
         <!-- Third Section: Big Black Letters Legend -->
 
@@ -144,13 +174,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:gravity="center"
             android:text="En proceso!"
             android:textAlignment="center"
             android:textColor="#000"
             android:textSize="18sp"
-            android:visibility="gone"
-            android:gravity="center"
-        />
+            android:visibility="gone" />
+
+
         <Button
             android:id="@+id/finishButton"
             android:layout_width="wrap_content"
@@ -158,7 +189,7 @@
             android:background="@color/black"
             android:text="Finalizar"
             android:textColor="#fff"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <!-- Rating Component -->
         <RatingBar
@@ -169,22 +200,8 @@
             android:progressTint="#FFEB3B"
             android:rating="3.5"
             android:stepSize="0.5"
-            android:visibility="visible" />
+            android:visibility="gone" />
         <!-- Fourth Section: Button and Rating Component -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bigLegendTextView">
-
-            <!-- Finish Button -->
-
-
-            <!-- You can add a RatingBar or custom view here -->
-        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
