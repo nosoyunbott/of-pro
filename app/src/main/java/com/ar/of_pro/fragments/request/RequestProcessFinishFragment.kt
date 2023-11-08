@@ -1,7 +1,9 @@
 package com.ar.of_pro.fragments.request
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.ar.of_pro.R
+import com.ar.of_pro.entities.Request
 import com.ar.of_pro.fragments.provider.ProposalFragmentArgs
 import com.ar.of_pro.services.RequestsService
 import com.ar.of_pro.services.UserService
@@ -24,6 +27,10 @@ class RequestProcessFinishFragment : Fragment() {
     val db = FirebaseFirestore.getInstance()
     val requestsCollection = db.collection("Requests")
     val usersCollection = db.collection("Users")
+
+    lateinit var v: View
+    lateinit var sharedPref: SharedPreferences
+    lateinit var userType: String
 
     lateinit var finishbutton: Button
     lateinit var ratingBar: RatingBar
@@ -38,74 +45,46 @@ class RequestProcessFinishFragment : Fragment() {
     lateinit var favIcon: ImageView
     lateinit var userTypeTitle: TextView
     lateinit var txtPrice: TextView
-    lateinit var txtCategoryService : TextView
+    lateinit var txtCategoryService: TextView
+
+    lateinit var request: Request
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
 
-        val v = inflater.inflate(R.layout.fragment_request_proccess_finish_client, container, false)
-        finishbutton = v.findViewById(R.id.finishButton)
-        ratingBar = v.findViewById(R.id.ratingBar)
-        val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-        val userType = sharedPref!!.getString("userType", "")
+        v = inflater.inflate(R.layout.fragment_request_proccess_finish_client, container, false)
+
+        init()
+
+        return v
+    }
+
+    override fun onStart() {
+        super.onStart()
         finishButtonReview()
-
-        fun handleRatingFinishRequest(rating: Float) {
-
-            RequestsService.updateRequestState("FINALIZADA", request.requestId)
-
-            requestsCollection.document(request.requestId).get().addOnSuccessListener { document ->
-
-                val providerId = document.getString("providerId")
-                UserService.updateRatingOfUser(rating, providerId!!)
-                //Toast.makeText(requireContext(), "PUNTUACIÓN: $rating", Toast.LENGTH_SHORT).show()
-
-                // Navigate back to the previous screen (pop the current fragment)
-                val action=RequestProcessFinishFragmentDirections.actionRequestFragmentProccessFinishClientToRequestsHistoryFragment()
-                findNavController().navigate(action)
-            }
-
-            Toast.makeText(requireContext(), "PUNTUACIÓN: $rating", Toast.LENGTH_SHORT).show()
-//            val action =
-//                RequestProcessFinishFragmentDirections.actionRequestFragmentProccessFinishClientToRequestsHistoryFragment()
-//            findNavController().navigate(action)
-
+        ratingBarListener()
+        if(userType.isNotEmpty()) {
+            historyManager()
         }
-
-        ratingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
-            if (fromUser) {
-                handleRatingFinishRequest(rating)
-            }
-        }
-
-        fullNameTextView = v.findViewById<TextView>(R.id.fullNameTextView)
-        zoneTextView = v.findViewById<TextView>(R.id.zoneTextView)
-        rankingTextView = v.findViewById<TextView>(R.id.rankingTextView)
-        legendTextView = v.findViewById<TextView>(R.id.legendTextView)
-        paragraphTextView = v.findViewById<TextView>(R.id.paragraphTextView)
-        requestTitle = v.findViewById<TextView>(R.id.bigLegendTextView)
-        profilePicture = v.findViewById<ImageView>(R.id.photoImageView);
-        mediumLegendTextView = v.findViewById<TextView>(R.id.mediumLegendTextView)
-        favIcon = v.findViewById<ImageView>(R.id.fav_star_icon)
-        userTypeTitle = v.findViewById(R.id.userTypeTitle)
-        txtPrice = v.findViewById(R.id.txtPrice)
-        txtCategoryService = v.findViewById(R.id.txtCategorySercvice)
-
+    }
+    private fun historyManager() {
         requestsCollection.document(request.requestId).get().addOnSuccessListener { document ->
-            if(userType == "CLIENT"){
+            if (userType == "CLIENT") {
                 userTypeTitle.text = "Datos del proovedor"
-            }else{
+            } else {
                 userTypeTitle.text = "Datos del cliente"
             }
             legendTextView.text = "Disciplina: " +
-                document.getString("categoryOcupation")
+                    document.getString("categoryOcupation")
             txtCategoryService.text = "Categoria: " + document.getString("categoryService")
-            paragraphTextView.text = "Descripción: " + document.getString("description") ?: "" // Set the description
+            paragraphTextView.text =
+                "Descripción: " + document.getString("description") ?: "" // Set the description
 
             requestTitle.text = document.getString("requestTitle") // Set the big legend
             txtPrice.text = "$" + document.getLong("maxCost")
                 .toString()
+
+
             var userId: String? = null;
             if (userType == "PROVIDER") {
                 userId = document.getString("clientId") ?: ""
@@ -120,16 +99,13 @@ class RequestProcessFinishFragment : Fragment() {
                     userDocument.getString("name") + " " + userDocument.getString("lastName") // Client
                 zoneTextView.text = userDocument.getString("location")//Client
 
-                val ratingAmount=userDocument.getDouble("rating")
-                val ratingQuantity=userDocument.getDouble("ratingQuantity")
-                if(ratingQuantity?.toInt() !=0)
-                {
-                    val rating= ratingAmount!! / ratingQuantity!!;
+                val ratingAmount = userDocument.getDouble("rating")
+                val ratingQuantity = userDocument.getDouble("ratingQuantity")
+                if (ratingQuantity?.toInt() != 0) {
+                    val rating = ratingAmount!! / ratingQuantity!!;
                     rankingTextView.text = String.format("%.1f", rating) // Client
-                }
-                else
-                {
-                    rankingTextView.text="Sin calificaciones "
+                } else {
+                    rankingTextView.text = "Sin calificaciones "
                 }
 
                 mediumLegendTextView.visibility = View.VISIBLE
@@ -148,7 +124,46 @@ class RequestProcessFinishFragment : Fragment() {
             }
 
         }
-        return v
+    }
+
+    private fun init() {
+        request = ProposalFragmentArgs.fromBundle(requireArguments()).request
+        finishbutton = v.findViewById(R.id.finishButton)
+        ratingBar = v.findViewById(R.id.ratingBar)
+        sharedPref = requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        userType = sharedPref.getString("userType", "")!!
+        fullNameTextView = v.findViewById(R.id.fullNameTextView)
+        zoneTextView = v.findViewById(R.id.zoneTextView)
+        rankingTextView = v.findViewById(R.id.rankingTextView)
+        legendTextView = v.findViewById(R.id.legendTextView)
+        paragraphTextView = v.findViewById(R.id.paragraphTextView)
+        requestTitle = v.findViewById(R.id.bigLegendTextView)
+        profilePicture = v.findViewById(R.id.photoImageView);
+        mediumLegendTextView = v.findViewById(R.id.mediumLegendTextView)
+        favIcon = v.findViewById(R.id.fav_star_icon)
+        userTypeTitle = v.findViewById(R.id.userTypeTitle)
+        txtPrice = v.findViewById(R.id.txtPrice)
+        txtCategoryService = v.findViewById(R.id.txtCategorySercvice)
+    }
+
+    private fun ratingBarListener() {
+        ratingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
+            if (fromUser) {
+                handleRatingFinishRequest(rating)
+            }
+        }
+    }
+
+    fun handleRatingFinishRequest(rating: Float) {
+        RequestsService.updateRequestState("FINALIZADA", request.requestId)
+        requestsCollection.document(request.requestId).get().addOnSuccessListener { document ->
+            val providerId = document.getString("providerId")
+            UserService.updateRatingOfUser(rating, providerId!!)
+            val action =
+                RequestProcessFinishFragmentDirections.actionRequestFragmentProccessFinishClientToRequestsHistoryFragment()
+            findNavController().navigate(action)
+        }
+        Toast.makeText(requireContext(), "PUNTUACIÓN: $rating", Toast.LENGTH_SHORT).show()
     }
 
     fun finishButtonReview() {

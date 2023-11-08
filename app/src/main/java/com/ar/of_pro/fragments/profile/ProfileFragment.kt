@@ -132,7 +132,6 @@ class ProfileFragment : Fragment() {
             editor.apply()
             val action = ProfileFragmentDirections.actionProfileFragmentToAuthActivity()
             v.findNavController().navigate(action)
-            v.findNavController().popBackStack(R.id.profileFragment, true)
         }
 
         btnEdit.setOnClickListener {
