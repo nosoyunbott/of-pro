@@ -114,8 +114,22 @@ class RequestFragment<OutputStream> : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_request, container, false)
+
+        init()
+
+        //Clean sharedPrefs regarding spinners
+        val editor = sharedPreferences.edit()
+        editor.remove("selectedService")
+        editor.remove("selectedOcupation")
+        editor.apply()
+        setupSpinner(spnOcupation, ocupationAdapter)
+        setupSpinner(spnServiceTypes, serviceTypesAdapter)
+
+        return v
+    }
+
+    private fun init() {
         spnOcupation = v.findViewById(R.id.spnOcupations)
         spnServiceTypes = v.findViewById(R.id.spnServiceTypes)
         btnAttach = v.findViewById(R.id.btnAttach)
@@ -126,12 +140,14 @@ class RequestFragment<OutputStream> : Fragment() {
         errorPriceTextView = v.findViewById(R.id.errorPriceTextView)
         errorDateTextView = v.findViewById(R.id.errorDateTextView)
         errorTitleTextView = v.findViewById(R.id.errorTitleTextView)
+        sharedPreferences =
+            requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
         edtTime = v.findViewById(R.id.edtTime)
         edtTime.setOnClickListener {
             showDatePickerDialog()
         }
-        val maxLength = 120
 
+        val maxLength = 120
         val inputFilter = InputFilter { source, start, end, dest, dstart, dend ->
             if (dest.length + end - start - (dend - dstart) <= maxLength) {
                 null
@@ -139,44 +155,14 @@ class RequestFragment<OutputStream> : Fragment() {
                 ""
             }
         }
-
-
-        edtDescripcion.filters = arrayOf(inputFilter)
-        sharedPreferences =
-            requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.remove("selectedService")
-        editor.remove("selectedOcupation")
-        editor.apply()
         imageUrlArray = mutableListOf()
-        setupSpinner(spnOcupation, ocupationAdapter)
-        setupSpinner(spnServiceTypes, serviceTypesAdapter)
-
-
-        return v
+        edtDescripcion.filters = arrayOf(inputFilter)
     }
 
     override fun onStart() {
         super.onStart()
 
-        val filename = "myfile"
-        val fileContents = "Hello world!"
-        requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
-            it.write(fileContents.toByteArray())
-        }
-
-//        setupSpinner(spnOcupation, ocupationAdapter)
-//        setupSpinner(spnServiceTypes, serviceTypesAdapter)
-        val posSpnService = sharedPreferences.getInt("selectedService", 0)
-        val posSpnOcupation = sharedPreferences.getInt("selectedOcupation", 0)
-        if (posSpnOcupation != 0) {
-            spnOcupation.setSelection(posSpnOcupation)
-            selectedOcupation = ocupationList[posSpnOcupation]
-        }
-        if (posSpnService != 0) {
-            spnServiceTypes.setSelection(posSpnService)
-            selectedServiceType = serviceTypesList[posSpnOcupation]
-        }
+        handleSpinnersPopulation()
         setOnClickListener(btnAttach)
 
         btnRequest.isEnabled = false
@@ -211,6 +197,19 @@ class RequestFragment<OutputStream> : Fragment() {
                 val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
                 v.findNavController().navigate(action)
             }
+        }
+    }
+
+    private fun handleSpinnersPopulation() {
+        val posSpnService = sharedPreferences.getInt("selectedService", 0)
+        val posSpnOcupation = sharedPreferences.getInt("selectedOcupation", 0)
+        if (posSpnOcupation != 0) {
+            spnOcupation.setSelection(posSpnOcupation)
+            selectedOcupation = ocupationList[posSpnOcupation]
+        }
+        if (posSpnService != 0) {
+            spnServiceTypes.setSelection(posSpnService)
+            selectedServiceType = serviceTypesList[posSpnOcupation]
         }
     }
 
