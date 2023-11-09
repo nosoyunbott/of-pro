@@ -155,9 +155,9 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         recProviderList.adapter = proposalInformationAdapter
 
         btnDelete.setOnClickListener {
-            //RequestsService.deleteRequestById(request.requestId)
+            RequestsService.deleteRequestById(request.requestId)
             ProposalsService.deleteProposalsFromRequestId(request.requestId)
-            //v.findNavController().popBackStack(R.id.requestsListFragment, true)
+            v.findNavController().popBackStack(R.id.requestsListFragment, true)
         }
 
     }
