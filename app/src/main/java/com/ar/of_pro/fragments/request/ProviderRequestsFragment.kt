@@ -19,6 +19,7 @@ import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.User
 import com.ar.of_pro.fragments.provider.ProposalFragmentArgs
 import com.ar.of_pro.listeners.OnProposalInformationClickedListener
+import com.ar.of_pro.services.ProposalsService
 import com.ar.of_pro.services.RequestsService
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
@@ -154,8 +155,9 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         recProviderList.adapter = proposalInformationAdapter
 
         btnDelete.setOnClickListener {
-            RequestsService.deleteRequestById(request.requestId)
-            v.findNavController().popBackStack(R.id.requestsListFragment, true)
+            //RequestsService.deleteRequestById(request.requestId)
+            ProposalsService.deleteProposalsFromRequestId(request.requestId)
+            //v.findNavController().popBackStack(R.id.requestsListFragment, true)
         }
 
     }
