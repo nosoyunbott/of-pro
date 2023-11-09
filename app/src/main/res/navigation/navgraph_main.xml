@@ -91,7 +91,7 @@
     </fragment>
     <fragment
         android:id="@+id/providerRequestsFragment"
-        android:name="com.ar.of_pro.fragments.provider.ProviderRequestsFragment"
+        android:name="com.ar.of_pro.fragments.request.ProviderRequestsFragment"
         android:label="fragment_provider_requests"
         tools:layout="@layout/fragment_provider_requests" >
         <action

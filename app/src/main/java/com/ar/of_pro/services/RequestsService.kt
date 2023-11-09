@@ -45,6 +45,12 @@ import com.google.firebase.firestore.FirebaseFirestore
              )
              requestDoc.update(updates)
          }
+         fun deleteRequestById(requestId: String) {
+             val requestsCollection = db.collection("Requests")
+             val requestDoc = requestsCollection.document(requestId)
+
+             requestDoc.delete()
+         }
      }
 
     }

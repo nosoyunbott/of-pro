@@ -1,10 +1,11 @@
-package com.ar.of_pro.fragments.provider
+package com.ar.of_pro.fragments.request
 
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -18,6 +19,8 @@ import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.User
 import com.ar.of_pro.fragments.provider.ProposalFragmentArgs
 import com.ar.of_pro.listeners.OnProposalInformationClickedListener
+import com.ar.of_pro.services.ProposalsService
+import com.ar.of_pro.services.RequestsService
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -40,8 +43,9 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
 
     lateinit var userObj: User
     lateinit var proposalInfo: ProposalInformation
-    var userName: String = ""
-    var userRating: Float = 0f
+    lateinit var btnDelete: Button
+
+
     override fun onPause() {
         super.onPause()
 
@@ -136,12 +140,12 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         v = inflater.inflate(R.layout.fragment_provider_requests, container, false)
         txtTitle = v.findViewById(R.id.txtTitle)
         recProviderList = v.findViewById(R.id.rec_providers)
+        btnDelete = v.findViewById(R.id.btnDeleteRequest)
         return v
     }
 
     override fun onStart() {
         super.onStart()
-        //val request = ProposalFragmentArgs.fromBundle(requireArguments()).request
         txtTitle.text = request.requestTitle
 
         recProviderList.setHasFixedSize(true)
@@ -149,6 +153,12 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         recProviderList.layoutManager = linearLayoutManager
         proposalInformationAdapter = ProposalInformationAdapter(providerList, this)
         recProviderList.adapter = proposalInformationAdapter
+
+        btnDelete.setOnClickListener {
+            RequestsService.deleteRequestById(request.requestId)
+            ProposalsService.deleteProposalsFromRequestId(request.requestId)
+            v.findNavController().popBackStack(R.id.requestsListFragment, true)
+        }
 
     }
 
