@@ -3,7 +3,6 @@ package com.ar.of_pro.fragments.profile
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.services.ActivityServiceApiBuilder
+import com.ar.of_pro.utils.SharedPrefUtils
 import com.google.firebase.firestore.FirebaseFirestore
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -47,11 +47,12 @@ class ProfileEditFragment : Fragment() {
 
     private val db = FirebaseFirestore.getInstance()
     private val usersCollection = db.collection("Users")
-    lateinit var sharedPreferences: SharedPreferences
+    lateinit var sharedPrefUtils: SharedPrefUtils
 
     private val PICK_MEDIA_REQUEST = 1
     lateinit var profilePictureEdit: ImageView
     private var imageUrl = ""
+    private var clientId: String = ""
 
 
     override fun onCreateView(
@@ -65,17 +66,16 @@ class ProfileEditFragment : Fragment() {
         txtNombre = v.findViewById(R.id.txtNombre)
         txtTelefono = v.findViewById(R.id.txtTelefono)
         txtLocalidad = v.findViewById(R.id.txtLocalidad)
-        txtBio = v.findViewById<EditText?>(R.id.txtDescripcion)
+        txtBio = v.findViewById(R.id.txtDescripcion)
         txtSurname = v.findViewById(R.id.txtApellido)
         profilePictureEdit = v.findViewById(R.id.profilePictureEdit)
-        sharedPreferences =
-            requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
+        sharedPrefUtils = SharedPrefUtils(requireContext())
         return v
     }
 
     override fun onStart() {
         super.onStart()
-
+         clientId = sharedPrefUtils.getFromSharedPrefs("clientId").toString()
         val filename = "myfile"
         val fileContents = "Hello world!"
         requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
@@ -83,8 +83,9 @@ class ProfileEditFragment : Fragment() {
         }
 
         setOnClickListener(profilePictureEdit)
+        val isUserClient = sharedPrefUtils.getFromSharedPrefs("userType") == "CLIENT";
 
-        if(sharedPreferences.getString("userType", "") == "CLIENT") {
+        if(isUserClient) {
             txtBio.visibility = View.GONE
         }
 
@@ -111,7 +112,8 @@ class ProfileEditFragment : Fragment() {
 
     fun updateDb(name: String?, apellido: String?, phone: String?, ubi: String?, description: String?) {
 
-        val userDoc = usersCollection.document(sharedPreferences.getString("clientId", "").toString())
+
+        val userDoc = usersCollection.document(clientId)
 
         //Name
         if (name!!.isNotEmpty()) {
@@ -147,7 +149,7 @@ class ProfileEditFragment : Fragment() {
 
     fun updateDb(name: String?, apellido: String?, phone: String?, ubi: String?, description: String?, imgurImage: String?) {
 
-        val userDoc = usersCollection.document(sharedPreferences.getString("clientId", "").toString())
+        val userDoc = usersCollection.document(clientId)
 
         //Name
         if (name!!.isNotEmpty()) {

@@ -1,9 +1,6 @@
 package com.ar.of_pro.fragments.provider
 
-import android.content.Context
 import android.os.Bundle
-import android.text.Layout
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +15,7 @@ import com.ar.of_pro.entities.Proposal
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.services.RequestsService
 import com.ar.of_pro.utils.DateUtils
+import com.ar.of_pro.utils.SharedPrefUtils
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
@@ -58,6 +56,7 @@ class ProposalFragment : Fragment() {
 
     var imageViewsList: MutableList<ImageView> = mutableListOf()
     lateinit var request: Request
+    lateinit var sharedPrefUtils: SharedPrefUtils
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,6 +87,7 @@ class ProposalFragment : Fragment() {
         txtRating = proposalProfileHeader.findViewById(R.id.headerRating)
         txtRatingQuantity = proposalProfileHeader.findViewById(R.id.headerRatingQuantity)
         imgHeader = proposalProfileHeader.findViewById(R.id.headerImage)
+        sharedPrefUtils = SharedPrefUtils(requireContext())
         return v
     }
 
@@ -156,8 +156,8 @@ class ProposalFragment : Fragment() {
 
         btnProposal.setOnClickListener {
 
-            val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-            val clientId = sharedPref!!.getString("clientId", "")
+
+            val providerId = sharedPrefUtils.getFromSharedPrefs("clientId")
             errorMessageTextView.visibility = View.GONE
             if(request.maxCost > edtBudget.text.toString().toFloat()) {
                 val users = db.collection("Users")
@@ -168,19 +168,13 @@ class ProposalFragment : Fragment() {
                         userIds.add(userId)
 
                     }
-                    val sharedPreferences =
-                        requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-
 
                     val bid = edtBudget.text.toString().toFloat()
                     val commentary = edtComment.text.toString()
-                    val idProvider = sharedPreferences.getString(
-                        "clientId",
-                        ""
-                    )
+
                     val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
                     val p = Proposal(
-                        idProvider,
+                        providerId,
                         idRequest,
                         bid,
                         commentary

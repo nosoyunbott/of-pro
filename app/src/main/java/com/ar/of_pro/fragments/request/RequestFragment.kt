@@ -28,6 +28,7 @@ import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.RequestFB
 import com.ar.of_pro.entities.ServiceType
 import com.ar.of_pro.services.ActivityServiceApiBuilder
+import com.ar.of_pro.utils.SharedPrefUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import okhttp3.MediaType
@@ -76,13 +77,14 @@ class RequestFragment<OutputStream> : Fragment() {
     lateinit var errorDateTextView: TextView
     lateinit var errorTitleTextView: TextView
     lateinit var sharedPreferences: SharedPreferences
+    lateinit var sharedPrefUtils: SharedPrefUtils
 
     private val db = FirebaseFirestore.getInstance()
     private var userId = FirebaseAuth.getInstance().currentUser?.uid
 
     var selectedServicePosition: Int = 0
     var selectedOcupationPosition: Int = 0
-
+    var clientId: String = ""
 
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
@@ -130,6 +132,8 @@ class RequestFragment<OutputStream> : Fragment() {
         edtTime.setOnClickListener {
             showDatePickerDialog()
         }
+        sharedPrefUtils = SharedPrefUtils(requireContext())
+
         val maxLength = 120
 
         val inputFilter = InputFilter { source, start, end, dest, dstart, dend ->
@@ -144,10 +148,10 @@ class RequestFragment<OutputStream> : Fragment() {
         edtDescripcion.filters = arrayOf(inputFilter)
         sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.remove("selectedService")
-        editor.remove("selectedOcupation")
-        editor.apply()
+
+        sharedPrefUtils.removeSharedPref("selectedService")
+        sharedPrefUtils.removeSharedPref("selectedOcupation")
+
         imageUrlArray = mutableListOf()
         setupSpinner(spnOcupation, ocupationAdapter)
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
@@ -158,23 +162,28 @@ class RequestFragment<OutputStream> : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
+        clientId = sharedPrefUtils.getFromSharedPrefs("clientId").toString()
         val filename = "myfile"
         val fileContents = "Hello world!"
         requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
             it.write(fileContents.toByteArray())
         }
 
-//        setupSpinner(spnOcupation, ocupationAdapter)
-//        setupSpinner(spnServiceTypes, serviceTypesAdapter)
-        val posSpnService = sharedPreferences.getInt("selectedService", 0)
-        val posSpnOcupation = sharedPreferences.getInt("selectedOcupation", 0)
+        val posSpnService = sharedPrefUtils.getFromSharedPrefs("selectedService")?.toInt()
+        val posSpnOcupation = sharedPrefUtils.getFromSharedPrefs("selectedOcupation")?.toInt()
+//        val posSpnService = sharedPreferences.getInt("selectedService", 0)
+//        val posSpnOcupation = sharedPreferences.getInt("selectedOcupation", 0)
+
         if (posSpnOcupation != 0) {
-            spnOcupation.setSelection(posSpnOcupation)
-            selectedOcupation = ocupationList[posSpnOcupation]
+            if (posSpnOcupation != null) {
+                spnOcupation.setSelection(posSpnOcupation)
+            }
+            selectedOcupation = ocupationList[posSpnOcupation!!]
         }
         if (posSpnService != 0) {
-            spnServiceTypes.setSelection(posSpnService)
+            if (posSpnService != null) {
+                spnServiceTypes.setSelection(posSpnService)
+            }
             selectedServiceType = serviceTypesList[posSpnOcupation]
         }
         setOnClickListener(btnAttach)
@@ -185,9 +194,6 @@ class RequestFragment<OutputStream> : Fragment() {
         btnRequest.setOnClickListener {
             errorPriceTextView.visibility = View.GONE
             if (validateForm()) {
-                val clientId = sharedPreferences.getString(
-                    "clientId", ""
-                )  // Retrieve the 'userType' attribute from SharedPreferences
                 val title = edtTitle.text.toString()
                 val r = RequestFB(
                     title,
@@ -204,10 +210,9 @@ class RequestFragment<OutputStream> : Fragment() {
 
                 val newDocRequest = db.collection("Requests").document()
                 db.collection("Requests").document(newDocRequest.id).set(r)
-                val editor = sharedPreferences.edit()
-                editor.remove("selectedService")
-                editor.remove("selectedOcupation")
-                editor.apply()
+                sharedPrefUtils.removeSharedPref("selectedService")
+                sharedPrefUtils.removeSharedPref("selectedOcupation")
+
                 val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
                 v.findNavController().navigate(action)
             }

@@ -1,8 +1,6 @@
 package com.ar.of_pro.fragments.profile
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
+import com.ar.of_pro.utils.SharedPrefUtils
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -46,7 +45,7 @@ class ProfileFragment : Fragment() {
     lateinit var profilePicture: ImageView
 
     //Shared
-    lateinit var sharedPreferences: SharedPreferences
+    private lateinit var sharedPrefUtils: SharedPrefUtils
 
 
     override fun onCreateView(
@@ -66,16 +65,14 @@ class ProfileFragment : Fragment() {
         txtBioDescription = v.findViewById(R.id.txtBioDescription)
         txtBio = v.findViewById(R.id.txtBio)
 
-        sharedPreferences =
-            requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-
         return v
     }
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        sharedPrefUtils = SharedPrefUtils(requireContext())
+        val isUserProvider = sharedPrefUtils.getFromSharedPrefs("userType") == "PROVIDER"
         userRequest.get().addOnSuccessListener { snapshots ->
             for (snapshot in snapshots) {
 
@@ -95,27 +92,23 @@ class ProfileFragment : Fragment() {
                     txtLocalidad.text = location
                     txtCorreo.text = mail
                     txtTelefono.text = phoneNumber.toString()
-                    if(sharedPreferences.getString("userType", "") == "PROVIDER") {
-                        if(ratingQty>0) {
+
+                    if (isUserProvider) {
+                        txtBioDescription.text = snapshot.getString("bio")
+
+                        if (ratingQty > 0) {
                             txtNumRating.text = (numRating / ratingQty).toString() + " 🌟"
-                        }else{
+                        } else {
                             txtNumRating.text = "$numRating 🌟"
                         }
-                    }
-
-                    imageUrl = profileImage
-                    Glide.with(requireContext()).load(imageUrl).into(profilePicture);
-
-                    if (snapshot.getString("userType") == "PROVIDER") {
-                        txtBioDescription.text = snapshot.getString("bio")
                     } else {
                         txtBio.text = ""
                         txtBioDescription.text = ""
                         txtNumRating.text = ""
                         txtRateQuantity2.text = ""
-
+                        imageUrl = profileImage
+                        Glide.with(requireContext()).load(imageUrl).into(profilePicture);
                     }
-
                 }
             }
         }
@@ -126,10 +119,7 @@ class ProfileFragment : Fragment() {
 
         btnLogout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            val editor = sharedPreferences.edit()
-            editor.remove("userType")
-            editor.remove("clientId")
-            editor.apply()
+            sharedPrefUtils.removeUserData()
             val action = ProfileFragmentDirections.actionProfileFragmentToAuthActivity()
             v.findNavController().navigate(action)
         }

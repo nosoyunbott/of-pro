@@ -1,7 +1,5 @@
 package com.ar.of_pro.fragments.login
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -17,12 +15,12 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
+import com.ar.of_pro.utils.SharedPrefUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
 class UserLoginFragment : Fragment() {
-
     override fun onResume() {
         super.onResume()
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -36,7 +34,8 @@ class UserLoginFragment : Fragment() {
     lateinit var logInButton: Button
     lateinit var errorMessageTextView: TextView
     lateinit var registerTextView: TextView
-    lateinit var sharedPreferences: SharedPreferences
+    lateinit var sharedPrefUtils: SharedPrefUtils
+
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -50,10 +49,7 @@ class UserLoginFragment : Fragment() {
         logInButton = v.findViewById(R.id.logInButton)
         errorMessageTextView = v.findViewById(R.id.errorMessageTextView)
         registerTextView = v.findViewById(R.id.registerTextView)
-
-        sharedPreferences =
-            requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-
+        sharedPrefUtils = SharedPrefUtils(requireContext())
         return v
     }
 
@@ -87,10 +83,7 @@ class UserLoginFragment : Fragment() {
                                             userQueryTask.result.documents[0].get("userType")
                                                 .toString()
                                         val userId = userQueryTask.result.documents[0].id
-                                        val editor = sharedPreferences.edit()
-                                        editor.putString("userType", userType)
-                                        editor.putString("clientId", userId)
-                                        editor.apply()
+                                        sharedPrefUtils.saveUserData(userType, userId)
                                         val action =
                                             UserLoginFragmentDirections.actionUserLoginFragmentToMainActivity(
                                                 userType
@@ -118,7 +111,7 @@ class UserLoginFragment : Fragment() {
 
     private fun validateUserSession() {
         if (user != null) {
-            val userType = sharedPreferences.getString("userType", "") ?: ""
+            val userType = sharedPrefUtils.getFromSharedPrefs("userType") ?: ""
             val action = UserLoginFragmentDirections.actionUserLoginFragmentToMainActivity(userType)
             v.findNavController().navigate(action)
         } else {
