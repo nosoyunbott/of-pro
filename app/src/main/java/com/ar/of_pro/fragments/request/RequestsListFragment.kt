@@ -18,6 +18,8 @@ import com.ar.of_pro.adapters.RequestCardAdapter
 import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.listeners.OnViewItemClickedListener
+import com.ar.of_pro.models.ProposalModel
+import com.ar.of_pro.models.RequestModel
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
@@ -243,34 +245,5 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         )
     }
 
-    data class ProposalModel(
-        val bid: Int,
-        val commentary: String,
-        val disabled: Boolean,
-        val providerId: String,
-        val requestId: String,
-        val stability: Int
-    ) {
-        constructor() : this(0, "", false, "", "", 0)
-    }
-
-    data class RequestModel(
-        val categoryOcupation: String,
-        val categoryService: String,
-        val clientId: String,
-        val date: String,
-        val description: String,
-        val imageUrlArray: MutableList<String>,
-        val maxCost: Int,
-        val providerId: String,
-        val requestBidAmount: Int,
-        val requestTitle: String,
-        val state: String,
-        val id: String
-    ) {
-        constructor() : this(
-            "", "", "", "", "", mutableListOf(), 0, "", 0, "", "", ""
-        )
-    }
 
 }

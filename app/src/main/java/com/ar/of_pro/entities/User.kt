@@ -32,6 +32,8 @@ class User(
     var bio: String = ""
     var imageUrl: String = ""
 
+    constructor() : this(null, null, null, null, null, null, null, null, null, null, null, null)
+
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),

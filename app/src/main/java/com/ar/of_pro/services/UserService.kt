@@ -1,21 +1,21 @@
 package com.ar.of_pro.services
 
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 class UserService {
-    companion object{
+    companion object {
         private val db = FirebaseFirestore.getInstance()
         private val usersCollection = db.collection("Users")
 
-        fun updateRatingOfUser(ratingPoint:Float,userId:String)
-        {
+        fun updateRatingOfUser(ratingPoint: Float, userId: String) {
             val userDocRef = usersCollection.document(userId)
 
             userDocRef.get().addOnSuccessListener { userDocument ->
                 // Retrieve the current rating from the document
                 val currentRating = userDocument.getDouble("rating") ?: 0.0
-                val ratingQuantity= userDocument.getDouble("ratingQuantity") ?: 0.0
-                val ratingQuantityUpdated=ratingQuantity+1
+                val ratingQuantity = userDocument.getDouble("ratingQuantity") ?: 0.0
+                val ratingQuantityUpdated = ratingQuantity + 1
                 // Calculate the new rating
                 val newRating = currentRating + ratingPoint
 
@@ -29,6 +29,20 @@ class UserService {
 
             }
 
+        }
+
+        fun getUserById(documentId: String, callback: (DocumentSnapshot?, Exception?) -> Unit) {
+            db.collection("Users")
+                .document(documentId)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val documentSnapshot: DocumentSnapshot? = task.result
+                        callback(documentSnapshot, null)
+                    } else {
+                        callback(null, task.exception)
+                    }
+                }
         }
     }
 }
