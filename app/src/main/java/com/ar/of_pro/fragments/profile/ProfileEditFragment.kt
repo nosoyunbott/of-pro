@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.User
+import com.ar.of_pro.models.UserModel
 import com.ar.of_pro.services.ActivityServiceApiBuilder
 import com.ar.of_pro.services.UserService
 import com.google.firebase.auth.FirebaseAuth
@@ -100,15 +101,15 @@ class ProfileEditFragment : Fragment() {
             sharedPreferences.getString(
                 "clientId",
                 ""
-            )!!
+            ).toString()
         ) { document, exception ->
             if (exception == null && document != null) {
-                val user = document.toObject(User::class.java)
+                val user = document.toObject(UserModel::class.java)
                 if (user != null) {
 
                     txtNombre.hint = user.name
                     txtSurname.hint = user.lastName
-                    txtLocalidad.hint = user.address
+                    txtLocalidad.hint = user.location
                     txtTelefono.hint = user.phone.toString()
                     txtBio.hint = user.bio
 
