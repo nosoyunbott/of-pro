@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
+import com.ar.of_pro.models.UserModel
+import com.ar.of_pro.services.UserService
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -65,64 +68,52 @@ class ProfileFragment : Fragment() {
         profilePicture = v.findViewById(R.id.profilePicture)
         txtBioDescription = v.findViewById(R.id.txtBioDescription)
         txtBio = v.findViewById(R.id.txtBio)
-
         sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
 
         return v
     }
 
-    @SuppressLint("SetTextI18n")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        userRequest.get().addOnSuccessListener { snapshots ->
-            for (snapshot in snapshots) {
-
-                //db.collection('books').where(firebase.firestore.FieldPath.documentId(), '==', 'fK3ddutEpD2qQqRMXNW5').get()
-
-                if (snapshot.getString("mail") == mail) {
-                    val name = snapshot.getString("name") ?: ""
-                    val surname = snapshot.getString("lastName") ?: ""
-                    val location = snapshot.getString("location") ?: ""
-                    val mail = snapshot.getString("mail") ?: ""
-                    val phoneNumber = snapshot.getLong("phone")?.toInt() ?: 0
-                    val numRating = snapshot.getLong("rating")?.toInt() ?: 0
-                    val ratingQty = snapshot.getLong("ratingQuantity")?.toInt() ?: 0
-                    val profileImage = snapshot.getString("imageUrl") ?: ""
-
-                    txtNombre.text = "$name $surname"
-                    txtLocalidad.text = location
-                    txtCorreo.text = mail
-                    txtTelefono.text = phoneNumber.toString()
-                    if(sharedPreferences.getString("userType", "") == "PROVIDER") {
-                        if(ratingQty>0) {
-                            txtNumRating.text = (numRating / ratingQty).toString() + " 🌟"
-                        }else{
-                            txtNumRating.text = "$numRating 🌟"
-                        }
-                    }
-
-                    imageUrl = profileImage
-                    Glide.with(requireContext()).load(imageUrl).into(profilePicture);
-
-                    if (snapshot.getString("userType") == "PROVIDER") {
-                        txtBioDescription.text = snapshot.getString("bio")
-                    } else {
-                        txtBio.text = ""
-                        txtBioDescription.text = ""
-                        txtNumRating.text = ""
-                        txtRateQuantity2.text = ""
-
-                    }
-
-                }
-            }
-        }
-    }
-
     override fun onStart() {
         super.onStart()
+
+        UserService.getUserById(
+            sharedPreferences.getString(
+                "clientId",
+                ""
+            ).toString()
+        ) { document, exception ->
+            if (exception == null && document != null) {
+                val user = document.toObject(UserModel::class.java)
+                if (user != null) {
+
+                    val userTotalRating = String.format("%.1f", (user.rating / user.ratingQuantity))
+
+                    txtNombre.text = "${user.name + " " + user.lastName}"
+                    txtLocalidad.text = user.location
+                    txtCorreo.text = user.mail
+                    txtTelefono.text = user.phone.toString()
+
+                    if (user.userType == "PROVIDER") {
+                        txtBioDescription.text = user.bio
+                        if (user.ratingQuantity > 0) {
+                            txtNumRating.text =
+                                "$userTotalRating 🌟"
+                        } else {
+                            txtNumRating.text = "$userTotalRating 🌟"
+                            //txt.text = String.format("%.1f", calification)
+                            txtBio.text = ""
+                            txtBioDescription.text = ""
+                            txtNumRating.text = ""
+                            txtRateQuantity2.text = ""
+                        }
+                    }
+                    Glide.with(requireContext()).load(user.imageUrl).into(profilePicture);
+                }
+            } else {
+                Log.d("ErrorProfileEdit", "User not found")
+            }
+        }
 
         btnLogout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
@@ -139,6 +130,5 @@ class ProfileFragment : Fragment() {
             v.findNavController().navigate(action)
         }
     }
-
 
 }
