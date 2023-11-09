@@ -13,11 +13,16 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
+import com.ar.of_pro.entities.User
+import com.ar.of_pro.models.UserModel
 import com.ar.of_pro.services.ActivityServiceApiBuilder
+import com.ar.of_pro.services.UserService
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -35,7 +40,7 @@ import java.io.IOException
 
 class ProfileEditFragment : Fragment() {
 
-    lateinit var v : View
+    lateinit var v: View
     lateinit var btnAccept: Button
     lateinit var btnCancel: Button
 
@@ -44,10 +49,12 @@ class ProfileEditFragment : Fragment() {
     lateinit var txtLocalidad: EditText
     lateinit var txtBio: EditText
     lateinit var txtSurname: EditText
+    lateinit var txtDescriptionTitle: TextView
 
     private val db = FirebaseFirestore.getInstance()
     private val usersCollection = db.collection("Users")
     lateinit var sharedPreferences: SharedPreferences
+    val uMail = FirebaseAuth.getInstance().currentUser?.email
 
     private val PICK_MEDIA_REQUEST = 1
     lateinit var profilePictureEdit: ImageView
@@ -65,8 +72,9 @@ class ProfileEditFragment : Fragment() {
         txtNombre = v.findViewById(R.id.txtNombre)
         txtTelefono = v.findViewById(R.id.txtTelefono)
         txtLocalidad = v.findViewById(R.id.txtLocalidad)
-        txtBio = v.findViewById<EditText?>(R.id.txtDescripcion)
+        txtBio = v.findViewById(R.id.txtDescripcion)
         txtSurname = v.findViewById(R.id.txtApellido)
+        txtDescriptionTitle = v.findViewById(R.id.txtDescriptionTitle)
         profilePictureEdit = v.findViewById(R.id.profilePictureEdit)
         sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
@@ -84,17 +92,52 @@ class ProfileEditFragment : Fragment() {
 
         setOnClickListener(profilePictureEdit)
 
-        if(sharedPreferences.getString("userType", "") == "CLIENT") {
+        if (sharedPreferences.getString("userType", "") == "CLIENT") {
             txtBio.visibility = View.GONE
+            txtDescriptionTitle.visibility = View.GONE
         }
 
-        btnAccept.setOnClickListener{
+        UserService.getUserById(
+            sharedPreferences.getString(
+                "clientId",
+                ""
+            ).toString()
+        ) { document, exception ->
+            if (exception == null && document != null) {
+                val user = document.toObject(UserModel::class.java)
+                if (user != null) {
 
-            //TODO actualizar todos los datos en la db
-            if (imageUrl.isNullOrEmpty()) {
-                updateDb(txtNombre.text.toString(), txtSurname.text.toString() ,txtTelefono.text.toString(), txtLocalidad.text.toString(), txtBio.text.toString())
+                    txtNombre.hint = user.name
+                    txtSurname.hint = user.lastName
+                    txtLocalidad.hint = user.location
+                    txtTelefono.hint = user.phone.toString()
+                    txtBio.hint = user.bio
+
+                }
             } else {
-                updateDb(txtNombre.text.toString(), txtSurname.text.toString() ,txtTelefono.text.toString(), txtLocalidad.text.toString(), txtBio.text.toString(), imageUrl)
+                Log.d("ErrorProfileEdit", "User not found")
+            }
+        }
+
+        btnAccept.setOnClickListener {
+
+            if (imageUrl.isNullOrEmpty()) {
+                updateDb(
+                    txtNombre.text.toString(),
+                    txtSurname.text.toString(),
+                    txtTelefono.text.toString(),
+                    txtLocalidad.text.toString(),
+                    txtBio.text.toString()
+                )
+            } else {
+                updateDb(
+                    txtNombre.text.toString(),
+                    txtSurname.text.toString(),
+                    txtTelefono.text.toString(),
+                    txtLocalidad.text.toString(),
+                    txtBio.text.toString(),
+                    imageUrl
+                )
             }
             //    v.findNavController().popBackStack()
             val action = ProfileEditFragmentDirections.actionProfileEditFragmentToProfileFragment()
@@ -102,87 +145,102 @@ class ProfileEditFragment : Fragment() {
         }
 
         btnCancel.setOnClickListener {
-         //   v.findNavController().popBackStack()
+            //   v.findNavController().popBackStack()
             val action = ProfileEditFragmentDirections.actionProfileEditFragmentToProfileFragment()
             v.findNavController().navigate(action)
         }
 
     }
 
-    fun updateDb(name: String?, apellido: String?, phone: String?, ubi: String?, description: String?) {
+    fun updateDb(
+        name: String?,
+        apellido: String?,
+        phone: String?,
+        ubi: String?,
+        description: String?
+    ) {
 
-        val userDoc = usersCollection.document(sharedPreferences.getString("clientId", "").toString())
+        val userDoc =
+            usersCollection.document(sharedPreferences.getString("clientId", "").toString())
 
         //Name
         if (name!!.isNotEmpty()) {
-            val name = hashMapOf<String, Any?>("name" to name) //TODO validar
+            val name = hashMapOf<String, Any?>("name" to name)
             userDoc.update(name)
         }
 
         //lastName
         if (apellido!!.isNotEmpty()) {
-            val lastName = hashMapOf<String, Any?>("lastName" to apellido) //TODO validar
+            val lastName = hashMapOf<String, Any?>("lastName" to apellido)
             userDoc.update(lastName)
         }
 
         //Phone
         if (phone!!.isNotEmpty()) {
-            val phone = hashMapOf<String, Any?>("phone" to phone.toString().toInt()) //TODO validar
+            val phone = hashMapOf<String, Any?>("phone" to phone.toString().toInt())
             userDoc.update(phone)
         }
 
         //Localidad
 
         if (ubi!!.isNotEmpty()) {
-            val localidad = hashMapOf<String, Any?>("location" to ubi) //TODO validar
+            val localidad = hashMapOf<String, Any?>("location" to ubi)
             userDoc.update(localidad)
         }
 
         //Bio
         if (description!!.isNotEmpty()) {
-            val bio = hashMapOf<String, Any>("bio" to description) //TODO validar
+            val bio = hashMapOf<String, Any>("bio" to description)
             userDoc.update(bio)
         }
     }
 
-    fun updateDb(name: String?, apellido: String?, phone: String?, ubi: String?, description: String?, imgurImage: String?) {
+    fun updateDb(
+        name: String?,
+        apellido: String?,
+        phone: String?,
+        ubi: String?,
+        description: String?,
+        imgurImage: String?
+    ) {
 
-        val userDoc = usersCollection.document(sharedPreferences.getString("clientId", "").toString())
+        val userDoc =
+            usersCollection.document(sharedPreferences.getString("clientId", "").toString())
 
         //Name
         if (name!!.isNotEmpty()) {
-            val name = hashMapOf<String, Any?>("name" to name) //TODO validar
+            val name = hashMapOf<String, Any?>("name" to name)
             userDoc.update(name)
         }
 
         //lastName
         if (apellido!!.isNotEmpty()) {
-            val lastName = hashMapOf<String, Any?>("lastName" to apellido) //TODO validar
+            val lastName = hashMapOf<String, Any?>("lastName" to apellido)
             userDoc.update(lastName)
         }
 
         //Phone
         if (phone!!.isNotEmpty()) {
-            val phone = hashMapOf<String, Any?>("phone" to phone.toString().toInt()) //TODO validar
+            val phone = hashMapOf<String, Any?>("phone" to phone.toString().toInt())
             userDoc.update(phone)
         }
 
         //Localidad
 
         if (ubi!!.isNotEmpty()) {
-            val localidad = hashMapOf<String, Any?>("location" to ubi) //TODO validar
+            val localidad = hashMapOf<String, Any?>("location" to ubi)
             userDoc.update(localidad)
         }
 
         //Bio
         if (description!!.isNotEmpty()) {
-            val bio = hashMapOf<String, Any>("bio" to description) //TODO validar
+            val bio = hashMapOf<String, Any>("bio" to description)
             userDoc.update(bio)
         }
 
         //Image
         if (imgurImage!!.isNotEmpty() && imageUrl!!.isNotEmpty()) {
-            val imageToDb = hashMapOf<String, Any>("imageUrl" to imgurImage) //TODO validar
+            val imageToDb = hashMapOf<String, Any>("imageUrl" to imgurImage)
             userDoc.update(imageToDb)
         }
     }
@@ -197,6 +255,7 @@ class ProfileEditFragment : Fragment() {
 
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -263,26 +322,26 @@ class ProfileEditFragment : Fragment() {
                             val imageUrll = dataObject.getString("link")
                             imageUrl = dataObject.getString("link")
                             Log.d("image", "Image URL: $imageUrll")
-                            // Handle imageUrl as needed (e.g., display it in your app)
+
                         } catch (e: JSONException) {
                             e.printStackTrace()
-                            // Handle JSON parsing error
+
                         }
                     } else {
-                        // Handle unsuccessful response here
+
                         Log.e("image", "Upload failed")
                     }
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    // Handle network errors or errors in the server
+
                     Log.e("image", "Error: " + t.message)
                 }
             })
 
         } catch (e: IOException) {
             e.printStackTrace()
-            // Handle file IO exception
+
         }
     }
 
