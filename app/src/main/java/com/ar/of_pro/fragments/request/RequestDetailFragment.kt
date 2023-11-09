@@ -12,7 +12,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
+import com.ar.of_pro.models.UserModel
 import com.ar.of_pro.services.RequestsService
+import com.ar.of_pro.services.UserService
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
@@ -85,7 +87,16 @@ class RequestDetailFragment : Fragment() {
                 }
 
             }
-
+//        UserService.getUserById(proposalInfo.providerId){document, exception ->
+//            if(exception==null && document!= null){
+//                val user = document.toObject(UserModel::class.java)
+//                if(user!=null){
+//                    Glide.with(requireContext()).load(user.).into(imgHeader)
+//                }
+//            }
+//
+//
+//        }
         btnAccept.setOnClickListener {
             RequestsService.updateProviderIdFromRequest(
                 proposalInfo.requestId,
