@@ -1,7 +1,9 @@
 package com.ar.of_pro.services
 
 import android.util.Log
+import com.ar.of_pro.models.ProposalModel
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
 class ProposalsService {
     companion object{
@@ -21,6 +23,27 @@ class ProposalsService {
                 }
             }
         }
+        suspend fun getProposalsByRequestId(requestId: String): List<ProposalModel> {
+            return try {
+                val querySnapshot = proposalsCollection.get().await()
+
+                val proposalsList = mutableListOf<ProposalModel>()
+
+                for (document in querySnapshot) {
+                    val proposal = document.toObject(ProposalModel::class.java)
+                    if (proposal.requestId == requestId) {
+                        proposalsList.add(proposal)
+                    }
+                }
+
+                return proposalsList
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emptyList()
+            }
+        }
+
 
     }
 }

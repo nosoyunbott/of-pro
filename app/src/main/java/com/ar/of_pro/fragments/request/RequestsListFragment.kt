@@ -20,6 +20,8 @@ import com.ar.of_pro.entities.Request
 import com.ar.of_pro.listeners.OnViewItemClickedListener
 import com.ar.of_pro.models.ProposalModel
 import com.ar.of_pro.models.RequestModel
+import com.ar.of_pro.services.ProposalsService
+import com.ar.of_pro.services.RequestsService
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
@@ -46,72 +48,8 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
 
     //NOTE Solo para validaciones de requests
-    private suspend fun getProposalsByRequestId(requestId: String): List<ProposalModel> {
-        return try {
-            val querySnapshot = proposalsCollection.get().await()
-
-            val proposalsList = mutableListOf<ProposalModel>()
-
-            for (document in querySnapshot) {
-                val proposal = document.toObject(ProposalModel::class.java)
-                if (proposal.requestId == requestId) {
-                    proposalsList.add(proposal)
-                }
-            }
-
-            return proposalsList
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emptyList()
-        }
-    }
-
-    private suspend fun getRequests(): List<RequestModel> {
-        return try {
-            val querySnapshot = requestsCollection.get().await()
-
-            val requestsList = mutableListOf<RequestModel>()
 
 
-            for (document in querySnapshot) {
-                val title = document.getString("requestTitle") ?: ""
-                val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
-                val selectedOcupation = document.getString("categoryOcupation") ?: ""
-                val selectedServiceType = document.getString("categoryService") ?: ""
-                val description = document.getString("description") ?: ""
-                val state = document.getString("state") ?: ""
-                val date = document.getString("date") ?: ""
-                val maxCost = document.getLong("maxCost")?.toInt() ?: 0
-                val clientId = document.getString("clientId") ?: ""
-                val requestId = document.id
-                val imageUrlArray =
-                    document.get("imageUrlArray") as? MutableList<String> ?: mutableListOf()
-                val providerId = document.getString("providerId") ?: ""
-                val request = RequestModel(
-                    selectedOcupation,
-                    selectedServiceType,
-                    clientId,
-                    date,
-                    description,
-                    imageUrlArray,
-                    maxCost,
-                    providerId,
-                    requestBidAmount,
-                    title,
-                    state,
-                    requestId
-                )
-                requestsList.add(request)
-            }
-
-            requestsList
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emptyList()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,11 +66,11 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         )
         lifecycleScope.launch {
 
-            val requests = getRequests()
+            val requests = RequestsService.getRequests()
 
 
             for (r in requests) {
-                val proposalsOfCurrentRequest = getProposalsByRequestId(r.id)
+                val proposalsOfCurrentRequest = ProposalsService.getProposalsByRequestId(r.id)
 
                 val PROVIDER_HAS_NOT_APPLIED =
                     userType == "PROVIDER" && !(proposalsOfCurrentRequest.any { it.providerId == userId }) && r.state == "PENDIENTE"
