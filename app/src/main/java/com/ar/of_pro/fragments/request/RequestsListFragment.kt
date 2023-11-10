@@ -1,6 +1,7 @@
 package com.ar.of_pro.fragments.request
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,12 +19,11 @@ import com.ar.of_pro.adapters.RequestCardAdapter
 import com.ar.of_pro.entities.Ocupation
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.listeners.OnViewItemClickedListener
-import com.ar.of_pro.models.ProposalModel
 import com.ar.of_pro.models.RequestModel
-import com.google.firebase.firestore.FieldPath
+import com.ar.of_pro.services.ProposalsService
+import com.ar.of_pro.services.RequestsService
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
@@ -38,101 +38,39 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     private lateinit var requestListAdapter: RequestCardAdapter
 
     val db = FirebaseFirestore.getInstance()
-    val requestsCollection = db.collection("Requests")
-    val proposalsCollection = db.collection("Proposals")
     private var selectedButton: Button? = null
     private lateinit var clearFiltersTextView: TextView
 
+    lateinit var sharedPreferences : SharedPreferences
+    lateinit var userType: String
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        v = inflater.inflate(R.layout.fragment_requests_list, container, false)
+        recRequestList = v.findViewById(R.id.rec_requestsList)
+        filterContainer = v.findViewById(R.id.filterContainer)
+        clearFiltersTextView = v.findViewById(R.id.clearFiltersTextView)
 
-
-    //NOTE Solo para validaciones de requests
-    private suspend fun getProposalsByRequestId(requestId: String): List<ProposalModel> {
-        return try {
-            val querySnapshot = proposalsCollection.get().await()
-
-            val proposalsList = mutableListOf<ProposalModel>()
-
-            for (document in querySnapshot) {
-                val proposal = document.toObject(ProposalModel::class.java)
-                if (proposal.requestId == requestId) {
-                    proposalsList.add(proposal)
-                }
-            }
-
-            return proposalsList
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emptyList()
-        }
-    }
-
-    private suspend fun getRequests(): List<RequestModel> {
-        return try {
-            val querySnapshot = requestsCollection.get().await()
-
-            val requestsList = mutableListOf<RequestModel>()
-
-
-            for (document in querySnapshot) {
-                val title = document.getString("requestTitle") ?: ""
-                val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
-                val selectedOcupation = document.getString("categoryOcupation") ?: ""
-                val selectedServiceType = document.getString("categoryService") ?: ""
-                val description = document.getString("description") ?: ""
-                val state = document.getString("state") ?: ""
-                val date = document.getString("date") ?: ""
-                val maxCost = document.getLong("maxCost")?.toInt() ?: 0
-                val clientId = document.getString("clientId") ?: ""
-                val requestId = document.id
-                val imageUrlArray =
-                    document.get("imageUrlArray") as? MutableList<String> ?: mutableListOf()
-                val providerId = document.getString("providerId") ?: ""
-                val request = RequestModel(
-                    selectedOcupation,
-                    selectedServiceType,
-                    clientId,
-                    date,
-                    description,
-                    imageUrlArray,
-                    maxCost,
-                    providerId,
-                    requestBidAmount,
-                    title,
-                    state,
-                    requestId
-                )
-                requestsList.add(request)
-            }
-
-            requestsList
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emptyList()
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val sharedPreferences =
+        sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-        val userType = sharedPreferences.getString(
+        userType = sharedPreferences.getString(
             "userType",
             ""
-        )
+        )!!
         val userId = sharedPreferences.getString(
             "clientId",
             ""
         )
+        filterRequests(userId)
+        return v
+    }
+
+    private fun filterRequests(userId: String?) {
         lifecycleScope.launch {
-
-            val requests = getRequests()
-
-
+            val requests = RequestsService.getRequests()
             for (r in requests) {
-                val proposalsOfCurrentRequest = getProposalsByRequestId(r.id)
+                val proposalsOfCurrentRequest = ProposalsService.getProposalsByRequestId(r.id)
 
                 val PROVIDER_HAS_NOT_APPLIED =
                     userType == "PROVIDER" && !(proposalsOfCurrentRequest.any { it.providerId == userId }) && r.state == "PENDIENTE"
@@ -150,20 +88,8 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_requests_list, container, false)
-        recRequestList = v.findViewById(R.id.rec_requestsList)
-        filterContainer = v.findViewById(R.id.filterContainer)
-        clearFiltersTextView = v.findViewById(R.id.clearFiltersTextView)
-        return v
-    }
-
     override fun onStart() {
         super.onStart()
-
 
         recRequestList.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(context)
@@ -171,17 +97,10 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         requestListAdapter = RequestCardAdapter(requestList, this)
         recRequestList.adapter = requestListAdapter
 
-
-        refreshRecyclerView()
-
-        clearFiltersTextView.setOnClickListener {
-            selectedButton?.setBackgroundResource(R.drawable.button_transparent)
-            requestListAdapter = RequestCardAdapter(requestList, this@RequestsListFragment)
-            recRequestList.adapter = requestListAdapter
-        }
+        refreshRecyclerByFilterButtons()
     }
 
-    fun refreshRecyclerView() {
+    private fun refreshRecyclerByFilterButtons() {
         for (filterName in ocupationList) {
             val btnFilter = Button(context)
             btnFilter.text = filterName
@@ -208,12 +127,14 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
             filterContainer.addView(btnFilter)
         }
+        clearFiltersTextView.setOnClickListener {
+            selectedButton?.setBackgroundResource(R.drawable.button_transparent)
+            requestListAdapter = RequestCardAdapter(requestList, this@RequestsListFragment)
+            recRequestList.adapter = requestListAdapter
+        }
     }
 
     override fun onViewItemDetail(request: Request) {
-        val sharedPreferences =
-            requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-        val userType = sharedPreferences.getString("userType", "")
         val actionForClient =
             RequestsListFragmentDirections.actionRequestsListFragmentToProviderRequestsFragment(
                 request
@@ -229,7 +150,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         }
     }
 
-    fun toRequest(r: RequestModel): Request {
+    private fun toRequest(r: RequestModel): Request {
         return Request(
             r.requestTitle,
             r.requestBidAmount,
