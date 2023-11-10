@@ -127,7 +127,7 @@ class RequestEditFragment : Fragment() {
         editor.apply()
         setupSpinner(spnOcupation, ocupationAdapter)
         setupSpinner(spnServiceTypes, serviceTypesAdapter)
-
+        populateWithRequestData()
         return v
     }
 
@@ -148,7 +148,7 @@ class RequestEditFragment : Fragment() {
         edtTime.setOnClickListener {
             showDatePickerDialog()
         }
-
+        requestId = RequestEditFragmentArgs.fromBundle(requireArguments()).requestId
         val maxLength = 120
         val inputFilter = InputFilter { source, start, end, dest, dstart, dend ->
             if (dest.length + end - start - (dend - dstart) <= maxLength) {
@@ -163,14 +163,14 @@ class RequestEditFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        requestId = RequestEditFragmentArgs.fromBundle(requireArguments()).requestId
+
 
         handleSpinnersPopulation()
         setOnClickListener(btnAttach)
 
         btnRequest.isEnabled = false
         btnRequest.isClickable = false
-        populateWithRequestData()
+
         btnRequest.setOnClickListener {
             errorPriceTextView.visibility = View.GONE
             if (validateForm()) {
@@ -220,8 +220,13 @@ class RequestEditFragment : Fragment() {
                         edtTime.setText(formatTimestamp(requestData.date.toLong()))
                     }
           //          imageUrlArray = requestData.imageUrlArray
-                    selectedOcupation = requestData.categoryOcupation
-                    selectedServiceType = requestData.categoryService
+                        selectedOcupation = requestData.categoryOcupation
+                    selectedOcupationPosition = Ocupation().getList().indexOf(selectedOcupation)
+                        spnOcupation.setSelection(selectedOcupationPosition)
+
+                        selectedServiceType = requestData.categoryService
+                    selectedServicePosition = ServiceType().getList().indexOf(selectedServiceType)
+                        spnServiceTypes.setSelection(selectedServicePosition)
                 }
             } else {
                 // Document does not exist
@@ -246,7 +251,7 @@ class RequestEditFragment : Fragment() {
         }
         if (posSpnService != 0) {
             spnServiceTypes.setSelection(posSpnService)
-            selectedServiceType = serviceTypesList[posSpnOcupation]
+            selectedServiceType = serviceTypesList[posSpnService]
         }
     }
 
