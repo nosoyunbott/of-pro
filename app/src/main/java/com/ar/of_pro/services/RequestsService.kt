@@ -3,6 +3,7 @@ package com.ar.of_pro.services
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.models.RequestModel
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
@@ -39,11 +40,11 @@ class RequestsService {
              requestDoc.update(updates)
          }
 
-         fun updateRequestBidAmount(requestId: String, bidAmount: Int) {
+         fun updateRequestBidAmount(requestId: String) {
              val requestDoc = requestsCollection.document(requestId)
 
              val updates = hashMapOf<String, Any>(
-                 "requestBidAmount" to bidAmount - 1
+                 "requestBidAmount" to FieldValue.increment(-1)
              )
              requestDoc.update(updates)
          }

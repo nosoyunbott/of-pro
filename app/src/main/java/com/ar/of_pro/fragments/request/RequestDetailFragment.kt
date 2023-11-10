@@ -12,12 +12,16 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
+import com.ar.of_pro.entities.Proposal
+import com.ar.of_pro.models.ProposalModel
 import com.ar.of_pro.models.UserModel
+import com.ar.of_pro.services.ProposalsService
 import com.ar.of_pro.services.RequestsService
 import com.ar.of_pro.services.UserService
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import kotlin.math.round
 import kotlin.math.truncate
 
@@ -75,87 +79,48 @@ class RequestDetailFragment : Fragment() {
         }
         txtCalificationQty.text = proposalInfo.calificationQty.toString()
 
-        val users = db.collection("Users")
-        users.whereEqualTo(FieldPath.documentId(), proposalInfo.providerId).get()
-            .addOnSuccessListener { querySnapshot ->
-                for (snapshot in querySnapshot) {
-
-                    val profileImage = snapshot.getString("imageUrl") ?: ""
-                    Glide.with(requireContext()).load(profileImage).into(imgHeader)
-                    val location = snapshot.getString("location") ?: ""
-                    txtLocation.text = location
+        UserService.getUserById(proposalInfo.providerId) { document, exception ->
+            if (exception == null && document != null) {
+                val user = document.toObject(UserModel::class.java)
+                if (user != null) {
+                    Glide.with(requireContext()).load(user.imageUrl).into(imgHeader)
+                    txtLocation.text = user.location
                 }
-
             }
-//        UserService.getUserById(proposalInfo.providerId){document, exception ->
-//            if(exception==null && document!= null){
-//                val user = document.toObject(UserModel::class.java)
-//                if(user!=null){
-//                    Glide.with(requireContext()).load(user.).into(imgHeader)
-//                }
-//            }
-//
-//
-//        }
+
+
+        }
         btnAccept.setOnClickListener {
             RequestsService.updateProviderIdFromRequest(
                 proposalInfo.requestId,
                 proposalInfo.providerId
             )
-
             v.findNavController()
                 .popBackStack(v.findNavController().graph.startDestinationId, false)
-            //v.findNavController().navigate(action)
         }
 
         btnDeny.setOnClickListener {
-
-            val proposalsCollection = db.collection("Proposals")
-
-            // Busca el documento con el campo providerId igual a la variable providerId
-            proposalsCollection.whereEqualTo("requestId", proposalInfo.requestId)
-                .whereEqualTo("providerId", proposalInfo.providerId)
-                .get()
-                .addOnSuccessListener { querySnapshot ->
-                    for (document in querySnapshot) {
-
-                        Log.d("document.id", document.id)
-                        document.reference.delete()
-                            .addOnSuccessListener {
-                                Log.d("Firestore", "Documento eliminado correctamente")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.w("Firestore", "Error al eliminar el documento", e)
-                            }
-
-                        val requestsCollection = db.collection("Requests")
-                        requestsCollection.whereEqualTo(
-                            FieldPath.documentId(),
-                            proposalInfo.requestId
-                        ).get().addOnSuccessListener { querySnapshot ->
-                            for (document in querySnapshot) {
-                                var reqBidAmount =
-                                    document.getLong("requestBidAmount")?.toInt() ?: 0
-                                RequestsService.updateRequestBidAmount(
-                                    proposalInfo.requestId,
-                                    reqBidAmount
-                                )
-
-                                v.findNavController()
-                                    .popBackStack(
-                                        v.findNavController().graph.startDestinationId,
-                                        false
-                                    )
-
-                            }
-
-                        }
-
+            ProposalsService.getProposalByRequestIdAndProviderId(
+                proposalInfo.requestId,
+                proposalInfo.providerId
+            ) { document, exception ->
+                if (exception == null && document != null) {
+                    for (d in document) {
+                        //val proposal = d.toObject(ProposalModel::class.java)
+                        ProposalsService.deleteProposalFromId(d.id)
                     }
                 }
-
-
-            //TODO borrar proposal por UID
+                updateRequestBidAmount(proposalInfo.requestId)
+                v.findNavController()
+                    .popBackStack(
+                        v.findNavController().graph.startDestinationId,
+                        false
+                    )
+            }
         }
+    }
+
+    fun updateRequestBidAmount(requestId: String) {
+        RequestsService.updateRequestBidAmount(requestId)
     }
 }
