@@ -44,7 +44,7 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
     lateinit var userObj: User
     lateinit var proposalInfo: ProposalInformation
     lateinit var btnDelete: Button
-
+    lateinit var btnEdit: Button
 
     override fun onPause() {
         super.onPause()
@@ -141,6 +141,7 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         txtTitle = v.findViewById(R.id.txtTitle)
         recProviderList = v.findViewById(R.id.rec_providers)
         btnDelete = v.findViewById(R.id.btnDeleteRequest)
+        btnEdit = v.findViewById(R.id.btnEditRequest)
         return v
     }
 
@@ -159,7 +160,10 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
             ProposalsService.deleteProposalsFromRequestId(request.requestId)
             v.findNavController().popBackStack(R.id.requestsListFragment, true)
         }
-
+        btnEdit.setOnClickListener {
+            val action = ProviderRequestsFragmentDirections.actionProviderRequestsFragmentToRequestEditFragment(request.requestId)
+            v.findNavController().navigate(action)
+        }
     }
 
     override fun onViewItemDetail(proposalInformation: ProposalInformation) {

@@ -3,6 +3,7 @@ package com.ar.of_pro.services
 import com.ar.of_pro.entities.Request
 import com.ar.of_pro.models.RequestModel
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
@@ -45,6 +46,14 @@ class RequestsService {
 
              val updates = hashMapOf<String, Any>(
                  "requestBidAmount" to FieldValue.increment(-1)
+             )
+             requestDoc.update(updates)
+         }
+         fun updateSingleStringField(fieldName: String, requestId: String, value: String){
+             val requestDoc = requestsCollection.document(requestId)
+
+             val updates = hashMapOf<String, Any>(
+                 fieldName to value
              )
              requestDoc.update(updates)
          }
@@ -98,6 +107,17 @@ class RequestsService {
                  e.printStackTrace()
                  emptyList()
              }
+         }
+
+         fun getRequestById(id: String, onSuccess: (DocumentSnapshot?) -> Unit, onFailure: (Exception) -> Unit) {
+             requestsCollection.document(id)
+                 .get()
+                 .addOnSuccessListener { documentSnapshot ->
+                     onSuccess(documentSnapshot)
+                 }
+                 .addOnFailureListener { exception ->
+                     onFailure(exception)
+                 }
          }
      }
 

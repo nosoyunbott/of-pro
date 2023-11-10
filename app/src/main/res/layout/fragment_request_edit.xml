@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutEditRequest"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.request.RequestEditFragment" >
+
+    <TextView
+        android:id="@+id/txtEditRequests"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Crear una solicitud"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="665dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtEditRequests"
+        app:layout_constraintVertical_bias="0.0"
+        android:paddingHorizontal="15dp"
+        >
+
+        <Spinner
+            android:id="@+id/spnEditOcupations"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:autofillHints="Rubro" />
+
+        <EditText
+            android:id="@+id/edtEditTitle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:hint="Titulo de la solicitud"
+            android:inputType="text"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/errorTitleEditTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="El titulo es obligatorio"
+            android:layout_below="@+id/edtEditTitle"
+            android:textColor="#FF0000"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtEditTitle">
+
+            <EditText
+                android:id="@+id/edtEditPriceMax"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:hint="Precio Max"
+                android:inputType="number"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/errorPriceEditTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="El precio es invalido"
+                android:layout_below="@+id/edtEditPriceMax"
+                android:textColor="#FF0000"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/spnEditServiceTypes"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:autofillHints="Tipo de servicio" />
+
+        <EditText
+            android:id="@+id/edtEditDescripcion"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:ems="10"
+            android:hint="Descripcion"
+            android:inputType="text"
+            android:text="" />
+
+        <EditText
+            android:id="@+id/edtEditTime"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Fecha y hora"
+            android:ems="10"
+            android:inputType="none"
+            android:focusable="false"
+
+            />
+        <TextView
+            android:id="@+id/errorDateEditTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="La fecha es invalida"
+            android:layout_below="@+id/edtEditTime"
+            android:textColor="#FF0000"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnEditAttach"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Adjuntar foto/video" />
+
+
+        <Button
+            android:id="@+id/btnEditRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Editar" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
