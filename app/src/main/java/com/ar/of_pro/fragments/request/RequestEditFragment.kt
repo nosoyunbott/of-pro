@@ -196,7 +196,7 @@ class RequestEditFragment : Fragment() {
                 editor.remove("selectedEditService")
                 editor.remove("selectedEditOcupation")
                 editor.apply()
-                val action = RequestFragmentDirections.actionRequestFragmentToRequestsListFragment()
+                val action = RequestEditFragmentDirections.actionRequestEditFragmentToRequestsListFragment()
                 v.findNavController().navigate(action)
             }
         }
@@ -207,10 +207,21 @@ class RequestEditFragment : Fragment() {
             if (documentSnapshot != null && documentSnapshot.exists()) {
                 val requestData = documentSnapshot.toObject(RequestModel::class.java)
                 if(requestData!=null) {
-                    edtTitle.setText(requestData.requestTitle)
-                    edtPriceMax.setText(requestData.maxCost.toString())
-                    edtDescripcion.setText(requestData.description)
-                    edtTime.setText(formatTimestamp(requestData.date.toLong()))
+                    if(edtTitle.text.isNullOrEmpty()) {
+                        edtTitle.setText(requestData.requestTitle)
+                    }
+                    if(edtPriceMax.text.isNullOrEmpty()) {
+                        edtPriceMax.setText(requestData.maxCost.toString())
+                    }
+                    if(edtDescripcion.text.isNullOrEmpty()) {
+                        edtDescripcion.setText(requestData.description)
+                    }
+                    if(edtTime.text.isNullOrEmpty()) {
+                        edtTime.setText(formatTimestamp(requestData.date.toLong()))
+                    }
+          //          imageUrlArray = requestData.imageUrlArray
+                    selectedOcupation = requestData.categoryOcupation
+                    selectedServiceType = requestData.categoryService
                 }
             } else {
                 // Document does not exist
@@ -223,8 +234,7 @@ class RequestEditFragment : Fragment() {
     }
 
     private fun updateDb(r: RequestFB) {
-        if (!r.requestTitle.isNullOrEmpty())
-            RequestsService.updateSingleStringField("requestTitle", requestId, r.requestTitle)
+        RequestsService.updateAll(requestId, r)
     }
 
     private fun handleSpinnersPopulation() {

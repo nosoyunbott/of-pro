@@ -164,5 +164,10 @@
         <argument
             android:name="requestId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_requestEditFragment_to_requestsListFragment"
+            app:destination="@id/requestsListFragment"
+            app:popUpTo="@id/requestsListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

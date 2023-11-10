@@ -1,6 +1,7 @@
 package com.ar.of_pro.services
 
 import com.ar.of_pro.entities.Request
+import com.ar.of_pro.entities.RequestFB
 import com.ar.of_pro.models.RequestModel
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -46,6 +47,22 @@ class RequestsService {
 
              val updates = hashMapOf<String, Any>(
                  "requestBidAmount" to FieldValue.increment(-1)
+             )
+             requestDoc.update(updates)
+         }
+         fun updateAll(requestId: String, request: RequestFB) {
+             val requestDoc = requestsCollection.document(requestId)
+
+             val updates = hashMapOf<String, Any>(
+                 "categoryOcupation" to request.categoryOcupation,
+                 "categoryService" to request.categoryService,
+                 "clientId" to request.clientId,
+                 "date" to request.date,
+                 "description" to request.description,
+                 "imageUrlArray" to request.imageUrlArray,
+                 "maxCost" to request.maxCost,
+                 "requestBidAmount" to request.requestBidAmount,
+                 "requestTitle" to request.requestTitle
              )
              requestDoc.update(updates)
          }
