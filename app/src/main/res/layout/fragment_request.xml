@@ -5,7 +5,7 @@
     android:id="@+id/layoutRequest"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.request.RequestFragment" >
+    tools:context=".fragments.request.RequestFragment">
 
     <TextView
         android:id="@+id/txtRequests"
@@ -19,39 +19,42 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="409dp"
-        android:layout_height="665dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingHorizontal="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtRequests"
-        app:layout_constraintVertical_bias="0.0"
-        android:paddingHorizontal="15dp"
-        >
+        app:layout_constraintVertical_bias="0.0">
 
         <Spinner
             android:id="@+id/spnOcupations"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginVertical="10sp"
             android:autofillHints="Rubro" />
 
         <EditText
             android:id="@+id/edtTitle"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginVertical="10sp"
             android:ems="10"
             android:hint="Titulo de la solicitud"
             android:inputType="text"
+
             android:text="" />
 
         <TextView
             android:id="@+id/errorTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/edtTitle"
             android:layout_centerInParent="true"
             android:text="El titulo es obligatorio"
-            android:layout_below="@+id/edtTitle"
             android:textColor="#FF0000"
             android:visibility="gone" />
 
@@ -68,6 +71,7 @@
                 android:id="@+id/edtPriceMax"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
+                android:layout_marginVertical="10sp"
                 android:ems="10"
                 android:hint="Precio Max"
                 android:inputType="number"
@@ -77,9 +81,9 @@
                 android:id="@+id/errorPriceTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/edtPriceMax"
                 android:layout_centerInParent="true"
                 android:text="El precio es invalido"
-                android:layout_below="@+id/edtPriceMax"
                 android:textColor="#FF0000"
                 android:visibility="gone" />
         </LinearLayout>
@@ -88,12 +92,13 @@
             android:id="@+id/spnServiceTypes"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginVertical="10sp"
             android:autofillHints="Tipo de servicio" />
 
         <EditText
             android:id="@+id/edtDescripcion"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="80dp"
             android:ems="10"
             android:hint="Descripcion"
             android:inputType="text"
@@ -103,19 +108,19 @@
             android:id="@+id/edtTime"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="Fecha y hora"
+            android:layout_marginVertical="10sp"
             android:ems="10"
-            android:inputType="none"
             android:focusable="false"
+            android:hint="Fecha y hora"
+            android:inputType="none" />
 
-            />
         <TextView
             android:id="@+id/errorDateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/edtTime"
             android:layout_centerInParent="true"
             android:text="La fecha es invalida"
-            android:layout_below="@+id/edtTime"
             android:textColor="#FF0000"
             android:visibility="gone" />
 
@@ -126,12 +131,22 @@
             android:text="Adjuntar foto/video" />
 
 
-        <Button
-            android:id="@+id/btnRequest"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Solicitar" />
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnRequest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Solicitar"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="55dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
