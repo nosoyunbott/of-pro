@@ -196,37 +196,39 @@ class RequestEditFragment : Fragment() {
                 editor.remove("selectedEditService")
                 editor.remove("selectedEditOcupation")
                 editor.apply()
-                val action = RequestEditFragmentDirections.actionRequestEditFragmentToRequestsListFragment()
+                val action =
+                    RequestEditFragmentDirections.actionRequestEditFragmentToRequestsListFragment()
                 v.findNavController().navigate(action)
             }
         }
     }
 
     private fun populateWithRequestData() {
-        RequestsService.getRequestById(requestId, onSuccess = {documentSnapshot ->
+        RequestsService.getRequestById(requestId, onSuccess = { documentSnapshot ->
             if (documentSnapshot != null && documentSnapshot.exists()) {
                 val requestData = documentSnapshot.toObject(RequestModel::class.java)
-                if(requestData!=null) {
-                    if(edtTitle.text.isNullOrEmpty()) {
+                if (requestData != null) {
+                    if (edtTitle.text.isNullOrEmpty()) {
                         edtTitle.setText(requestData.requestTitle)
                     }
-                    if(edtPriceMax.text.isNullOrEmpty()) {
+                    if (edtPriceMax.text.isNullOrEmpty()) {
                         edtPriceMax.setText(requestData.maxCost.toString())
                     }
-                    if(edtDescripcion.text.isNullOrEmpty()) {
+                    if (edtDescripcion.text.isNullOrEmpty()) {
                         edtDescripcion.setText(requestData.description)
                     }
-                    if(edtTime.text.isNullOrEmpty()) {
+                    if (edtTime.text.isNullOrEmpty()) {
                         edtTime.setText(formatTimestamp(requestData.date.toLong()))
+                        timestamp = requestData.date
                     }
-          //          imageUrlArray = requestData.imageUrlArray
-                        selectedOcupation = requestData.categoryOcupation
+                    //          imageUrlArray = requestData.imageUrlArray
+                    selectedOcupation = requestData.categoryOcupation
                     selectedOcupationPosition = Ocupation().getList().indexOf(selectedOcupation)
-                        spnOcupation.setSelection(selectedOcupationPosition)
+                    spnOcupation.setSelection(selectedOcupationPosition)
 
-                        selectedServiceType = requestData.categoryService
+                    selectedServiceType = requestData.categoryService
                     selectedServicePosition = ServiceType().getList().indexOf(selectedServiceType)
-                        spnServiceTypes.setSelection(selectedServicePosition)
+                    spnServiceTypes.setSelection(selectedServicePosition)
                 }
             } else {
                 // Document does not exist
