@@ -77,9 +77,6 @@ class RequestEditFragment : Fragment() {
     lateinit var errorTitleTextView: TextView
     lateinit var sharedPreferences: SharedPreferences
 
-    private val db = FirebaseFirestore.getInstance()
-    private var userId = FirebaseAuth.getInstance().currentUser?.uid
-
     var selectedServicePosition: Int = 0
     var selectedOcupationPosition: Int = 0
 
@@ -95,7 +92,7 @@ class RequestEditFragment : Fragment() {
         val datePickerDialog = DatePickerDialog(
             requireContext(), { _, year, month, dayOfMonth ->
                 val selectedTimestamp = createTimestamp(year, month, dayOfMonth)
-                timestamp = selectedTimestamp.toString() //VALIDAR
+                timestamp = selectedTimestamp.toString()
                 edtTime.setText(formatTimestamp(selectedTimestamp))
             }, currentYear, currentMonth, currentDay
         )
@@ -185,7 +182,7 @@ class RequestEditFragment : Fragment() {
                     selectedServiceType,
                     edtDescripcion.text.toString(),
                     Request.PENDING,
-                    timestamp, //TODO cambiar el string a su tipo correspondiente
+                    timestamp,
                     edtPriceMax.text.toString().toIntOrNull(),
                     clientId,
                     imageUrlArray
@@ -333,20 +330,16 @@ class RequestEditFragment : Fragment() {
                     }
                     for (i in 0 until count) {
                         val selectedMediaUri = data.clipData!!.getItemAt(i).uri
-                        // Handle the selected image URI as needed
                         Log.d("SELECTED_MEDIA_URI", selectedMediaUri.toString())
 
-                        // Convert URI to blob
                         val blob = uriToBlob(selectedMediaUri)
 
-                        // Save blob data to a file with a unique name
                         val fileName = "photo_${System.currentTimeMillis()}.jpg"
                         requireContext().openFileOutput(fileName, Context.MODE_PRIVATE)
                             .use { output ->
                                 output.write(blob)
                             }
 
-                        // Load image from URI or blob data
                         try {
                             loadImage(selectedMediaUri, blob)
                             Toast.makeText(
@@ -403,7 +396,6 @@ class RequestEditFragment : Fragment() {
     }
 
     private fun loadImage(uri: Uri, blob: ByteArray) {
-//        val file = File(requireContext().filesDir, "foto")
         try {
             val inputStream = requireContext().contentResolver.openInputStream(uri)
             val contentResolver = requireContext().contentResolver
@@ -414,9 +406,6 @@ class RequestEditFragment : Fragment() {
 
 
             val service = ActivityServiceApiBuilder.create()
-//            val requestBody = RequestBody.create(
-//                MediaType.parse(requireContext().contentResolver.getType(uri)), file
-//            )
             val imagePart =
                 MultipartBody.Part.createFormData("image", "imagetest1.jpg", requestBody)
 
@@ -433,26 +422,26 @@ class RequestEditFragment : Fragment() {
                             val imageUrll = dataObject.getString("link")
                             imageUrlArray.add(dataObject.getString("link"))
                             Log.d("image", "Image URL: $imageUrll")
-                            // Handle imageUrl as needed (e.g., display it in your app)
+
                         } catch (e: JSONException) {
                             e.printStackTrace()
-                            // Handle JSON parsing error
+
                         }
                     } else {
-                        // Handle unsuccessful response here
+
                         Log.e("image", response.toString())
                     }
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    // Handle network errors or errors in the server
+
                     Log.e("image", "Error: " + t.message)
                 }
             })
 
         } catch (e: IOException) {
             e.printStackTrace()
-            // Handle file IO exception
+
         }
     }
 
