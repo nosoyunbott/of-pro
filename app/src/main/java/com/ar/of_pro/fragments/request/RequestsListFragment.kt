@@ -62,7 +62,13 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
             "clientId",
             ""
         )
+        requestList.clear()
         filterRequests(userId)
+        recRequestList.setHasFixedSize(true)
+        linearLayoutManager = LinearLayoutManager(context)
+        recRequestList.layoutManager = linearLayoutManager
+        requestListAdapter = RequestCardAdapter(requestList, this)
+        recRequestList.adapter = requestListAdapter
         return v
     }
 
@@ -91,11 +97,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     override fun onStart() {
         super.onStart()
 
-        recRequestList.setHasFixedSize(true)
-        linearLayoutManager = LinearLayoutManager(context)
-        recRequestList.layoutManager = linearLayoutManager
-        requestListAdapter = RequestCardAdapter(requestList, this)
-        recRequestList.adapter = requestListAdapter
+
 
         refreshRecyclerByFilterButtons()
     }

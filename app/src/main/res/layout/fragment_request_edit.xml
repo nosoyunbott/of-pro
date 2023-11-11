@@ -2,24 +2,24 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layoutRequest"
+    android:id="@+id/layoutEditRequest"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.request.RequestFragment">
+    tools:context=".fragments.request.RequestEditFragment">
 
     <TextView
-        android:id="@+id/txtRequests"
+        android:id="@+id/txtEditRequests"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Crear una solicitud"
+        android:text="Editando tu solicitud"
         android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayout4"
+        android:id="@+id/linearLayout3"
         android:layout_width="409dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -27,32 +27,31 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtRequests"
+        app:layout_constraintTop_toBottomOf="@+id/txtEditRequests"
         app:layout_constraintVertical_bias="0.0">
 
         <Spinner
-            android:id="@+id/spnOcupations"
+            android:id="@+id/spnEditOcupations"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginVertical="10sp"
             android:autofillHints="Rubro" />
 
         <EditText
-            android:id="@+id/edtTitle"
+            android:id="@+id/edtEditTitle"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginVertical="10sp"
             android:ems="10"
             android:hint="Titulo de la solicitud"
             android:inputType="text"
-
             android:text="" />
 
         <TextView
-            android:id="@+id/errorTitleTextView"
+            android:id="@+id/errorTitleEditTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/edtTitle"
+            android:layout_below="@+id/edtEditTitle"
             android:layout_centerInParent="true"
             android:text="El titulo es obligatorio"
             android:textColor="#FF0000"
@@ -65,10 +64,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtTitle">
+            app:layout_constraintTop_toBottomOf="@+id/edtEditTitle">
 
             <EditText
-                android:id="@+id/edtPriceMax"
+                android:id="@+id/edtEditPriceMax"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:layout_marginVertical="10sp"
@@ -78,10 +77,10 @@
                 android:text="" />
 
             <TextView
-                android:id="@+id/errorPriceTextView"
+                android:id="@+id/errorPriceEditTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtPriceMax"
+                android:layout_below="@+id/edtEditPriceMax"
                 android:layout_centerInParent="true"
                 android:text="El precio es invalido"
                 android:textColor="#FF0000"
@@ -89,43 +88,45 @@
         </LinearLayout>
 
         <Spinner
-            android:id="@+id/spnServiceTypes"
+            android:id="@+id/spnEditServiceTypes"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginVertical="10sp"
             android:autofillHints="Tipo de servicio" />
 
         <EditText
-            android:id="@+id/edtDescripcion"
+            android:id="@+id/edtEditDescripcion"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="150dp"
             android:ems="10"
             android:hint="Descripcion"
             android:inputType="text"
             android:text="" />
 
         <EditText
-            android:id="@+id/edtTime"
+            android:id="@+id/edtEditTime"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginVertical="10sp"
             android:ems="10"
             android:focusable="false"
             android:hint="Fecha y hora"
-            android:inputType="none" />
+            android:inputType="none"
+
+            />
 
         <TextView
-            android:id="@+id/errorDateTextView"
+            android:id="@+id/errorDateEditTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/edtTime"
+            android:layout_below="@+id/edtEditTime"
             android:layout_centerInParent="true"
             android:text="La fecha es invalida"
             android:textColor="#FF0000"
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/btnAttach"
+            android:id="@+id/btnEditAttach"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="Adjuntar foto/video" />
@@ -134,19 +135,32 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnRequest"
-        android:layout_width="match_parent"
+        android:id="@+id/btnEditRequest"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Solicitar"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        android:text="Guardar"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.93"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+    <Button
+        android:id="@+id/btnCancelEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Cancelar"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toStartOf="@+id/btnEditRequest"
+        app:layout_constraintHorizontal_bias="0.887"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
+        android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_end="55dp" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

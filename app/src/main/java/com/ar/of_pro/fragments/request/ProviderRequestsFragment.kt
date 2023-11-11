@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,7 @@ import com.ar.of_pro.services.ProposalsService
 import com.ar.of_pro.services.RequestsService
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
 
 
 class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListener {
@@ -44,7 +46,7 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
     lateinit var userObj: User
     lateinit var proposalInfo: ProposalInformation
     lateinit var btnDelete: Button
-
+    lateinit var btnEdit: Button
 
     override fun onPause() {
         super.onPause()
@@ -141,6 +143,8 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         txtTitle = v.findViewById(R.id.txtTitle)
         recProviderList = v.findViewById(R.id.rec_providers)
         btnDelete = v.findViewById(R.id.btnDeleteRequest)
+        btnEdit = v.findViewById(R.id.btnEditRequest)
+        btnEdit.visibility = View.GONE
         return v
     }
 
@@ -159,6 +163,16 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
             ProposalsService.deleteProposalsFromRequestId(request.requestId)
             v.findNavController().popBackStack(R.id.requestsListFragment, true)
         }
+        lifecycleScope.launch { if(checkIfRequestHasProposals()) {
+            btnEdit.visibility = View.VISIBLE
+        } }
+        btnEdit.setOnClickListener {
+            val action =
+                ProviderRequestsFragmentDirections.actionProviderRequestsFragmentToRequestEditFragment(
+                    request.requestId
+                )
+            v.findNavController().navigate(action)
+        }
 
     }
 
@@ -171,5 +185,9 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         Snackbar.make(v, proposalInformation.name, Snackbar.LENGTH_SHORT).show()
     }
 
+    private suspend fun checkIfRequestHasProposals(): Boolean{
+        val proposals = ProposalsService.getProposalsByRequestId(request.requestId)
+        return proposals.isEmpty()
+    }
 
 }
