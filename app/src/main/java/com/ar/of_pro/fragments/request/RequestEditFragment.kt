@@ -55,6 +55,7 @@ class RequestEditFragment : Fragment() {
     lateinit var spnServiceTypes: Spinner
     lateinit var btnAttach: Button
     lateinit var btnRequest: Button
+    lateinit var btnCancelRequest: Button
     private val PICK_MEDIA_REQUEST = 1
 
     lateinit var edtTitle: EditText
@@ -116,7 +117,11 @@ class RequestEditFragment : Fragment() {
         v = inflater.inflate(R.layout.fragment_request_edit, container, false)
 
         init()
-
+        Toast.makeText(
+            context,
+            "Para editar, suba sus imagenes nuevamente",
+            Toast.LENGTH_SHORT
+        ).show()
         //Clean sharedPrefs regarding spinners
         val editor = sharedPreferences.edit()
         editor.remove("selectedEditService")
@@ -139,6 +144,7 @@ class RequestEditFragment : Fragment() {
         errorPriceTextView = v.findViewById(R.id.errorPriceEditTextView)
         errorDateTextView = v.findViewById(R.id.errorDateEditTextView)
         errorTitleTextView = v.findViewById(R.id.errorTitleEditTextView)
+        btnCancelRequest = v.findViewById(R.id.btnCancelEdit)
         sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
         edtTime = v.findViewById(R.id.edtEditTime)
@@ -197,6 +203,11 @@ class RequestEditFragment : Fragment() {
                     RequestEditFragmentDirections.actionRequestEditFragmentToRequestsListFragment()
                 v.findNavController().navigate(action)
             }
+        }
+        btnCancelRequest.setOnClickListener {
+            val action =
+                RequestEditFragmentDirections.actionRequestEditFragmentToRequestsListFragment()
+            v.findNavController().navigate(action)
         }
     }
 
