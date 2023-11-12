@@ -24,6 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:paddingBottom="5dp"
+        app:itemIconTint="@color/sky"
+        app:itemTextColor="@color/dark_blue"
         android:foregroundGravity="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/navHostView"

@@ -6,10 +6,9 @@
 
     <ImageView
         android:id="@+id/logoImageView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="500dp"
+        android:layout_height="250dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
         android:src="@drawable/ofprologo" />
 
     <TextView
@@ -17,8 +16,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/logoImageView"
+        android:fontFamily="@font/poppins_semibold"
         android:layout_centerHorizontal="true"
         android:textSize="45sp"
+        android:textColor="@color/medium_blue"
         android:text="Iniciar sesión" />
 
     <EditText
@@ -31,6 +32,7 @@
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
         android:hint="ort@example.com"
+        android:fontFamily="@font/poppins_regular"
         android:layout_centerHorizontal="true"
         android:background="@drawable/edittext_border" /> <!-- Define un recurso para el borde con color negro -->
 
@@ -45,6 +47,7 @@
         android:paddingStart="12dp"
         android:layout_centerHorizontal="true"
         android:hint="Contraseña"
+        android:fontFamily="@font/poppins_regular"
         android:background="@drawable/edittext_border"
         android:inputType="textPassword" />
 
@@ -68,6 +71,7 @@
         android:layout_marginEnd="16dp"
         android:layout_centerHorizontal="true"
         android:text="INICIA SESIÓN"
+        android:fontFamily="@font/poppins_semibold"
         android:background="@drawable/rounded_button" />
 
     <TextView
@@ -76,6 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/logInButton"
         android:layout_centerHorizontal="true"
+        android:fontFamily="@font/poppins_regular"
         android:text="No tienes una cuenta? Regístrate"
         android:layout_marginTop="80dp"
         android:textSize="20sp" />
@@ -87,6 +92,7 @@
         android:layout_below="@+id/registerTextView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/poppins_regular"
         android:text="¿Olvidaste tu contraseña? Recupérala"
         android:textSize="20sp" />
 </RelativeLayout>
