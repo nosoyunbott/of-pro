@@ -135,7 +135,7 @@
                     android:id="@+id/txtPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="54dp"
-                    android:fontFamily="@font/poppins_regular"
+                    android:fontFamily="@font/poppins_semibold"
                     android:textColor="@color/dark_blue"
                     android:text="Telefono:"
                     android:textStyle="bold"
@@ -166,6 +166,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/dark_blue"
             android:text="Biografía"
+            android:visibility="gone"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:textSize="20sp" />

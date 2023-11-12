@@ -103,7 +103,7 @@ class ProfileFragment : Fragment() {
                         } else {
                             txtNumRating.text = "$userTotalRating 🌟"
                             //txt.text = String.format("%.1f", calification)
-                            txtBio.text = ""
+                            txtBio.visibility = View.GONE
                             txtBioDescription.text = ""
                             txtNumRating.text = ""
                             txtRateQuantity2.text = ""
