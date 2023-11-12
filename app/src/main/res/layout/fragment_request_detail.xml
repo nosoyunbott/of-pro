@@ -24,7 +24,8 @@
         android:id="@+id/txtDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac arcu et nunc congue vehicula a at odio. Donec luctus quam erat, eget mattis neque condimentum sit amet. Etiam ac quam diam. Curabitur nec erat dolor. Mauris viverra neque eu felis dignissim sollicitudin. Sed feugiat ligula consequat, suscipit lorem sed, volutpat ex. Ut turpis mauris, sollicitudin id imperdiet vitae, tincidunt eget ex. "
+        android:text="@string/lorem_ipsum"
+        android:fontFamily="@font/poppins_regular"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +37,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="$30.000"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/dark_blue"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10sp"
             android:layout_weight="1"
-            android:backgroundTint="#40B845"
+            android:backgroundTint="@color/light_blue"
             android:text="Aceptar" />
 
         <Button

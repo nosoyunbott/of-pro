@@ -95,6 +95,7 @@ class ProfileFragment : Fragment() {
                     txtTelefono.text = user.phone.toString()
 
                     if (user.userType == "PROVIDER") {
+                        txtBio.visibility = View.VISIBLE
                         txtBioDescription.text = user.bio
                         if (user.ratingQuantity > 0) {
                             txtNumRating.text =
@@ -102,7 +103,7 @@ class ProfileFragment : Fragment() {
                         } else {
                             txtNumRating.text = "$userTotalRating 🌟"
                             //txt.text = String.format("%.1f", calification)
-                            txtBio.text = ""
+                            txtBio.visibility = View.GONE
                             txtBioDescription.text = ""
                             txtNumRating.text = ""
                             txtRateQuantity2.text = ""

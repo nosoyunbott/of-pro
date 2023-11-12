@@ -21,7 +21,6 @@ import org.json.JSONArray
 import org.json.JSONException
 
 
-
 class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
 
     lateinit var v: View
@@ -50,27 +49,23 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
         val validStatesEnCurso = "EN CURSO"
         val validStatesFinalizada = "FINALIZADA"
 
-        val enCursoRequests = mutableListOf<Request>()
-        val finalizadaRequests = mutableListOf<Request>()
-
         //usar un userId que
         val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-        val userType=sharedPref!!.getString("userType","")
-        val clientId=sharedPref!!.getString("clientId","")
-        var userValue=""
-        if(userType=="CLIENT")
-        {
-             userValue="clientId"
-        }else
-        {
-             userValue="providerId"
+        val userType = sharedPref!!.getString("userType", "")
+        val clientId = sharedPref!!.getString("clientId", "")
+        var userValue = ""
+        if (userType == "CLIENT") {
+            userValue = "clientId"
+        } else {
+            userValue = "providerId"
         }
 
 
-        requestsCollection.whereEqualTo("state", validStatesEnCurso).whereEqualTo(userValue,clientId)
+        requestsCollection.whereEqualTo("state", validStatesEnCurso)
+            .whereEqualTo(userValue, clientId)
             .get().addOnSuccessListener { documents ->
 
-            for (document in documents) {
+                for (document in documents) {
 
                     val title = document.getString("requestTitle") ?: ""
                     val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
@@ -79,13 +74,13 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                     val description = document.getString("description") ?: ""
                     val state = document.getString("state") ?: ""
                     val dateTimestamp = document.getString("date") ?: ""
-                    val date=DateUtils.GetFormattedDate(dateTimestamp)
+                    val date = DateUtils.GetFormattedDate(dateTimestamp)
                     val maxCost = document.getLong("maxCost")?.toInt() ?: 0
                     val clientId = document.getString("clientId") ?: ""
                     val providerId = document.getString("providerId") ?: ""
                     val requestId = document.id
-                    val imageUrlArray = document.get("imageUrlArray") as? MutableList<String> ?: mutableListOf()
-
+                    val imageUrlArray =
+                        document.get("imageUrlArray") as? MutableList<String> ?: mutableListOf()
 
 
                     val r = Request(
@@ -119,8 +114,6 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                                     //FIN 'En estado'
 
 
-
-
                                 }
                         }.addOnFailureListener { clientException ->
                             val requestHistory = RequestHistory(r, "clientName", "providerName")
@@ -128,17 +121,16 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                         }
 
 
+                }
 
 
+            }.addOnFailureListener { Exception ->
+                println("Error getting documents: $Exception")
+                Log.e("ERROR DE DB", "$Exception")
             }
 
-
-        }.addOnFailureListener { Exception ->
-            println("Error getting documents: $Exception")
-            Log.e("ERROR DE DB", "$Exception")
-        }
-
-        requestsCollection.whereEqualTo("state", validStatesFinalizada).whereEqualTo(userValue,clientId)
+        requestsCollection.whereEqualTo("state", validStatesFinalizada)
+            .whereEqualTo(userValue, clientId)
             .get().addOnSuccessListener { documents ->
                 for (document in documents) {
 
@@ -149,12 +141,13 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                     val description = document.getString("description") ?: ""
                     val state = document.getString("state") ?: ""
                     val dateTimestamp = document.getString("date") ?: ""
-                    val date=DateUtils.GetFormattedDate(dateTimestamp)
+                    val date = DateUtils.GetFormattedDate(dateTimestamp)
                     val maxCost = document.getLong("maxCost")?.toInt() ?: 0
                     val clientId = document.getString("clientId") ?: ""
                     val providerId = document.getString("providerId") ?: ""
                     val requestId = document.id
-                    val imageUrlArray = document.get("imageUrlArray") as? MutableList<String> ?: mutableListOf()
+                    val imageUrlArray =
+                        document.get("imageUrlArray") as? MutableList<String> ?: mutableListOf()
 
 
                     val r = Request(
@@ -185,7 +178,9 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                                     val requestHistory = RequestHistory(r, clientName, providerName)
                                     requestList.add(requestHistory)
                                     requestListAdapter.notifyDataSetChanged()
-                                }}}
+                                }
+                        }
+                }
 
 
             }
@@ -211,10 +206,3 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
 
 
 }
-
-
-/*
-*  //Esta va a ser la lista total ordenada
-                                    requestList.add(requestHistory)
-                                    requestListAdapter.notifyDataSetChanged()
-* */
