@@ -95,6 +95,7 @@ class ProfileFragment : Fragment() {
                     txtTelefono.text = user.phone.toString()
 
                     if (user.userType == "PROVIDER") {
+                        txtBio.visibility = View.VISIBLE
                         txtBioDescription.text = user.bio
                         if (user.ratingQuantity > 0) {
                             txtNumRating.text =

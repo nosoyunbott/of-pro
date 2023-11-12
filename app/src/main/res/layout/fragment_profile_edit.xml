@@ -13,11 +13,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TableRow
-                android:layout_width="170dp"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
@@ -26,7 +26,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Aceptar"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="ACEPTAR"
                 android:textColorHighlight="#4CAF50"
                 android:textColorLink="#673AB7" />
 
@@ -35,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Cancelar" />
+                android:text="CANCELAR" />
 
         </LinearLayout>
 
@@ -66,7 +67,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="170dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -76,8 +77,10 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/txtNombre"
+                            android:fontFamily="@font/poppins_regular"
                             android:layout_width="251dp"
-                            android:layout_height="50dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center_vertical"
                             android:hint="" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -85,12 +88,14 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
                         android:layout_weight="1">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/txtApellido"
+                            android:fontFamily="@font/poppins_regular"
                             android:layout_width="251dp"
-                            android:layout_height="50dp"
+                            android:layout_height="60dp"
                             android:hint="" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -102,8 +107,10 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/txtLocalidad"
+                            android:fontFamily="@font/poppins_regular"
                             android:layout_width="251dp"
-                            android:layout_height="50dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center_vertical"
                             android:hint="" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,31 +118,29 @@
 
             </LinearLayout>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="32dp" />
-
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="80dp">
 
                 <TextView
                     android:id="@+id/txtPhone"
                     android:layout_width="123dp"
-                    android:layout_height="54dp"
+                    android:layout_height="60dp"
                     android:text="Telefono:"
+                    android:layout_gravity="center_vertical"
+                    android:fontFamily="@font/poppins_semibold"
                     android:textSize="20sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="80dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/txtTelefono"
                         android:layout_width="251dp"
-                        android:layout_height="50dp"
+                        android:layout_height="60dp"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -144,6 +149,7 @@
         </LinearLayout>
 
         <TableRow
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="24dp" />
 
@@ -151,9 +157,11 @@
             android:id="@+id/txtDescriptionTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:layout_weight="1"
             android:text="Bio"
-            android:textSize="16sp" />
+            android:fontFamily="@font/poppins_semibold"
+            android:textSize="20sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -161,6 +169,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtDescripcion"
+                android:fontFamily="@font/poppins_regular"
                 android:layout_width="match_parent"
                 android:layout_height="111dp"
                 android:hint="" />

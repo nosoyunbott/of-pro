@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="20sp">
+    android:padding="10sp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:orientation="horizontal"
             android:layout_gravity="end"
@@ -20,25 +20,27 @@
 
             <Button
                 android:id="@+id/btnEdit"
-                android:layout_width="1dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Editar"
+                android:text="EDITAR"
                 android:layout_marginRight="10sp"
                 />
 
             <Button
                 android:id="@+id/btnLogout"
-                android:layout_width="1dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Logout"
+                android:text="LOGOUT"
                 android:backgroundTint="@color/logout_btn"
                 />
 
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginTop="12dp"
             android:layout_width="407dp"
             android:layout_height="match_parent"
             android:baselineAligned="false"
@@ -61,11 +63,14 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/txtNombre"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textColor="@color/dark_blue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -75,6 +80,7 @@
 
                     <TextView
                         android:id="@+id/txtLocalidad"
+                        android:fontFamily="@font/poppins_regular"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -92,12 +98,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/txtMail"
-                    android:layout_width="124dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textColor="@color/dark_blue"
+                    android:layout_width="wrap_content"
                     android:layout_height="45dp"
                     android:text="Mail: "
                     android:textStyle="bold"
@@ -106,6 +115,8 @@
                 <TextView
                     android:id="@+id/txtCorreo"
                     android:layout_width="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:fontFamily="@font/poppins_regular"
                     android:layout_height="35dp"
                     android:layout_weight="1"
                     android:text=""
@@ -122,8 +133,10 @@
 
                 <TextView
                     android:id="@+id/txtPhone"
-                    android:layout_width="123dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="54dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/dark_blue"
                     android:text="Telefono:"
                     android:textStyle="bold"
                     android:textSize="20sp" />
@@ -132,7 +145,9 @@
                     android:id="@+id/txtTelefono"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
+                    android:paddingLeft="10dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/poppins_regular"
                     android:text=""
                     android:textSize="18dp" />
 
@@ -146,14 +161,18 @@
 
         <TextView
             android:id="@+id/txtBio"
+            android:fontFamily="@font/poppins_semibold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/dark_blue"
+            android:text="Biografía"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/txtBioDescription"
+            android:fontFamily="@font/poppins_regular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="" />
@@ -165,7 +184,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="#EFE6E6"
+            android:backgroundTint="#FFFFFF"
             android:orientation="horizontal">
 
             <TextView
@@ -173,12 +192,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/poppins_semibold"
                 android:text=" "
                 android:textAlignment="textEnd"
                 android:textSize="34sp" />
 
             <TextView
                 android:id="@+id/txtRateQuantity2"
+                android:fontFamily="@font/poppins_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
