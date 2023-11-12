@@ -51,7 +51,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="16dp"
                 android:text="Limpiar Filtro"
-                android:textColor="@color/violet"
+                android:textColor="@color/light_blue"
                 android:textSize="13sp" />
         </RelativeLayout>
 

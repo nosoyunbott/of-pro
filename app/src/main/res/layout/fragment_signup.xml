@@ -12,10 +12,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:textSize="35sp"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/dark_blue"
         android:text="Registrarse" />
 
     <EditText
         android:id="@+id/nameEdt"
+        android:fontFamily="@font/poppins_regular"
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_below="@+id/registerTextView"
@@ -39,6 +42,7 @@
 
     <EditText
         android:id="@+id/lastNameEdt"
+        android:fontFamily="@font/poppins_regular"
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_below="@+id/nameEdt"
@@ -63,6 +67,7 @@
     <EditText
         android:id="@+id/addressEdt"
         android:layout_width="300dp"
+        android:fontFamily="@font/poppins_regular"
         android:layout_height="45dp"
         android:layout_below="@+id/lastNameEdt"
         android:layout_marginTop="17dp"
@@ -86,6 +91,7 @@
     <EditText
         android:id="@+id/locationEdt"
         android:layout_width="300dp"
+        android:fontFamily="@font/poppins_regular"
         android:layout_height="45dp"
         android:layout_below="@+id/addressEdt"
         android:layout_marginTop="17dp"
@@ -115,6 +121,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
+        android:fontFamily="@font/poppins_regular"
         android:layout_centerHorizontal="true"
         android:hint="Mail"
         android:background="@drawable/edittext_border" />
@@ -148,6 +155,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="Celular invalido"
+        android:fontFamily="@font/poppins_regular"
         android:layout_below="@+id/phoneEdt"
         android:textColor="#FF0000"
         android:visibility="gone" />
@@ -161,6 +169,7 @@
         android:layout_centerHorizontal="true"
         android:autofillHints="Tipo de Usuario"
         android:paddingStart="12dp"
+        android:fontFamily="@font/poppins_regular"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -176,6 +185,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
+        android:fontFamily="@font/poppins_regular"
         android:layout_centerHorizontal="true"
         android:hint="Contraseña"
         android:background="@drawable/edittext_border"
@@ -194,15 +204,16 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnPhotos"
         android:layout_width="300dp"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_below="@+id/passwordEdt"
         android:layout_marginTop="18dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="12dp"
+        android:fontFamily="@font/poppins_semibold"
         android:layout_centerHorizontal="true"
-        android:text="Adjuntar foto de perfil"
-        android:background="@drawable/button_add_image"
+        android:text="SUBIR FOTO"
+        android:backgroundTint="@color/light_blue"
         />
 
     <TextView
@@ -217,15 +228,17 @@
 
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="275dp"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:layout_below="@+id/btnPhotos"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_centerHorizontal="true"
         android:text="REGISTRATE"
-        android:background="@drawable/rounded_button" />
+        android:fontFamily="@font/poppins_semibold"
+        android:backgroundTint="@color/light_blue"/>
+
 
     <TextView
         android:id="@+id/logInTextView"
@@ -233,6 +246,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/registerButton"
         android:layout_centerHorizontal="true"
+        android:fontFamily="@font/poppins_regular"
         android:text="Ya tenes una cuenta? Inicia Sesión"
         android:layout_marginTop="10dp"
         android:textSize="20sp" />
