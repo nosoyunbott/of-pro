@@ -13,6 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Crear una solicitud"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/dark_blue"
         android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,6 +45,7 @@
             android:layout_height="50dp"
             android:layout_marginVertical="10sp"
             android:ems="10"
+            android:fontFamily="@font/poppins_regular"
             android:hint="Titulo de la solicitud"
             android:inputType="text"
 
@@ -74,6 +77,7 @@
                 android:layout_marginVertical="10sp"
                 android:ems="10"
                 android:hint="Precio Max"
+                android:fontFamily="@font/poppins_regular"
                 android:inputType="number"
                 android:text="" />
 
@@ -101,6 +105,7 @@
             android:layout_height="80dp"
             android:ems="10"
             android:hint="Descripcion"
+            android:fontFamily="@font/poppins_regular"
             android:inputType="text"
             android:text="" />
 
@@ -112,6 +117,7 @@
             android:ems="10"
             android:focusable="false"
             android:hint="Fecha y hora"
+            android:fontFamily="@font/poppins_regular"
             android:inputType="none" />
 
         <TextView
@@ -126,18 +132,21 @@
 
         <Button
             android:id="@+id/btnAttach"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="Adjuntar foto/video" />
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="ADJUNTAR FOTO" />
 
 
     </LinearLayout>
 
     <Button
         android:id="@+id/btnRequest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Solicitar"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:text="SOLICITAR"
+        android:fontFamily="@font/poppins_semibold"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
