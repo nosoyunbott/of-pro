@@ -21,6 +21,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.Ocupation
@@ -30,6 +31,7 @@ import com.ar.of_pro.entities.ServiceType
 import com.ar.of_pro.services.ActivityServiceApiBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -265,18 +267,16 @@ class RequestFragment<OutputStream> : Fragment() {
             startActivityForResult(intent, PICK_MEDIA_REQUEST)
         }
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d("DATA FROM INTENT", data.toString())
-
         imageUrlArray = mutableListOf()
 
         if (requestCode == PICK_MEDIA_REQUEST && resultCode == Activity.RESULT_OK) {
             if (data != null) {
-
+                val count = data.clipData!!.itemCount
                 if (data != null && data.clipData != null) {
-                    val count = data.clipData!!.itemCount
+
 
                     if (count > 3) {
                         Toast.makeText(
@@ -303,7 +303,7 @@ class RequestFragment<OutputStream> : Fragment() {
 
                         // Load image from URI or blob data
                         try {
-                            loadImage(selectedMediaUri, blob)
+                            loadImage(selectedMediaUri, blob, count)
                             Toast.makeText(
                                 context,
                                 "Image uploaded successfully",
@@ -315,8 +315,9 @@ class RequestFragment<OutputStream> : Fragment() {
                             Log.e("Exception", e.toString())
                         }
                     }
-                    btnRequest.isEnabled = true
-                    btnRequest.isClickable = true
+
+
+
                 } else if (data.data != null) {
                     val selectedMediaUri = data.data!!
                     val blob = uriToBlob(selectedMediaUri!!)
@@ -328,12 +329,12 @@ class RequestFragment<OutputStream> : Fragment() {
                         }
 
                         try {
-                            loadImage(selectedMediaUri, blob)
+                            loadImage(selectedMediaUri, blob, count)
                             Toast.makeText(
                                 context, "la img subio ok", Toast.LENGTH_SHORT
                             ).show()
-                            btnRequest.isEnabled = true
-                            btnRequest.isClickable = true
+//                            btnRequest.isEnabled = true
+//                            btnRequest.isClickable = true
                         } catch (e: FileNotFoundException) {
                             Toast.makeText(
                                 context, "la imagen no subio", Toast.LENGTH_SHORT
@@ -357,7 +358,7 @@ class RequestFragment<OutputStream> : Fragment() {
         return byteArray
     }
 
-    private fun loadImage(uri: Uri, blob: ByteArray) {
+    private fun loadImage(uri: Uri, blob: ByteArray, count: Int) {
 //        val file = File(requireContext().filesDir, "foto")
         try {
             val inputStream = requireContext().contentResolver.openInputStream(uri)
@@ -387,6 +388,10 @@ class RequestFragment<OutputStream> : Fragment() {
                             val dataObject = jsonResponse.getJSONObject("data")
                             val imageUrll = dataObject.getString("link")
                             imageUrlArray.add(dataObject.getString("link"))
+                            if(imageUrlArray.size == count){
+                                btnRequest.isEnabled = true
+                                btnRequest.isClickable = true
+                            }
                             Log.d("image", "Image URL: $imageUrll")
                             // Handle imageUrl as needed (e.g., display it in your app)
                         } catch (e: JSONException) {
@@ -396,6 +401,7 @@ class RequestFragment<OutputStream> : Fragment() {
                     } else {
                         // Handle unsuccessful response here
                         Log.e("image", response.toString())
+
                     }
                 }
 
@@ -437,6 +443,15 @@ class RequestFragment<OutputStream> : Fragment() {
         }else{
             errorTitleTextView.visibility = View.VISIBLE
         }
+        //        if(imageUrlArray.isNotEmpty()){
+//            imageValidate = true
+//        }else{
+//            errorImageTextView.visibility = View.VISIBLE
+//            val handler = Handler()
+//            handler.postDelayed({
+//                errorImageTextView.visibility = View.GONE
+//            }, 2000)
+//        }
 
         return priceValidate && dateValidate && titleValidate
     }
