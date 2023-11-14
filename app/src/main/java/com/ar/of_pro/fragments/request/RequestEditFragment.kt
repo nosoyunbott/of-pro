@@ -115,8 +115,9 @@ class RequestEditFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         v = inflater.inflate(R.layout.fragment_request_edit, container, false)
-
         init()
+        btnRequest.isEnabled = false
+        btnRequest.isClickable = false
         Toast.makeText(
             context,
             "Para editar, suba sus imagenes nuevamente",
@@ -171,8 +172,7 @@ class RequestEditFragment : Fragment() {
         handleSpinnersPopulation()
         setOnClickListener(btnAttach)
 
-        btnRequest.isEnabled = false
-        btnRequest.isClickable = false
+
 
         btnRequest.setOnClickListener {
             errorPriceTextView.visibility = View.GONE
@@ -327,9 +327,8 @@ class RequestEditFragment : Fragment() {
 
         if (requestCode == PICK_MEDIA_REQUEST && resultCode == Activity.RESULT_OK) {
             if (data != null) {
-
+                val count = data.clipData!!.itemCount
                 if (data != null && data.clipData != null) {
-                    val count = data.clipData!!.itemCount
 
                     if (count > 3) {
                         Toast.makeText(
@@ -352,7 +351,7 @@ class RequestEditFragment : Fragment() {
                             }
 
                         try {
-                            loadImage(selectedMediaUri, blob)
+                            loadImage(selectedMediaUri, blob, count)
                             Toast.makeText(
                                 context,
                                 "Image uploaded successfully",
@@ -377,7 +376,7 @@ class RequestEditFragment : Fragment() {
                         }
 
                         try {
-                            loadImage(selectedMediaUri, blob)
+                            loadImage(selectedMediaUri, blob, count)
                             Toast.makeText(
                                 context, "la img subio ok", Toast.LENGTH_SHORT
                             ).show()
@@ -406,7 +405,7 @@ class RequestEditFragment : Fragment() {
         return byteArray
     }
 
-    private fun loadImage(uri: Uri, blob: ByteArray) {
+    private fun loadImage(uri: Uri, blob: ByteArray, count: Int) {
         try {
             val inputStream = requireContext().contentResolver.openInputStream(uri)
             val contentResolver = requireContext().contentResolver
@@ -432,6 +431,10 @@ class RequestEditFragment : Fragment() {
                             val dataObject = jsonResponse.getJSONObject("data")
                             val imageUrll = dataObject.getString("link")
                             imageUrlArray.add(dataObject.getString("link"))
+                            if(imageUrlArray.size == count){
+                                btnRequest.isEnabled = true
+                                btnRequest.isClickable = true
+                            }
                             Log.d("image", "Image URL: $imageUrll")
 
                         } catch (e: JSONException) {
