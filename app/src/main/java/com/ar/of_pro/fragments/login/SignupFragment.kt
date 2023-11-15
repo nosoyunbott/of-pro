@@ -157,7 +157,7 @@ class SignupFragment : Fragment() {
                         0.0,
                         0,
                         selectedUserType,
-                        "Bio del usuario.",
+                        "Edita para completar.",
                         imageUrl
                     )
 
