@@ -22,14 +22,17 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.ar.of_pro.R
 import com.ar.of_pro.entities.User
 import com.ar.of_pro.entities.UserType
 import com.ar.of_pro.services.ActivityServiceApiBuilder
+import com.ar.of_pro.services.UserService
 import com.ar.of_pro.utils.Sanitizer
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -78,7 +81,7 @@ class SignupFragment : Fragment() {
     lateinit var errorPhoneTextView: TextView
     lateinit var errorPasswordTextView: TextView
     lateinit var errorPhotoTextView: TextView
-
+    lateinit var errorDuplicateEmailTextView: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -104,6 +107,7 @@ class SignupFragment : Fragment() {
         errorLastNameTextView = v.findViewById(R.id.errorLastNameTextView)
         errorPasswordTextView = v.findViewById(R.id.errorPasswordTextView)
         errorPhotoTextView = v.findViewById(R.id.errorPhotoTextView)
+        errorDuplicateEmailTextView = v.findViewById(R.id.errorDuplicateEmailTextView)
         setupSpinner(spnUserType, userTypeAdapter)
         return v
     }
@@ -142,41 +146,47 @@ class SignupFragment : Fragment() {
 
     private fun signUp() {
         registerButton.setOnClickListener {
-            if (validateForm()) {
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(
-                    emailEdt.text.toString(), passwordEdt.text.toString()
-                ).addOnCompleteListener {
-                    val user = User(
-                        nameEdt.text.toString(),
-                        lastNameEdt.text.toString(),
-                        addressEdt.text.toString(),
-                        locationEdt.text.toString(),
-                        emailEdt.text.toString(),
-                        passwordEdt.text.toString(),
-                        phoneEdt.text.toString().toInt(),
-                        0.0,
-                        0,
-                        selectedUserType,
-                        "Edita para completar.",
-                        imageUrl
-                    )
+            lifecycleScope.launch {
+                if (validateForm()) {
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(
+                        emailEdt.text.toString(), passwordEdt.text.toString()
+                    ).addOnCompleteListener {
+                        val user = User(
+                            nameEdt.text.toString(),
+                            lastNameEdt.text.toString(),
+                            addressEdt.text.toString(),
+                            locationEdt.text.toString(),
+                            emailEdt.text.toString(),
+                            passwordEdt.text.toString(),
+                            phoneEdt.text.toString().toInt(),
+                            0.0,
+                            0,
+                            selectedUserType,
+                            "Edita para completar.",
+                            imageUrl
+                        )
 
-                    val newDocUser = db.collection("Users").document()
-                    db.collection("Users").document(newDocUser.id).set(user)
+                        val newDocUser = db.collection("Users").document()
+                        db.collection("Users").document(newDocUser.id).set(user)
 
-                    if (it.isSuccessful) {
-                        Toast.makeText(context, "SU REGISTRO FUE EXITOSO! puto", Toast.LENGTH_LONG)
+                        if (it.isSuccessful) {
+                            Toast.makeText(
+                                context,
+                                "SU REGISTRO FUE EXITOSO! puto",
+                                Toast.LENGTH_LONG
+                            )
 
 
-                        val action =
-                            SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
-                        Log.d("user", user.toString())
-                        FirebaseAuth.getInstance().signOut()
-                        v.findNavController().navigate(action)
+                            val action =
+                                SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
+                            Log.d("user", user.toString())
+                            FirebaseAuth.getInstance().signOut()
+                            v.findNavController().navigate(action)
 
+
+                        }
 
                     }
-
                 }
             }
         }
@@ -312,7 +322,7 @@ class SignupFragment : Fragment() {
         logInTextView.movementMethod = LinkMovementMethod.getInstance()
     }
 
-    private fun validateForm(): Boolean {
+    private suspend fun validateForm(): Boolean {
         var phoneValidate = true
         var nameValidate = true
         var lastNameValidate = true
@@ -348,6 +358,12 @@ class SignupFragment : Fragment() {
             emailValidate = false
             errorEmailTextView.visibility = View.VISIBLE
         } else {
+            if (UserService.doesUserExistByMail(emailEdt.text.toString())) {
+                emailValidate = false
+                errorDuplicateEmailTextView.visibility = View.VISIBLE
+            } else {
+                errorDuplicateEmailTextView.visibility = View.GONE
+            }
             errorEmailTextView.visibility = View.GONE
         }
         if (!Sanitizer().validateNumeric(phoneEdt.text.toString())) {
@@ -362,10 +378,10 @@ class SignupFragment : Fragment() {
         } else {
             errorPasswordTextView.visibility = View.GONE
         }
-        if(imageUrl.isNullOrBlank()){
+        if (imageUrl.isNullOrBlank()) {
             photoValidate = false
             errorPhotoTextView.visibility = View.VISIBLE
-        }else{
+        } else {
             errorPhotoTextView.visibility = View.GONE
         }
         return phoneValidate && nameValidate && lastNameValidate && addressValidate && locationValidate && emailValidate && photoValidate

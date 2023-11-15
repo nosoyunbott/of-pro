@@ -136,6 +136,16 @@
         android:textColor="#FF0000"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/errorDuplicateEmailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="El mail ingresado ya existe"
+        android:layout_below="@+id/emailEdt"
+        android:textColor="#FF0000"
+        android:visibility="gone" />
+
     <EditText
         android:id="@+id/phoneEdt"
         android:layout_width="300dp"
