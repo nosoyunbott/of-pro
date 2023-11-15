@@ -2,6 +2,7 @@ package com.ar.of_pro.fragments.provider
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
@@ -146,10 +147,8 @@ class ProposalFragment : Fragment() {
                     txtFullName.text = "$name $surname"
                     val location = snapshot.getString("location") ?: ""
                     txtLocation.text = location
-                    val rating = snapshot.getLong("rating")?.toInt() ?: 0
-                    txtRating.text = "$rating ⭐"
-                    val ratingQuantity = snapshot.getLong("ratingQuantity")?.toInt() ?: 0
-                    txtRatingQuantity.text = "($ratingQuantity)"
+                    txtRating.visibility = View.GONE
+                    txtRatingQuantity.visibility = View.GONE
                 }
 
             }
@@ -159,7 +158,7 @@ class ProposalFragment : Fragment() {
             val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
             val clientId = sharedPref!!.getString("clientId", "")
             errorMessageTextView.visibility = View.GONE
-            if(request.maxCost > edtBudget.text.toString().toFloat()) {
+            if(edtBudget.text.isNotEmpty() && request.maxCost > edtBudget.text.toString().toFloat()) {
                 val users = db.collection("Users")
                 users.get().addOnSuccessListener { querySnapshot ->
                     val userIds = ArrayList<String>()
@@ -201,6 +200,11 @@ class ProposalFragment : Fragment() {
                 }
             }else {
             errorMessageTextView.visibility = View.VISIBLE
+                val handler = Handler()
+            handler.postDelayed({
+                errorMessageTextView.visibility = View.GONE
+            }, 2000)
+//        }
         }
 
         }

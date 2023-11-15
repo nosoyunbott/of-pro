@@ -13,8 +13,6 @@
         layout="@layout/profile_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:paddingBottom="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +21,6 @@
         android:layout_width="409dp"
         android:layout_height="579dp"
         android:orientation="vertical"
-        android:layout_marginTop="25dp"
         android:paddingHorizontal="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +28,6 @@
         app:layout_constraintTop_toBottomOf="@+id/proposalProfileHeader">
 
         <LinearLayout
-            android:layout_marginTop="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -101,7 +97,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
             android:fontFamily="@font/poppins_regular"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fermentum pellentesque tellus sit amet consectetur. " />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -170,7 +166,7 @@
             <Button
                 android:id="@+id/btnProposal"
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="18dp"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="PROPONER" />
