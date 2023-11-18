@@ -49,17 +49,9 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
     lateinit var btnDelete: Button
     lateinit var btnEdit: Button
 
-    override fun onPause() {
-        super.onPause()
-
-
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         request = ProposalFragmentArgs.fromBundle(requireArguments()).request
-        var providerId: String = ""
-        var bid: Float = 0f
-        val requestId = "WmU6lopxhoshV8j50mk5"
         getProposalsFromRequestId(request.requestId)
 
     }
@@ -125,10 +117,8 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
                     user.getLong("ratingQuantity")?.toInt(),
                     proposal.requestId,
                     proposal.providerId
-                ) //user.id tiene que ser proposal.providerId
+                )
                 providerList.add(proposalInfo)
-
-                //TODO desranciar esto
 
                 proposalInformationAdapter.notifyDataSetChanged()
             }
