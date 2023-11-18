@@ -126,13 +126,13 @@ class ProposalFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         request = ProposalFragmentArgs.fromBundle(requireArguments()).request
-        txtTitle.text = request.requestTitle
-        txtOcupation.text = request.categoryOcupation
-        txtServiceType.text = request.categoryService
-        txtTime.text = DateUtils.GetFormattedDate(request.date)
+        txtTitle.text = "Trabajo: ${request.requestTitle}"
+        txtOcupation.text = "Se solicita: ${request.categoryOcupation}"
+        txtServiceType.text = "Tipo: ${request.categoryService}"
+        txtTime.text = "Fecha: ${DateUtils.GetFormattedDate(request.date)}"
 
-        txtPricing.text = "$" + request.maxCost.toString()
-        txtDescription.text = request.description
+        txtPricing.text = "Precio: $" + request.maxCost.toString()
+        txtDescription.text = "Detalle del pedido: ${request.description}"
         listOfImages = request.imageUrlArray
         val context = context
 
@@ -156,7 +156,6 @@ class ProposalFragment : Fragment() {
         btnProposal.setOnClickListener {
 
             val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-            val clientId = sharedPref!!.getString("clientId", "")
             errorMessageTextView.visibility = View.GONE
             if (edtBudget.text.isNotEmpty() && request.maxCost > edtBudget.text.toString()
                     .toFloat()
