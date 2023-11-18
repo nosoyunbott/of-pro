@@ -322,43 +322,50 @@ class SignupFragment : Fragment() {
         var photoValidate = true
         if (!Sanitizer().validateOnlyLetters(nameEdt.text.toString())) {
             nameValidate = false
-            errorNameTextView.visibility = View.VISIBLE
+            nameEdt.error = "Error con el nombre"
+            //errorNameTextView.visibility = View.VISIBLE
         } else {
             errorNameTextView.visibility = View.GONE
         }
         if (!Sanitizer().validateOnlyLetters(lastNameEdt.text.toString())) {
             lastNameValidate = false
-            errorLastNameTextView.visibility = View.VISIBLE
+            lastNameEdt.error = "Error con el apellido"
+            //errorLastNameTextView.visibility = View.VISIBLE
         } else {
             errorLastNameTextView.visibility = View.GONE
         }
         if (!Sanitizer().validateLettersNumericAndSpaces(addressEdt.text.toString())) {
             addressValidate = false
-            errorAddressTextView.visibility = View.VISIBLE
+            addressEdt.error = "Error con la dirección"
+            //errorAddressTextView.visibility = View.VISIBLE
         } else {
             errorAddressTextView.visibility = View.GONE
         }
         if (!Sanitizer().validateLettersAndSpaces(locationEdt.text.toString())) {
             locationValidate = false
-            errorLocationTextView.visibility = View.VISIBLE
+            locationEdt.error = "Error con la localidad"
+            //errorLocationTextView.visibility = View.VISIBLE
         } else {
             errorLocationTextView.visibility = View.GONE
         }
         if (!Sanitizer().validateMail(emailEdt.text.toString())) {
             emailValidate = false
-            errorEmailTextView.visibility = View.VISIBLE
+            emailEdt.error = "Error con el correo"
+            //errorEmailTextView.visibility = View.VISIBLE
         } else {
             errorEmailTextView.visibility = View.GONE
         }
         if (!Sanitizer().validateNumeric(phoneEdt.text.toString())) {
             phoneValidate = false
-            errorPhoneTextView.visibility = View.VISIBLE
+            phoneEdt.error = "Error con el teléfono"
+            //errorPhoneTextView.visibility = View.VISIBLE
         } else {
             errorPhoneTextView.visibility = View.GONE
         }
         if (passwordEdt.text.toString().isNullOrBlank()) {
             phoneValidate = false
-            errorPasswordTextView.visibility = View.VISIBLE
+            passwordEdt.error = "Error con la contraseña"
+            //errorPasswordTextView.visibility = View.VISIBLE
         } else {
             errorPasswordTextView.visibility = View.GONE
         }
