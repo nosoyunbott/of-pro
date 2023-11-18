@@ -1,5 +1,6 @@
 package com.ar.of_pro.fragments.request
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -159,9 +160,8 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
         recProviderList.adapter = proposalInformationAdapter
 
         btnDelete.setOnClickListener {
-            RequestsService.deleteRequestById(request.requestId)
-            ProposalsService.deleteProposalsFromRequestId(request.requestId)
-            v.findNavController().popBackStack(R.id.requestsListFragment, true)
+            showConfirmationDialog()
+
         }
         lifecycleScope.launch { if(checkIfRequestHasProposals()) {
             btnEdit.visibility = View.VISIBLE
@@ -174,6 +174,25 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
             v.findNavController().navigate(action)
         }
 
+    }
+    private fun showConfirmationDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+
+        builder.setTitle("Confirmacion")
+            .setMessage("Estás seguro que desea eliminar la solicitud?")
+            .setPositiveButton("Si") { dialog, which ->
+                deleteRequest()
+            }
+            .setNegativeButton("No") { dialog, which ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun deleteRequest() {
+                    RequestsService.deleteRequestById(request.requestId)
+            ProposalsService.deleteProposalsFromRequestId(request.requestId)
+            v.findNavController().popBackStack(R.id.requestsListFragment, true)
     }
 
     override fun onViewItemDetail(proposalInformation: ProposalInformation) {
