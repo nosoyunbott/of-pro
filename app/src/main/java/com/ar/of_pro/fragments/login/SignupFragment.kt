@@ -165,7 +165,7 @@ class SignupFragment : Fragment() {
                     db.collection("Users").document(newDocUser.id).set(user)
 
                     if (it.isSuccessful) {
-                        Toast.makeText(context, "SU REGISTRO FUE EXITOSO! puto", Toast.LENGTH_LONG)
+                        Toast.makeText(context, "SU REGISTRO FUE EXITOSO!", Toast.LENGTH_LONG)
 
 
                         val action =
