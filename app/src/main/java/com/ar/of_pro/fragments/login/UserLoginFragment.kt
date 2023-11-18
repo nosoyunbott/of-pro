@@ -104,14 +104,18 @@ class UserLoginFragment : Fragment() {
 
                                 }
                         } else {
-                            errorMessageTextView.visibility = View.VISIBLE
+                            emailEdt.error = "Credenciales incorrectas"
+                            passwordEdt.error = "Credenciales incorrectas"
+                            //errorMessageTextView.visibility = View.VISIBLE
                         }
 
 
                     }
 
             } else {
-                errorMessageTextView.visibility = View.VISIBLE
+                emailEdt.error = "Credenciales incorrectas"
+                passwordEdt.error = "Credenciales incorrectas"
+                //errorMessageTextView.visibility = View.VISIBLE
             }
 
 
