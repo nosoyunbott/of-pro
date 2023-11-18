@@ -52,8 +52,7 @@ class RecoverPasswordFragment : Fragment() {
                 Toast.makeText(context, "Mail enviado con éxito!", Toast.LENGTH_LONG).show()
                 Handler().postDelayed(
                     {
-                        val action =
-                            RecoverPasswordFragmentDirections.actionRecoverPasswordFragmentToUserLoginFragment()
+                        val action = RecoverPasswordFragmentDirections.actionRecoverPasswordFragmentToUserLoginFragment()
                         v.findNavController().navigate(action)
                     }, 2000
                 )
