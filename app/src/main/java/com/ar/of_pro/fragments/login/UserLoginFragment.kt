@@ -36,6 +36,7 @@ class UserLoginFragment : Fragment() {
     lateinit var logInButton: Button
     lateinit var errorMessageTextView: TextView
     lateinit var registerTextView: TextView
+    lateinit var recoverPasswordTextView: TextView
     lateinit var sharedPreferences: SharedPreferences
 
     private val db = FirebaseFirestore.getInstance()
@@ -50,6 +51,7 @@ class UserLoginFragment : Fragment() {
         logInButton = v.findViewById(R.id.logInButton)
         errorMessageTextView = v.findViewById(R.id.errorMessageTextView)
         registerTextView = v.findViewById(R.id.registerTextView)
+        recoverPasswordTextView = v.findViewById(R.id.recoverPasswordTextView)
 
         sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
@@ -61,6 +63,7 @@ class UserLoginFragment : Fragment() {
         super.onStart()
         goToApp()
         goToSignUp()
+        goToRecover()
         validateUserSession()
 
     }
@@ -101,14 +104,18 @@ class UserLoginFragment : Fragment() {
 
                                 }
                         } else {
-                            errorMessageTextView.visibility = View.VISIBLE
+                            emailEdt.error = "Credenciales incorrectas"
+                            passwordEdt.error = "Credenciales incorrectas"
+                            //errorMessageTextView.visibility = View.VISIBLE
                         }
 
 
                     }
 
             } else {
-                errorMessageTextView.visibility = View.VISIBLE
+                emailEdt.error = "Credenciales incorrectas"
+                passwordEdt.error = "Credenciales incorrectas"
+                //errorMessageTextView.visibility = View.VISIBLE
             }
 
 
@@ -146,5 +153,25 @@ class UserLoginFragment : Fragment() {
         )
         registerTextView.text = spannableString
         registerTextView.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    private fun goToRecover() {
+        val spannableString = SpannableString(recoverPasswordTextView.text)
+
+        val startIndex = recoverPasswordTextView.text.indexOf("Recupérala")
+        val endIndex = startIndex + "Recupérala".length
+
+        val clickableSpan = object : ClickableSpan() {
+            override fun onClick(v: View) {
+                val action =
+                    UserLoginFragmentDirections.actionUserLoginFragmentToRecoverPasswordFragment()
+                v.findNavController().navigate(action)
+            }
+        }
+        spannableString.setSpan(
+            clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        recoverPasswordTextView.text = spannableString
+        recoverPasswordTextView.movementMethod = LinkMovementMethod.getInstance()
     }
 }

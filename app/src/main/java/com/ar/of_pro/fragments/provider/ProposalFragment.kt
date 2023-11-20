@@ -126,13 +126,13 @@ class ProposalFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         request = ProposalFragmentArgs.fromBundle(requireArguments()).request
-        txtTitle.text = request.requestTitle
-        txtOcupation.text = request.categoryOcupation
-        txtServiceType.text = request.categoryService
-        txtTime.text = DateUtils.GetFormattedDate(request.date)
+        txtTitle.text = "Trabajo: ${request.requestTitle}"
+        txtOcupation.text = "Se solicita: ${request.categoryOcupation}"
+        txtServiceType.text = "Tipo: ${request.categoryService}"
+        txtTime.text = "Fecha: ${DateUtils.GetFormattedDate(request.date)}"
 
-        txtPricing.text = "$" + request.maxCost.toString()
-        txtDescription.text = request.description
+        txtPricing.text = "Precio: $" + request.maxCost.toString()
+        txtDescription.text = "Detalle del pedido: ${request.description}"
         listOfImages = request.imageUrlArray
         val context = context
 
@@ -156,9 +156,10 @@ class ProposalFragment : Fragment() {
         btnProposal.setOnClickListener {
 
             val sharedPref = context?.getSharedPreferences("my_preference", Context.MODE_PRIVATE)
-            val clientId = sharedPref!!.getString("clientId", "")
             errorMessageTextView.visibility = View.GONE
-            if(edtBudget.text.isNotEmpty() && request.maxCost > edtBudget.text.toString().toFloat()) {
+            if (edtBudget.text.isNotEmpty() && request.maxCost > edtBudget.text.toString()
+                    .toFloat()
+            ) {
                 val users = db.collection("Users")
                 users.get().addOnSuccessListener { querySnapshot ->
                     val userIds = ArrayList<String>()
@@ -177,7 +178,7 @@ class ProposalFragment : Fragment() {
                         "clientId",
                         ""
                     )
-                    val idRequest = request.requestId//TODO Mandar idRequest desde la sesión
+                    val idRequest = request.requestId
                     val p = Proposal(
                         idProvider,
                         idRequest,
@@ -187,25 +188,24 @@ class ProposalFragment : Fragment() {
 
                     val newDocProposal = db.collection("Proposals").document()
                     db.collection("Proposals").document(newDocProposal.id).set(p)
-                    //update request in BD
                     RequestsService.updateProposalsQtyFromId(
                         request.requestId,
                         request.requestBidAmount
                     )
 
                     val action =
-                        //agregar que edit text carguen el objeto a la db y crear entity Proposal
                         ProposalFragmentDirections.actionProposalFragmentToRequestsListFragment()
                     v.findNavController().navigate(action)
                 }
-            }else {
-            errorMessageTextView.visibility = View.VISIBLE
+            } else {
+                edtBudget.error = "Error con el presupuesto"
+                //errorMessageTextView.visibility = View.VISIBLE
                 val handler = Handler()
-            handler.postDelayed({
-                errorMessageTextView.visibility = View.GONE
-            }, 2000)
+                handler.postDelayed({
+                    errorMessageTextView.visibility = View.GONE
+                }, 2000)
 //        }
-        }
+            }
 
         }
 

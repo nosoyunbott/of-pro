@@ -41,27 +41,34 @@ class MainActivity : AppCompatActivity() {
 
 
         NavigationUI.setupWithNavController(bottomNavigation, navHostFragment.navController)
-        bottomNavigation.setOnItemSelectedListener {item ->
-            when(item.itemId){
-                R.id.requestsListFragment ->{
-                    navHostFragment.navController.navigate(R.id.requestsListFragment)
+        bottomNavigation.setOnItemSelectedListener { item ->
+            val navController = navHostFragment.navController
+
+            when (item.itemId) {
+                R.id.requestsListFragment -> {
+                    navController.popBackStack(R.id.requestsListFragment, false)
+                    navController.navigate(R.id.requestsListFragment)
                     true
                 }
                 R.id.requestsHistoryFragment -> {
-                    navHostFragment.navController.navigate(R.id.requestsHistoryFragment)
+                    navController.popBackStack(R.id.requestsHistoryFragment, false)
+                    navController.navigate(R.id.requestsHistoryFragment)
                     true
                 }
                 R.id.profileFragment -> {
-                    navHostFragment.navController.navigate(R.id.profileFragment)
+                    navController.popBackStack(R.id.profileFragment, false)
+                    navController.navigate(R.id.profileFragment)
                     true
                 }
                 R.id.requestFragment -> {
-                    navHostFragment.navController.navigate(R.id.requestFragment)
+                    navController.popBackStack(R.id.requestFragment, false)
+                    navController.navigate(R.id.requestFragment)
                     true
                 }
                 else -> false
             }
         }
+
     }
 
 

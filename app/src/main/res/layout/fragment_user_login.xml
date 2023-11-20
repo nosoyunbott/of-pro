@@ -30,7 +30,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:paddingStart="12dp"
+        android:padding="12dp"
         android:hint="ort@example.com"
         android:fontFamily="@font/poppins_regular"
         android:layout_centerHorizontal="true"
@@ -44,7 +44,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:paddingStart="12dp"
+        android:padding="12dp"
         android:layout_centerHorizontal="true"
         android:hint="Contraseña"
         android:fontFamily="@font/poppins_regular"
@@ -86,7 +86,7 @@
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/recuperarContraseñaTextView"
+        android:id="@+id/recoverPasswordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/registerTextView"

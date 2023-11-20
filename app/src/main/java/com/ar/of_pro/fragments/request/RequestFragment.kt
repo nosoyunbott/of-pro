@@ -109,7 +109,7 @@ class RequestFragment<OutputStream> : Fragment() {
     }
 
     private fun formatTimestamp(timestamp: Long): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         return dateFormat.format(Date(timestamp))
     }
 
@@ -236,6 +236,7 @@ class RequestFragment<OutputStream> : Fragment() {
                         selectedOcupation = ocupationList[position]
                         selectedOcupationPosition = position
                     }
+
                     spnServiceTypes -> {
                         selectedServiceType = serviceTypesList[position]
                         selectedServicePosition = position
@@ -267,6 +268,7 @@ class RequestFragment<OutputStream> : Fragment() {
             startActivityForResult(intent, PICK_MEDIA_REQUEST)
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d("DATA FROM INTENT", data.toString())
@@ -306,16 +308,15 @@ class RequestFragment<OutputStream> : Fragment() {
                             loadImage(selectedMediaUri, blob, count)
                             Toast.makeText(
                                 context,
-                                "Image uploaded successfully",
+                                "Imagen subida correctamente",
                                 Toast.LENGTH_SHORT
                             ).show()
                         } catch (e: FileNotFoundException) {
-                            Toast.makeText(context, "Image upload failed", Toast.LENGTH_SHORT)
+                            Toast.makeText(context, "Fallo en la subida de imagen", Toast.LENGTH_SHORT)
                                 .show()
                             Log.e("Exception", e.toString())
                         }
                     }
-
 
 
                 } else if (data.data != null) {
@@ -388,7 +389,7 @@ class RequestFragment<OutputStream> : Fragment() {
                             val dataObject = jsonResponse.getJSONObject("data")
                             val imageUrll = dataObject.getString("link")
                             imageUrlArray.add(dataObject.getString("link"))
-                            if(imageUrlArray.size == count){
+                            if (imageUrlArray.size == count) {
                                 btnRequest.isEnabled = true
                                 btnRequest.isClickable = true
                             }
@@ -426,22 +427,26 @@ class RequestFragment<OutputStream> : Fragment() {
                 errorPriceTextView.visibility = View.GONE
                 priceValidate = true
             } else {
-                errorPriceTextView.visibility = View.VISIBLE
+                edtPriceMax.error = "Error con el precio"
+                //errorPriceTextView.visibility = View.VISIBLE
             }
         } else {
-            errorPriceTextView.visibility = View.VISIBLE
+            edtPriceMax.error = "Error con el precio"
+            //errorPriceTextView.visibility = View.VISIBLE
         }
         if (!timestamp.isNullOrBlank() && timestamp > System.currentTimeMillis().toString()) {
             errorDateTextView.visibility = View.GONE
             dateValidate = true
         } else {
-            errorDateTextView.visibility = View.VISIBLE
+            edtTime.error = "Error con la fecha"
+            //errorDateTextView.visibility = View.VISIBLE
         }
-        if (edtTitle.text.isNotEmpty()){
+        if (edtTitle.text.isNotEmpty()) {
             titleValidate = true
             errorTitleTextView.visibility = View.GONE
-        }else{
-            errorTitleTextView.visibility = View.VISIBLE
+        } else {
+            edtTitle.error = "Error con el título"
+            //errorTitleTextView.visibility = View.VISIBLE
         }
         //        if(imageUrlArray.isNotEmpty()){
 //            imageValidate = true
