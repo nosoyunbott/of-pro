@@ -108,7 +108,6 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
                     user.getString("address")!!,
                     user.getString("location")!!,
                     user.getString("mail")!!,
-                    user.getString("password")!!,
                     user.getLong("phone")?.toInt(),
                     user.getDouble("rating")!!,
                     user.getLong("ratingQuantity")!!.toInt()!!,

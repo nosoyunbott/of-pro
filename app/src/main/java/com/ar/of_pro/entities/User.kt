@@ -10,7 +10,6 @@ class User(
     address: String?,
     location: String?,
     mail: String?,
-    password: String?,
     phone: Int?,
     rating: Double?,
     ratingQuantity: Int?,
@@ -24,7 +23,6 @@ class User(
     var address: String = ""
     var location: String = ""
     var mail: String = ""
-    var password: String = ""
     var phone: Int = 0
     var rating: Double = 0.0
     var ratingQuantity: Int = 0
@@ -32,10 +30,9 @@ class User(
     var bio: String = ""
     var imageUrl: String = ""
 
-    constructor() : this(null, null, null, null, null, null, null, null, null, null, null, null)
+    constructor() : this(null, null, null, null, null, null, null, null, null, null, null)
 
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -55,7 +52,6 @@ class User(
         this.address = address!!
         this.location = location!!
         this.mail = mail!!
-        this.password = password!!
         this.phone = phone!!
         this.rating = rating!!
         this.ratingQuantity = ratingQuantity!!
@@ -70,7 +66,6 @@ class User(
         parcel.writeString(address)
         parcel.writeString(location)
         parcel.writeString(mail)
-        parcel.writeString(password)
         parcel.writeInt(phone)
         parcel.writeDouble(rating)
         parcel.writeInt(ratingQuantity)

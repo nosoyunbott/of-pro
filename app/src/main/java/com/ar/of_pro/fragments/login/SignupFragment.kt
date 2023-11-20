@@ -157,7 +157,6 @@ class SignupFragment : Fragment() {
                             addressEdt.text.toString(),
                             locationEdt.text.toString(),
                             emailEdt.text.toString(),
-                            passwordEdt.text.toString(),
                             phoneEdt.text.toString().toInt(),
                             0.0,
                             0,
