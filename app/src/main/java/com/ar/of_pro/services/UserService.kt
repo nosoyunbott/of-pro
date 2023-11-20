@@ -1,7 +1,10 @@
 package com.ar.of_pro.services
 
+import android.util.Log
+import com.ar.of_pro.entities.User
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
 class UserService {
     companion object {
@@ -43,6 +46,20 @@ class UserService {
                         callback(null, task.exception)
                     }
                 }
+        }
+        suspend fun doesUserExistByMail(email: String): Boolean {
+            return try {
+                val querySnapshot = db.collection("Users")
+                    .whereEqualTo("mail", email)
+                    .get()
+                    .await()
+
+                !querySnapshot.isEmpty
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
+            }
         }
 
     }
