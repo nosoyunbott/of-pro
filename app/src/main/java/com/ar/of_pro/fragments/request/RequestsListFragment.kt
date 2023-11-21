@@ -40,7 +40,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
     val db = FirebaseFirestore.getInstance()
     private var selectedButton: Button? = null
     private lateinit var clearFiltersTextView: TextView
-
+    lateinit var txtNoRequests: TextView
     lateinit var sharedPreferences : SharedPreferences
     lateinit var userType: String
     override fun onCreateView(
@@ -51,7 +51,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         recRequestList = v.findViewById(R.id.rec_requestsList)
         filterContainer = v.findViewById(R.id.filterContainer)
         clearFiltersTextView = v.findViewById(R.id.clearFiltersTextView)
-
+        txtNoRequests = v.findViewById(R.id.txtNoRequests)
         sharedPreferences =
             requireContext().getSharedPreferences("my_preference", Context.MODE_PRIVATE)
         userType = sharedPreferences.getString(
@@ -91,6 +91,9 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
 
             }
             requestListAdapter.notifyDataSetChanged()
+            if(requestList.isEmpty()){
+                txtNoRequests.visibility = View.VISIBLE
+            }
         }
     }
 

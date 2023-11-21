@@ -120,7 +120,8 @@ class SignupFragment : Fragment() {
         requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
             it.write(fileContents.toByteArray())
         }
-
+        registerButton.isEnabled = false
+        registerButton.isClickable = false
 
         signUp()
         goToLogInByTextView()
@@ -170,7 +171,7 @@ class SignupFragment : Fragment() {
 
 
                     if (it.isSuccessful) {
-                        Toast.makeText(context, "SU REGISTRO FUE EXITOSO!", Toast.LENGTH_LONG)
+                        Toast.makeText(context, "SU REGISTRO FUE EXITOSO!", Toast.LENGTH_LONG).show()
 
                             val action =
                                 SignupFragmentDirections.actionSignupFragmentToUserLoginFragment()
@@ -247,6 +248,10 @@ class SignupFragment : Fragment() {
                             val imageUrll = dataObject.getString("link")
                             imageUrl = dataObject.getString("link")
                             Log.d("image", "Image URL: $imageUrll")
+                            if(imageUrl.isNotEmpty()){
+                                registerButton.isClickable = true
+                                registerButton.isEnabled = true
+                            }
                             // Handle imageUrl as needed (e.g., display it in your app)
                         } catch (e: JSONException) {
                             e.printStackTrace()
