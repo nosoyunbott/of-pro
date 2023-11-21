@@ -229,7 +229,7 @@
             android:layout_marginHorizontal="10sp"
             android:layout_centerHorizontal="true"
             android:text="SUBIR FOTO"
-            android:backgroundTint="@color/light_blue"
+            android:backgroundTint="@color/medium_blue"
             />
 
 
