@@ -116,7 +116,7 @@
             android:layout_marginVertical="10sp"
             android:ems="10"
             android:focusable="false"
-            android:hint="Fecha y hora"
+            android:hint="Fecha"
             android:fontFamily="@font/poppins_regular"
             android:inputType="none" />
 
