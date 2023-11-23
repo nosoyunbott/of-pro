@@ -35,10 +35,6 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
     private lateinit var requestListAdapter: HistoryCardAdapter
     var requestList: MutableList<RequestHistory> = ArrayList()
 
-    val db = FirebaseFirestore.getInstance()
-    val requestsCollection = db.collection("Requests")
-    val usersCollection = db.collection("Users")
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -94,7 +90,7 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                         val requestHistory = RequestHistory(RequestUtil.toRequest(r), clientName, providerName)
                         Log.d("adsdsaads", requestHistory.toString())
                         requestList.add(requestHistory)
-                        requestListAdapter.notifyDataSetChanged()
+
                     }
 
                 }
@@ -128,135 +124,9 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                         requestList.add(requestHistory)
                         requestListAdapter.notifyDataSetChanged()
                     }
-
                 }
             }
         }
-
-
-//        requestsCollection.whereEqualTo("state", validStatesEnCurso)
-//            .whereEqualTo(userValue, clientId)
-//            .get().addOnSuccessListener { documents ->
-//
-//                for (document in documents) {
-//
-//                    val title = document.getString("requestTitle") ?: ""
-//                    val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
-//                    val selectedOcupation = document.getString("categoryOcupation") ?: ""
-//                    val selectedServiceType = document.getString("categoryService") ?: ""
-//                    val description = document.getString("description") ?: ""
-//                    val state = document.getString("state") ?: ""
-//                    val dateTimestamp = document.getString("date") ?: ""
-//                    val date = DateUtils.GetFormattedDate(dateTimestamp)
-//                    val maxCost = document.getLong("maxCost")?.toInt() ?: 0
-//                    val clientId = document.getString("clientId") ?: ""
-//                    val providerId = document.getString("providerId") ?: ""
-//                    val requestId = document.id
-//                    val imageUrlArray =
-//                        document.get("imageUrlArray") as? MutableList<String> ?: mutableListOf()
-//
-//
-//                    val r = Request(
-//                        title,
-//                        requestBidAmount,
-//                        selectedOcupation,
-//                        selectedServiceType,
-//                        description,
-//                        state,
-//                        date,
-//                        maxCost,
-//                        clientId,
-//                        requestId,
-//                        imageUrlArray
-//                    )
-//
-//                    usersCollection.document(clientId).get()
-//                        .addOnSuccessListener { clientDocument ->
-//                            val clientName = clientDocument.getString("name") ?: ""
-//
-//                            // Query the user collection to get the provider's name
-//                            usersCollection.document(providerId).get()
-//                                .addOnSuccessListener { providerDocument ->
-//                                    val providerName = providerDocument.getString("name")
-//                                        ?: "" + providerDocument.getString("lastName") ?: ""
-//
-//                                    // Create a RequestHistory object and add it to the list
-//                                    val requestHistory = RequestHistory(r, clientName, providerName)
-//                                    requestList.add(requestHistory)
-//                                    requestListAdapter.notifyDataSetChanged()
-//                                    //FIN 'En estado'
-//
-//
-//                                }
-//                        }.addOnFailureListener { clientException ->
-//                            val requestHistory = RequestHistory(r, "clientName", "providerName")
-//                            requestList.add(requestHistory)
-//                        }
-//
-//
-//                }
-//
-//
-//            }.addOnFailureListener { Exception ->
-//                println("Error getting documents: $Exception")
-//                Log.e("ERROR DE DB", "$Exception")
-//            }
-
-//        requestsCollection.whereEqualTo("state", validStatesFinalizada)
-//            .whereEqualTo(userValue, clientId)
-//            .get().addOnSuccessListener { documents ->
-//                for (document in documents) {
-//
-//                    val title = document.getString("requestTitle") ?: ""
-//                    val requestBidAmount = document.getLong("requestBidAmount")?.toInt() ?: 0
-//                    val selectedOcupation = document.getString("categoryOcupation") ?: ""
-//                    val selectedServiceType = document.getString("categoryService") ?: ""
-//                    val description = document.getString("description") ?: ""
-//                    val state = document.getString("state") ?: ""
-//                    val dateTimestamp = document.getString("date") ?: ""
-//                    val date = DateUtils.GetFormattedDate(dateTimestamp)
-//                    val maxCost = document.getLong("maxCost")?.toInt() ?: 0
-//                    val clientId = document.getString("clientId") ?: ""
-//                    val providerId = document.getString("providerId") ?: ""
-//                    val requestId = document.id
-//                    val imageUrlArray =
-//                        document.get("imageUrlArray") as? MutableList<String> ?: mutableListOf()
-//
-//
-//                    val r = Request(
-//                        title,
-//                        requestBidAmount,
-//                        selectedOcupation,
-//                        selectedServiceType,
-//                        description,
-//                        state,
-//                        date,
-//                        maxCost,
-//                        clientId,
-//                        requestId,
-//                        imageUrlArray
-//                    )
-//
-//                    usersCollection.document(clientId).get()
-//                        .addOnSuccessListener { clientDocument ->
-//                            val clientName = clientDocument.getString("name") ?: ""
-//
-//                            // Query the user collection to get the provider's name
-//                            usersCollection.document(providerId).get()
-//                                .addOnSuccessListener { providerDocument ->
-//                                    val providerName = providerDocument.getString("name")
-//                                        ?: "" + providerDocument.getString("lastName") ?: ""
-//
-//                                    // Create a RequestHistory object and add it to the list
-//                                    val requestHistory = RequestHistory(r, clientName, providerName)
-//                                    requestList.add(requestHistory)
-//                                    requestListAdapter.notifyDataSetChanged()
-//                                }
-//                        }
-//                }
-//
-//
-//            }
     }
 
     override fun onStart() {
@@ -276,6 +146,4 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
             )
         )
     }
-
-
 }
