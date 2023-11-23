@@ -22,6 +22,7 @@ import com.ar.of_pro.listeners.OnViewItemClickedListener
 import com.ar.of_pro.models.RequestModel
 import com.ar.of_pro.services.ProposalsService
 import com.ar.of_pro.services.RequestsService
+import com.ar.of_pro.utils.RequestUtil
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
@@ -84,9 +85,9 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
                     userType == "CLIENT" && userId == r.clientId && r.providerId == ""
 
                 if (REQUEST_MISSING_PROIVDER) {
-                    requestList.add(toRequest(r))
+                    requestList.add(RequestUtil.toRequest(r))
                 } else if (PROVIDER_HAS_NOT_APPLIED) {
-                    requestList.add(toRequest(r))
+                    requestList.add(RequestUtil.toRequest(r))
                 }
 
             }
@@ -155,21 +156,7 @@ class RequestsListFragment : Fragment(), OnViewItemClickedListener {
         }
     }
 
-    private fun toRequest(r: RequestModel): Request {
-        return Request(
-            r.requestTitle,
-            r.requestBidAmount,
-            r.categoryOcupation,
-            r.categoryService,
-            r.description,
-            r.state,
-            r.date,
-            r.maxCost,
-            r.clientId,
-            r.id,
-            r.imageUrlArray as MutableList<String>
-        )
-    }
+
 
 
 }
