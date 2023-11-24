@@ -115,11 +115,6 @@ class SignupFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        val filename = "myfile"
-        val fileContents = "Hello world!"
-        requireContext().openFileOutput(filename, Context.MODE_PRIVATE).use {
-            it.write(fileContents.toByteArray())
-        }
         registerButton.isEnabled = false
         registerButton.isClickable = false
 
