@@ -61,7 +61,7 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
         } else {
             userValue = "providerId"
         }
-
+//TODO Extraer codigo adentro de lifecycleScope a funciones y encadenar EN CURSO con FINALIZADA
         lifecycleScope.launch {
             //For request "EN CURSO"
             val requestsInProgress = RequestsService.getRequestByState(validStatesEnCurso, userValue, clientId!!)
