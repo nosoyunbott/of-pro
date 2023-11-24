@@ -21,11 +21,13 @@ import com.ar.of_pro.entities.Request
 import com.ar.of_pro.entities.User
 import com.ar.of_pro.fragments.provider.ProposalFragmentArgs
 import com.ar.of_pro.listeners.OnProposalInformationClickedListener
+import com.ar.of_pro.models.ProposalModel
 import com.ar.of_pro.models.UserModel
 import com.ar.of_pro.services.ProposalsService
 import com.ar.of_pro.services.RequestsService
 import com.ar.of_pro.services.UserService
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
@@ -37,16 +39,8 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
     var providerList: MutableList<ProposalInformation> = ArrayList()
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var proposalInformationAdapter: ProposalInformationAdapter
-
-    val db = FirebaseFirestore.getInstance()
-    val proposalsCollection = db.collection("Proposals")
-    val usersCollection = db.collection("Users")
-
     lateinit var txtTitle: TextView
-
     lateinit var request: Request
-
-    lateinit var userObj: User
     lateinit var proposalInfo: ProposalInformation
     lateinit var btnDelete: Button
     lateinit var btnEdit: Button
@@ -59,31 +53,38 @@ class ProviderRequestsFragment : Fragment(), OnProposalInformationClickedListene
            for(proposal in proposals){
                UserService.getUserById(proposal.providerId) { document, exception ->
                    if (exception == null && document != null) {
-                       val user = document.toObject(UserModel::class.java)
-                       if (user != null) {
-                           proposalInfo = ProposalInformation(
-                               user.name,
-                               proposal.bid.toFloat(),
-                               user.rating,
-                               proposal.commentary,
-                               user.ratingQuantity,
-                               proposal.requestId,
-                               proposal.providerId
-                           )
-                           Log.d("proposalInfo", proposalInfo.toString())
-                           providerList.add(proposalInfo)
-
-                           proposalInformationAdapter.notifyDataSetChanged()
-                       }
+                       addToRecycler(document, proposal)
                    } else {
                        Log.d("ErrorProfileEdit", "User not found")
                    }
                }
            }
-
         }
 
     }
+
+    private fun addToRecycler(
+        document: DocumentSnapshot,
+        proposal: ProposalModel
+    ) {
+        val user = document.toObject(UserModel::class.java)
+        if (user != null) {
+            proposalInfo = ProposalInformation(
+                user.name,
+                proposal.bid.toFloat(),
+                user.rating,
+                proposal.commentary,
+                user.ratingQuantity,
+                proposal.requestId,
+                proposal.providerId
+            )
+            Log.d("proposalInfo", proposalInfo.toString())
+            providerList.add(proposalInfo)
+
+            proposalInformationAdapter.notifyDataSetChanged()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
