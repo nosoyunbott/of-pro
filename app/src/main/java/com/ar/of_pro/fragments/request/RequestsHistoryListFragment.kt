@@ -40,14 +40,8 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
     ): View? {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_request_history_list, container, false)
-
         recRequestList = v.findViewById(R.id.rec_requestsHistoryList)
-
-        return v
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        requestList = mutableListOf()
         val validStatesEnCurso = "EN CURSO"
         val validStatesFinalizada = "FINALIZADA"
 
@@ -61,69 +55,83 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
         } else {
             userValue = "providerId"
         }
-//TODO Extraer codigo adentro de lifecycleScope a funciones y encadenar EN CURSO con FINALIZADA
         lifecycleScope.launch {
-            //For request "EN CURSO"
-            val requestsInProgress = RequestsService.getRequestByState(validStatesEnCurso, userValue, clientId!!)
+            listInProgressRequest(validStatesEnCurso, userValue, clientId)
+            listFinishedRequest(validStatesFinalizada, userValue, clientId)
+        }
 
-            for(r in requestsInProgress){
-                var providerName = ""
-                var clientName = ""
-                UserService.getUserById(r.providerId){ document, exception ->
-                    if (exception == null && document != null) {
-                        val lastName = document.getString("lastName")
-                        val name = document.getString("name")
-                        Log.d("lastname", lastName!!)
-                        Log.d("name", name!!)
-                        providerName = name + " " + lastName
-                    } else {
-                        Log.d("ErrorProfileEdit", "User not found")
-                    }
-                    UserService.getUserById(r.clientId){ document, exception ->
-                        if (exception == null && document != null) {
-                            val lastName = document.getString("lastName")
-                            val name = document.getString("name")
-                            clientName = name + " " + lastName
-                        } else {
-                            Log.d("ErrorProfileEdit", "User not found")
-                        }
-                        val requestHistory = RequestHistory(RequestUtil.toRequest(r), clientName, providerName)
-                        Log.d("adsdsaads", requestHistory.toString())
-                        requestList.add(requestHistory)
+        return v
+    }
+    private suspend fun listInProgressRequest(
+        validStatesEnCurso: String,
+        userValue: String,
+        clientId: String?
+    ) {
+        val requestsInProgress =
+            RequestsService.getRequestByState(validStatesEnCurso, userValue, clientId!!)
 
-                    }
-
+        for (r in requestsInProgress) {
+            var providerName = ""
+            var clientName = ""
+            UserService.getUserById(r.providerId) { document, exception ->
+                if (exception == null && document != null) {
+                    val lastName = document.getString("lastName")
+                    val name = document.getString("name")
+                    providerName = name + " " + lastName
+                } else {
+                    Log.d("ErrorProfileEdit", "User not found")
                 }
-            }
-            //For request "FINALIZADA"
-
-            val requests = RequestsService.getRequestByState(validStatesFinalizada, userValue, clientId!!)
-            for(r in requests){
-                var providerName = ""
-                var clientName = ""
-                UserService.getUserById(r.providerId){ document, exception ->
+                UserService.getUserById(r.clientId) { document, exception ->
                     if (exception == null && document != null) {
                         val lastName = document.getString("lastName")
                         val name = document.getString("name")
-                        Log.d("lastname", lastName!!)
-                        Log.d("name", name!!)
-                        providerName = name + " " + lastName
+                        clientName = name + " " + lastName
                     } else {
                         Log.d("ErrorProfileEdit", "User not found")
                     }
-                    UserService.getUserById(r.clientId){ document, exception ->
-                        if (exception == null && document != null) {
-                            val lastName = document.getString("lastName")
-                            val name = document.getString("name")
-                            clientName = name + " " + lastName
-                        } else {
-                            Log.d("ErrorProfileEdit", "User not found")
-                        }
-                        val requestHistory = RequestHistory(RequestUtil.toRequest(r), clientName, providerName)
-                        Log.d("adsdsaads", requestHistory.toString())
-                        requestList.add(requestHistory)
-                        requestListAdapter.notifyDataSetChanged()
+                    val requestHistory =
+                        RequestHistory(RequestUtil.toRequest(r), clientName, providerName)
+                    requestList.add(requestHistory)
+                }
+
+            }
+        }
+    }
+
+    private suspend fun listFinishedRequest(
+        validStatesFinalizada: String,
+        userValue: String,
+        clientId: String?
+    ) {
+        val requests =
+            RequestsService.getRequestByState(validStatesFinalizada, userValue, clientId!!)
+        for (r in requests) {
+
+            var providerName = ""
+            var clientName = ""
+            UserService.getUserById(r.providerId) { document, exception ->
+                if (exception == null && document != null) {
+                    val lastName = document.getString("lastName")
+                    val name = document.getString("name")
+                    Log.d("lastname", lastName!!)
+                    Log.d("name", name!!)
+                    providerName = name + " " + lastName
+                } else {
+                    Log.d("ErrorProfileEdit", "User not found")
+                }
+                UserService.getUserById(r.clientId) { document, exception ->
+                    if (exception == null && document != null) {
+                        val lastName = document.getString("lastName")
+                        val name = document.getString("name")
+                        clientName = name + " " + lastName
+                    } else {
+                        Log.d("ErrorProfileEdit", "User not found")
                     }
+                    val requestHistory =
+                        RequestHistory(RequestUtil.toRequest(r), clientName, providerName)
+                    Log.d("adsdsaads", requestHistory.toString())
+                    requestList.add(requestHistory)
+                    requestListAdapter.notifyDataSetChanged()
                 }
             }
         }
