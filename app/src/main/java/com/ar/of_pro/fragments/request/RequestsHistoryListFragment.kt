@@ -92,6 +92,7 @@ class RequestsHistoryListFragment : Fragment(), OnViewItemClickedListener {
                     val requestHistory =
                         RequestHistory(RequestUtil.toRequest(r), clientName, providerName)
                     requestList.add(requestHistory)
+                    requestListAdapter.notifyDataSetChanged()
                 }
 
             }
